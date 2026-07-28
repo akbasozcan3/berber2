@@ -35,18 +35,19 @@ function getPool() {
     if (!connStr) throw new Error("DB_NOT_CONFIGURED");
 
     const isServerless = Boolean(process.env.VERCEL);
-    const needsSsl =
-      isServerless &&
-      !/sslmode=/i.test(connStr) &&
-      !/localhost|127\.0\.0\.1/i.test(connStr);
+    const isRemote = !/localhost|127\.0\.0\.1/i.test(connStr);
+    const ssl =
+      isServerless && isRemote
+        ? { rejectUnauthorized: false }
+        : undefined;
 
     globalForDb.__pgPool = new Pool({
       connectionString: connStr,
       max: isServerless ? 1 : 3,
       idleTimeoutMillis: isServerless ? 5000 : 30000,
-      connectionTimeoutMillis: isServerless ? 10000 : 5000,
+      connectionTimeoutMillis: isServerless ? 20000 : 5000,
       allowExitOnIdle: isServerless,
-      ssl: needsSsl ? { rejectUnauthorized: false } : undefined,
+      ssl,
     });
   }
   return globalForDb.__pgPool;

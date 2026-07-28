@@ -2,6 +2,7 @@ import { ensureDb } from "@/lib/db/ensure";
 import { db } from "@/lib/db";
 import { settings, services, barbers, appointments } from "@/lib/db/schema";
 import { jsonResponse } from "@/lib/api/helpers";
+import { resolveDatabaseUrlFromEnv } from "@/lib/utils/load-local-env";
 import { sql } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +13,9 @@ export async function GET() {
       ok: false,
       database: "disconnected",
       message: "DATABASE_URL tanımlı değil veya bağlantı kurulamadı.",
+      hint: resolveDatabaseUrlFromEnv()
+        ? "URL bulundu ama baglanti basarisiz — Vercel'de Redeploy yapin."
+        : "Vercel Environment Variables'a DATABASE_URL ekleyin.",
     });
   }
 
