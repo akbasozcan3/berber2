@@ -19,15 +19,27 @@ export function loadLocalEnv() {
 }
 
 export function resolveDatabaseUrlFromEnv(): string {
-  return (
-    process.env.DATABASE_URL ||
-    process.env.DATABASE_URL_DATABASE_URL ||
-    process.env.DATABASE_URL_POSTGRES_URL ||
-    process.env.DATABASE_URL_PRISMA_DATABASE_URL ||
-    process.env.POSTGRES_URL_NON_POOLING ||
-    process.env.POSTGRES_URL ||
-    process.env.POSTGRES_PRISMA_URL ||
-    process.env.POSTGRES_CONNECTION_STRING ||
-    ""
-  );
+  const candidates = process.env.VERCEL
+    ? [
+        process.env.DATABASE_URL,
+        process.env.POSTGRES_PRISMA_URL,
+        process.env.POSTGRES_URL,
+        process.env.DATABASE_URL_POSTGRES_URL,
+        process.env.DATABASE_URL_PRISMA_DATABASE_URL,
+        process.env.DATABASE_URL_DATABASE_URL,
+        process.env.POSTGRES_URL_NON_POOLING,
+        process.env.POSTGRES_CONNECTION_STRING,
+      ]
+    : [
+        process.env.DATABASE_URL,
+        process.env.DATABASE_URL_DATABASE_URL,
+        process.env.DATABASE_URL_POSTGRES_URL,
+        process.env.DATABASE_URL_PRISMA_DATABASE_URL,
+        process.env.POSTGRES_URL_NON_POOLING,
+        process.env.POSTGRES_URL,
+        process.env.POSTGRES_PRISMA_URL,
+        process.env.POSTGRES_CONNECTION_STRING,
+      ];
+
+  return candidates.find((value) => Boolean(value?.trim()))?.trim() || "";
 }

@@ -9,6 +9,8 @@ import Badge from "@/components/admin/ui/Badge";
 import PageHeader from "@/components/admin/ui/PageHeader";
 import Avatar from "@/components/admin/ui/Avatar";
 import { formatCurrency, formatTime } from "@/lib/admin/utils";
+import { adminApi, type AdminAppointment } from "@/lib/api/admin";
+import { normalizeDashboardStats } from "@/lib/api/helpers";
 
 interface DashboardData {
   todayAppointments: number;
@@ -18,32 +20,32 @@ interface DashboardData {
   revenueMonth: number;
 }
 
-interface Appointment {
-  id: number;
-  customerName: string;
-  serviceName: string;
-  barberName: string;
-  date: string;
-  time: string;
-  status: string;
-  price: number;
-}
+const EMPTY_STATS: DashboardData = {
+  todayAppointments: 0,
+  waitingCustomers: 0,
+  completedToday: 0,
+  revenueToday: 0,
+  revenueMonth: 0,
+};
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardData | null>(null);
-  const [todayApts, setTodayApts] = useState<Appointment[]>([]);
+  const [todayApts, setTodayApts] = useState<AdminAppointment[]>([]);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
-    Promise.all([
-      fetch("/api/v1/admin/dashboard").then((r) => r.json()),
-      fetch("/api/v1/admin/appointments").then((r) => r.json()),
-    ]).then(([dashboard, appointments]) => {
-      setStats(dashboard);
-      setTodayApts(
-        (appointments as Appointment[]).filter((a) => a.date === today).slice(0, 8)
-      );
-    });
+
+    Promise.all([adminApi.getDashboard(), adminApi.getAppointments()])
+      .then(([dashboard, appointments]) => {
+        setStats(normalizeDashboardStats(dashboard));
+        setTodayApts(appointments.filter((a) => a.date === today).slice(0, 8));
+      })
+      .catch((err: Error) => {
+        setStats(EMPTY_STATS);
+        setTodayApts([]);
+        setLoadError(err.message || "Veriler yüklenemedi");
+      });
   }, []);
 
   if (!stats) {
@@ -56,6 +58,14 @@ export default function DashboardPage() {
         title="Özet"
         description={`Hoş geldiniz! Bugün ${new Date().toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}`}
       />
+
+      {loadError && (
+        <div className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+          {loadError}. Veritabanı bağlantısını kontrol edin; Vercel&apos;de{" "}
+          <code className="text-amber-100">DATABASE_URL</code> tanımlı olmalı ve{" "}
+          <code className="text-amber-100">npm run db:setup</code> bir kez çalıştırılmalı.
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 mb-8">
         <StatCard title="Bugünkü Randevular" value={stats.todayAppointments} icon={Calendar} />
