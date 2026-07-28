@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -10,7 +10,7 @@ export default function GlobalError({
 }) {
   return (
     <html lang="tr">
-      <body className="min-h-screen bg-[#0A0A0A] text-white flex items-center justify-center p-6">
+      <body className="min-h-screen bg-[#0D1117] text-white flex items-center justify-center p-6">
         <div className="max-w-md text-center space-y-6">
           <h1 className="text-2xl font-serif">Bir şeyler ters gitti</h1>
           <p className="text-white/50 text-sm">

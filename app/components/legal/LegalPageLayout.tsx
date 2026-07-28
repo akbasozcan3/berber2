@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 export default function LegalPageLayout({
   title,
@@ -12,7 +12,7 @@ export default function LegalPageLayout({
       <div className="container mx-auto px-6 md:px-16 max-w-3xl">
         <Link
           href="/"
-          className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#D4AF37] hover:text-white transition-colors"
+          className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#C8703A] hover:text-white transition-colors"
         >
           ← Ana Sayfa
         </Link>

@@ -1,20 +1,50 @@
 import { seedDatabase } from "@/lib/db/seed";
-import { initDatabase } from "@/lib/db";
+import { initDatabase, isDbAvailable } from "@/lib/db";
 import { runSettingsMigrations } from "@/lib/db/settings-migrations";
 
-let seeding: Promise<void> | null = null;
+const g = globalThis as typeof globalThis & {
+  __seedDone?: boolean;
+  __seeding?: Promise<void> | null;
+};
 
-/** Verifies DB connectivity. Full seed runs at build (db:setup), not on every request. */
-export async function ensureDb() {
-  await initDatabase();
-  await runSettingsMigrations();
-  if (process.env.NEXT_PHASE === "phase-production-build") return;
+function isBuildPhase(): boolean {
+  return process.env.NEXT_PHASE === "phase-production-build";
+}
 
-  // Serverless: never seed per request — exhausts Postgres connection limits.
-  if (process.env.VERCEL && process.env.RUN_DB_SEED !== "true") return;
+/** Ensures DB is connected, migrations run, and seed applied when needed. */
+export async function ensureDb(): Promise<boolean> {
+  // Build sırasında DB'ye bağlanma — çok sayıda worker Windows'ta çökmeye yol açıyor.
+  if (isBuildPhase()) return false;
 
-  if (!seeding) {
-    seeding = seedDatabase();
+  try {
+    await initDatabase();
+  } catch {
+    return false;
   }
-  await seeding;
+
+  if (!isDbAvailable()) return false;
+
+  try {
+    await runSettingsMigrations();
+  } catch {
+    // non-fatal
+  }
+
+  if (process.env.NODE_ENV === "development") return true;
+  if (process.env.VERCEL) return true;
+  if (process.env.RUN_DB_SEED !== "true") return true;
+
+  if (g.__seedDone) return true;
+
+  if (!g.__seeding) {
+    g.__seeding = seedDatabase()
+      .then(() => {
+        g.__seedDone = true;
+      })
+      .catch(() => {
+        g.__seeding = null;
+      });
+  }
+  await g.__seeding;
+  return true;
 }

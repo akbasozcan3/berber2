@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -179,7 +179,7 @@ export default function GalleryPage() {
               value={newItem.instagramUrl}
               onChange={(e) => setNewItem((p) => ({ ...p, instagramUrl: e.target.value }))}
             />
-            <div className="flex items-center justify-between rounded-2xl border border-white/[0.06] bg-[#0A0A0A] px-4 py-3">
+            <div className="flex items-center justify-between rounded-2xl border border-white/[0.06] bg-[#0D1117] px-4 py-3">
               <div>
                 <p className="text-sm font-medium text-[#F8F8F8]">Video / Reel içeriği</p>
                 <p className="text-xs text-[#71717A] mt-0.5">Açıksa kapak görseli zorunludur.</p>
@@ -229,7 +229,7 @@ export default function GalleryPage() {
 
           return (
             <Card key={img.id} padding="none" className={`mb-4 break-inside-avoid overflow-hidden ${missingCover ? "ring-1 ring-red-500/40" : ""}`}>
-              <div className="relative h-56 bg-[#111]">
+              <div className="relative h-56 bg-[#141E2E]">
                 {preview ? (
                   <Image src={preview} alt={d.title} fill className="object-cover" unoptimized />
                 ) : (
@@ -276,7 +276,7 @@ export default function GalleryPage() {
                       value={d.instagramUrl}
                       onChange={(e) => updateDraft(img.id, { instagramUrl: e.target.value })}
                     />
-                    <div className="flex items-center justify-between rounded-2xl border border-white/[0.06] bg-[#0A0A0A] px-4 py-3">
+                    <div className="flex items-center justify-between rounded-2xl border border-white/[0.06] bg-[#0D1117] px-4 py-3">
                       <p className="text-sm text-[#A1A1AA]">Video / Reel</p>
                       <Toggle
                         checked={d.isVideo}

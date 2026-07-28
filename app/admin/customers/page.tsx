@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -142,19 +142,19 @@ export default function CustomersPage() {
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 mt-5">
-                  <div className="p-3 bg-[#0A0A0A] rounded-2xl border border-white/[0.06]">
+                  <div className="p-3 bg-[#0D1117] rounded-2xl border border-white/[0.06]">
                     <p className="text-xs text-[#71717A]">Tamamlanan</p>
                     <p className="text-lg font-semibold text-[#F8F8F8]">{customer.visitCount}</p>
                   </div>
-                  <div className="p-3 bg-[#0A0A0A] rounded-2xl border border-white/[0.06]">
+                  <div className="p-3 bg-[#0D1117] rounded-2xl border border-white/[0.06]">
                     <p className="text-xs text-[#71717A]">Aktif Randevu</p>
-                    <p className="text-lg font-semibold text-[#D4AF37]">
+                    <p className="text-lg font-semibold text-[#C8703A]">
                       {customer.activeAppointments ?? 0}
                     </p>
                   </div>
-                  <div className="p-3 bg-[#0A0A0A] rounded-2xl border border-white/[0.06]">
+                  <div className="p-3 bg-[#0D1117] rounded-2xl border border-white/[0.06]">
                     <p className="text-xs text-[#71717A]">Harcama</p>
-                    <p className="text-lg font-semibold text-[#D4AF37]">
+                    <p className="text-lg font-semibold text-[#C8703A]">
                       {formatCurrency(customer.totalSpent)}
                     </p>
                   </div>

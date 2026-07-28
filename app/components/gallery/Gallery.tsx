@@ -1,16 +1,13 @@
 ﻿"use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { api, type GalleryImage } from "@/lib/api/client";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 import SectionTitle from "@/components/ui/SectionTitle";
 import GalleryItemCard from "@/components/gallery/GalleryItemCard";
-import {
-  getGalleryDisplayUrl,
-  isInstagramGalleryItem,
-} from "@/lib/utils/gallery";
+import GalleryLightbox from "@/components/gallery/GalleryLightbox";
+import { useGalleryLightbox } from "@/components/gallery/useGalleryLightbox";
+import { isInstagramGalleryItem } from "@/lib/utils/gallery";
 
 interface GalleryProps {
   initialImages?: GalleryImage[];
@@ -20,7 +17,6 @@ export default function Gallery({ initialImages = [] }: GalleryProps) {
   const settings = usePublicSettings();
   const [images, setImages] = useState<GalleryImage[]>(initialImages);
   const [activeCategory, setActiveCategory] = useState("Tümü");
-  const [photoIndex, setPhotoIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (initialImages.length > 0) return;
@@ -33,30 +29,11 @@ export default function Gallery({ initialImages = [] }: GalleryProps) {
     (img) => activeCategory === "Tümü" || img.title === activeCategory
   );
 
-  const lightboxImages = filteredImages.filter((img) => !isInstagramGalleryItem(img));
-
-  const openLightbox = (item: GalleryImage) => {
-    if (isInstagramGalleryItem(item)) return;
-    const index = lightboxImages.findIndex((img) => img.id === item.id);
-    if (index >= 0) setPhotoIndex(index);
-  };
-
-  const handlePrev = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (photoIndex !== null) {
-      setPhotoIndex((photoIndex - 1 + lightboxImages.length) % lightboxImages.length);
-    }
-  };
-
-  const handleNext = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (photoIndex !== null) {
-      setPhotoIndex((photoIndex + 1) % lightboxImages.length);
-    }
-  };
+  const { lightboxImages, photoIndex, openLightbox, closeLightbox, goPrev, goNext } =
+    useGalleryLightbox(filteredImages);
 
   return (
-    <section id="gallery" className="py-32 bg-[#0A0A0A] relative min-h-screen">
+    <section id="gallery" className="py-32 bg-[#0D1117] relative min-h-screen">
       <div className="absolute top-0 left-0 right-0 h-px bg-white/[0.06]" />
 
       <div className="container mx-auto px-6 md:px-16">
@@ -85,9 +62,10 @@ export default function Gallery({ initialImages = [] }: GalleryProps) {
             {categories.map((cat) => (
               <button
                 key={cat}
+                type="button"
                 onClick={() => {
                   setActiveCategory(cat);
-                  setPhotoIndex(null);
+                  closeLightbox();
                 }}
                 className={`px-6 py-2.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 border ${
                   activeCategory === cat
@@ -114,68 +92,13 @@ export default function Gallery({ initialImages = [] }: GalleryProps) {
         </div>
       </div>
 
-      <AnimatePresence>
-        {photoIndex !== null && lightboxImages[photoIndex] && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setPhotoIndex(null)}
-            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 md:p-10 select-none"
-          >
-            <button
-              onClick={() => setPhotoIndex(null)}
-              className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10"
-              aria-label="Kapat"
-            >
-              <X size={20} />
-            </button>
-
-            {lightboxImages.length > 1 && (
-              <button
-                onClick={handlePrev}
-                className="absolute left-4 md:left-8 text-white/50 hover:text-white transition-colors w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10"
-                aria-label="Önceki Görsel"
-              >
-                <ChevronLeft size={24} />
-              </button>
-            )}
-
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 120 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative max-w-4xl max-h-[80vh] aspect-auto flex flex-col items-center"
-            >
-              <img
-                src={getGalleryDisplayUrl(lightboxImages[photoIndex])}
-                alt={lightboxImages[photoIndex].title}
-                className="max-w-full max-h-[70vh] rounded-md object-contain border border-white/10 shadow-2xl"
-              />
-              <div className="mt-6 flex flex-col items-center text-center">
-                <span className="text-[9px] tracking-[0.35em] text-white/60 uppercase font-bold">
-                  {lightboxImages[photoIndex].title}
-                </span>
-                <span className="text-white/40 text-xs mt-1">
-                  Görsel {photoIndex + 1} / {lightboxImages.length}
-                </span>
-              </div>
-            </motion.div>
-
-            {lightboxImages.length > 1 && (
-              <button
-                onClick={handleNext}
-                className="absolute right-4 md:right-8 text-white/50 hover:text-white transition-colors w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10"
-                aria-label="Sonraki Görsel"
-              >
-                <ChevronRight size={24} />
-              </button>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <GalleryLightbox
+        images={lightboxImages}
+        photoIndex={photoIndex}
+        onClose={closeLightbox}
+        onPrev={goPrev}
+        onNext={goNext}
+      />
     </section>
   );
 }

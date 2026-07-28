@@ -8,8 +8,8 @@ import { eq } from "drizzle-orm";
 import { LEGAL_DEFAULTS } from "../data/legal";
 
 const now = () => new Date().toISOString();
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "ozcanakbas38@gmail.com";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Ozcan2009ak";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL?.trim() || "";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 
 const GOOGLE_REVIEWS = [
   { name: "Ahmet Nazik", rating: 5, review: "Gayet başarılı memnun kaldım tavsiye ederim", featured: true },
@@ -20,6 +20,10 @@ const GOOGLE_REVIEWS = [
 ];
 
 export async function ensureAdminUser() {
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    console.warn("ADMIN_EMAIL ve ADMIN_PASSWORD tanımlı değil — admin kullanıcısı atlandı.");
+    return;
+  }
   const hashed = await bcrypt.hash(ADMIN_PASSWORD, 12);
   const existing = await db.select().from(users).limit(1);
   if (existing.length === 0) {
@@ -251,7 +255,7 @@ export async function seedDatabase() {
       duration: 25,
       price: 300,
       image:
-        "https://images.unsplash.com/photo-1503951914875-0ac311b30ba9?w=400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400&h=300&fit=crop",
       popular: false,
       sortOrder: 4,
     },
@@ -273,7 +277,7 @@ export async function seedDatabase() {
       duration: 90,
       price: 900,
       image:
-        "https://images.unsplash.com/photo-1585747860715-2ba37e78870b?w=400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400&h=300&fit=crop",
       popular: true,
       sortOrder: 6,
     },
@@ -510,7 +514,7 @@ export async function seedDatabase() {
   await ensureCMS();
 
   console.log("Database seeded successfully!");
-  console.log(`Admin login: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`);
+  if (ADMIN_EMAIL) console.log(`Admin login email: ${ADMIN_EMAIL}`);
 }
 
 if (require.main === module) {

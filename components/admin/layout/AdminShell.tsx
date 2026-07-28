@@ -1,24 +1,32 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/admin/layout/Sidebar";
 import Header from "@/components/admin/layout/Header";
+import LoadingScreen from "@/app/components/ui/LoadingScreen";
 import { cn } from "@/lib/admin/cn";
-import { AdminSessionProvider } from "@/lib/context/AdminSessionContext";
+import { AdminSessionProvider, useAdminSession } from "@/lib/context/AdminSessionContext";
 
-export default function AdminShell({ children }: { children: React.ReactNode }) {
+function AdminLayout({ children }: { children: React.ReactNode }) {
+  const { loading, user } = useAdminSession();
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Login sayfasında shell'i sarma
   if (pathname === "/admin/login") {
     return <>{children}</>;
   }
 
+  // Session çözülene kadar admin kabuğuyla aynı görsel dilde bekleme ekranı göster.
+  if (loading || !user) {
+    return <LoadingScreen variant="admin-shell" />;
+  }
+
   return (
-    <AdminSessionProvider>
-    <div className="min-h-screen bg-[#090909] text-[#F8F8F8]">
+    <div className="relative min-h-screen overflow-hidden bg-[#080D15] text-[#EEE9E0]">
+      <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(135deg,rgba(200,112,58,0.06),transparent_36%),linear-gradient(180deg,rgba(255,255,255,0.025),transparent_26%)]" />
       <Sidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed(!collapsed)}
@@ -35,9 +43,23 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           onMenuClick={() => setMobileOpen(true)}
           sidebarCollapsed={collapsed}
         />
-        <main className="p-4 lg:p-8">{children}</main>
+        <main className="relative z-10 mx-auto w-full max-w-[1600px] p-4 lg:p-8">{children}</main>
       </div>
     </div>
+  );
+}
+
+export default function AdminShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  // Login sayfasında provider'a bile gerek yok
+  if (pathname === "/admin/login") {
+    return <>{children}</>;
+  }
+
+  return (
+    <AdminSessionProvider>
+      <AdminLayout>{children}</AdminLayout>
     </AdminSessionProvider>
   );
 }

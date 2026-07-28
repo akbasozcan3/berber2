@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { availabilityBlocks, availabilityAuditLog, barbers } from "@/lib/db/schema";
-import { eq, and, lte, gte, or, isNull } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getSetting } from "./booking";
 import { parseLocalIsoDate, toLocalIsoDate } from "@/lib/utils/format";
 import { isSunday, barberWorksOnDate } from "@/lib/utils/salon-schedule";
@@ -278,9 +278,19 @@ export function canBarberTakeSlot(params: {
   rules: (typeof availabilityBlocks.$inferSelect)[];
   existingAppointments: { barberId: number | null; time: string; duration: number }[];
   breakTimes: { start: string; end: string }[];
+  maxBookingsPerSlot?: number;
 }): boolean {
-  const { barber, date, slotTime, slotStart, slotEnd, rules, existingAppointments, breakTimes } =
-    params;
+  const {
+    barber,
+    date,
+    slotTime,
+    slotStart,
+    slotEnd,
+    rules,
+    existingAppointments,
+    breakTimes,
+    maxBookingsPerSlot = 1,
+  } = params;
 
   if (!barberWorksOnDate(date, barber.workingDays)) return false;
 
@@ -296,6 +306,9 @@ export function canBarberTakeSlot(params: {
   if (block.blocked) return false;
 
   const barberApts = existingAppointments.filter((a) => a.barberId === barber.id);
+  const sameTimeCount = barberApts.filter((apt) => apt.time === slotTime).length;
+  if (sameTimeCount >= maxBookingsPerSlot) return false;
+
   return !barberApts.some((apt) => {
     const aptStart = parseTime(apt.time);
     const aptEnd = aptStart + apt.duration;

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Toggle from "@/components/admin/ui/Toggle";
 import Input from "@/components/admin/ui/Input";
@@ -8,8 +8,6 @@ import {
   serializeWorkingHours,
   type WorkingHourRow,
 } from "@/lib/data/working-hours";
-
-const DAYS = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"] as const;
 
 export type { WorkingHourRow };
 
@@ -45,12 +43,12 @@ export default function WorkingHoursEditor({
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-[#71717A]">
-        Üst şeritteki saatler ve iletişim bölümleri buradan güncellenir. <strong className="text-[#A1A1AA]">Pazar günleri her zaman kapalıdır.</strong> Randevu slotları için
+      <p className="text-sm text-[#6B7A94]">
+        Üst şeritteki saatler ve iletişim bölümleri buradan güncellenir. <strong className="text-[#8A9BB0]">Pazar günleri her zaman kapalıdır.</strong> Randevu slotları için
         aşağıdaki butonla berber saatlerini de eşitleyebilirsiniz.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl border border-white/[0.06] bg-[#0A0A0A]">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl border border-white/[0.06] bg-[#0D1117]">
         <Input
           label="Hafta içi açılış"
           type="time"
@@ -79,9 +77,9 @@ export default function WorkingHoursEditor({
         {rows.map((row, index) => (
           <div
             key={row.day}
-            className="grid grid-cols-1 sm:grid-cols-[120px_1fr_1fr_auto] gap-3 items-center p-3 rounded-xl border border-white/[0.06] bg-[#0A0A0A]"
+            className="grid grid-cols-1 sm:grid-cols-[120px_1fr_1fr_auto] gap-3 items-center p-3 rounded-xl border border-white/[0.06] bg-[#0D1117]"
           >
-            <span className="text-sm font-medium text-[#F8F8F8]">{row.day}</span>
+            <span className="text-sm font-medium text-[#EEE9E0]">{row.day}</span>
             <Input
               label="Açılış"
               type="time"

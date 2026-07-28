@@ -3,8 +3,6 @@ import Contact from "../components/contact/Contact";
 import { getPublicSettingsSnapshot } from "@/lib/data/public-server";
 import { buildPageMetadata } from "@/lib/data/seo";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata() {
   const settings = await getPublicSettingsSnapshot();
   return buildPageMetadata(settings, settings.contactPageTitle, settings.contactPageSubtitle);

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { cn } from "@/lib/admin/cn";
 
@@ -11,7 +11,7 @@ interface TabsProps {
 
 export default function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
   return (
-    <div className={cn("flex items-center gap-1 p-1 bg-[#0A0A0A] rounded-2xl border border-white/[0.06]", className)}>
+    <div className={cn("flex items-center gap-1 p-1 bg-[#0D1117] rounded-2xl border border-white/[0.06]", className)}>
       {tabs.map((tab) => (
         <button
           key={tab.id}
@@ -19,8 +19,8 @@ export default function Tabs({ tabs, activeTab, onChange, className }: TabsProps
           className={cn(
             "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200",
             activeTab === tab.id
-              ? "bg-[#1A1A1A] text-[#F8F8F8] shadow-sm"
-              : "text-[#71717A] hover:text-[#A1A1AA]"
+              ? "bg-[#1A1A1A] text-[#EEE9E0] shadow-sm"
+              : "text-[#6B7A94] hover:text-[#8A9BB0]"
           )}
         >
           {tab.label}
@@ -28,7 +28,7 @@ export default function Tabs({ tabs, activeTab, onChange, className }: TabsProps
             <span
               className={cn(
                 "text-xs px-1.5 py-0.5 rounded-md",
-                activeTab === tab.id ? "bg-[#D4AF37]/10 text-[#D4AF37]" : "bg-white/[0.04] text-[#71717A]"
+                activeTab === tab.id ? "bg-[#C8703A]/10 text-[#C8703A]" : "bg-white/[0.04] text-[#6B7A94]"
               )}
             >
               {tab.count}

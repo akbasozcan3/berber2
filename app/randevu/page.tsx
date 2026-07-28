@@ -4,8 +4,6 @@ import { getPublicSettingsSnapshot, getEnabledServices, getAvailableBarbers } fr
 import { buildPageMetadata } from "@/lib/data/seo";
 import type { Barber, Service } from "@/lib/api/client";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata() {
   const settings = await getPublicSettingsSnapshot();
   return buildPageMetadata(settings, settings.bookingPageTitle, settings.seoDefaultDescription);

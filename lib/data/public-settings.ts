@@ -1,4 +1,5 @@
 import { ensureDb } from "@/lib/db/ensure";
+import { isDbAvailable } from "@/lib/db";
 import { getSettings } from "@/lib/services/booking";
 import type { PublicSettings } from "@/lib/api/client";
 import { publicSettingsDefaults } from "./public-settings-defaults";
@@ -89,7 +90,7 @@ export function mapSettingsToPublic(all: Record<string, string>): PublicSettings
 
 export async function getPublicSettingsServer(): Promise<PublicSettings> {
   try {
-    await ensureDb();
+    if (!(await ensureDb()) || !isDbAvailable()) return publicSettingsDefaults;
     const all = await getSettings();
     return mapSettingsToPublic(all);
   } catch {

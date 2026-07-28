@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Save } from "lucide-react";
@@ -93,7 +93,7 @@ export default function ContentAdminPage() {
             onClick={() => setActiveSlug(p.slug)}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
               activeSlug === p.slug
-                ? "bg-[#D4AF37] text-black"
+                ? "bg-[#C8703A] text-black"
                 : "bg-white/[0.04] text-[#71717A] hover:text-white"
             }`}
           >

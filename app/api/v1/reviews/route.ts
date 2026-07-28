@@ -2,29 +2,26 @@ import { z } from "zod";
 import { ensureDb } from "@/lib/db/ensure";
 import { db } from "@/lib/db";
 import { reviews } from "@/lib/db/schema";
-import { eq, desc, and } from "drizzle-orm";
-import { jsonResponse, errorResponse, parseBody } from "@/lib/api/helpers";
+import { eq, desc } from "drizzle-orm";
+import { jsonResponse, errorResponse, parseBody, publicDbHandler } from "@/lib/api/helpers";
 import { createNotification } from "@/lib/services/notifications";
 
 export async function GET(request: Request) {
-  await ensureDb();
   const { searchParams } = new URL(request.url);
   const featured = searchParams.get("featured");
   const approved = searchParams.get("approved") !== "false";
 
-  const query = db.select().from(reviews).orderBy(desc(reviews.createdAt));
-
-  if (approved) {
-    const data = await db
-      .select()
-      .from(reviews)
-      .where(eq(reviews.approved, true))
-      .orderBy(desc(reviews.createdAt));
-    return jsonResponse(featured === "true" ? data.filter((r) => r.featured) : data);
-  }
-
-  const data = await query;
-  return jsonResponse(data);
+  return publicDbHandler(async () => {
+    if (approved) {
+      const data = await db
+        .select()
+        .from(reviews)
+        .where(eq(reviews.approved, true))
+        .orderBy(desc(reviews.createdAt));
+      return featured === "true" ? data.filter((r) => r.featured) : data;
+    }
+    return db.select().from(reviews).orderBy(desc(reviews.createdAt));
+  }, []);
 }
 
 const reviewSchema = z.object({
@@ -36,7 +33,9 @@ const reviewSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    await ensureDb();
+    if (!(await ensureDb())) {
+      return errorResponse("Yorum gönderilemedi.", 503);
+    }
     const body = await parseBody<unknown>(request);
     const data = reviewSchema.parse(body);
 

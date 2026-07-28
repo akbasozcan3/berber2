@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Search } from "lucide-react";
 import { cn } from "@/lib/admin/cn";
@@ -18,13 +18,13 @@ export default function SearchInput({
 }: SearchInputProps) {
   return (
     <div className={cn("relative", className)}>
-      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#52525B]" />
+      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4A5568]" />
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full h-10 pl-10 pr-4 bg-[#0A0A0A] border border-white/[0.06] rounded-2xl text-sm text-[#F8F8F8] placeholder:text-[#52525B] focus:outline-none focus:border-[#D4AF37]/40 focus:ring-1 focus:ring-[#D4AF37]/20 transition-all duration-200"
+        className="w-full h-10 pl-10 pr-4 bg-[#0D1117] border border-white/[0.06] rounded-2xl text-sm text-[#EEE9E0] placeholder:text-[#4A5568] focus:outline-none focus:border-[#C8703A]/40 focus:ring-1 focus:ring-[#C8703A]/20 transition-all duration-200"
       />
     </div>
   );

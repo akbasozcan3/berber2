@@ -1,5 +1,3 @@
-const DEFAULT_SITE_URL = "https://www.thebarberyasin.com";
-
 function normalizeSiteUrl(url: string): string {
   const trimmed = url.trim().replace(/\/$/, "");
   if (!trimmed) return "";
@@ -18,5 +16,14 @@ export function resolvePublicSiteUrl(siteUrl?: string | null): string {
     return normalizeSiteUrl(productionHost);
   }
 
-  return DEFAULT_SITE_URL;
+  const vercelUrl = process.env.VERCEL_URL?.trim();
+  if (vercelUrl) {
+    return normalizeSiteUrl(vercelUrl);
+  }
+
+  if (process.env.NODE_ENV === "development") {
+    return "http://localhost:3000";
+  }
+
+  return "";
 }

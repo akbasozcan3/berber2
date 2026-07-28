@@ -18,7 +18,7 @@ export default function StatsStrip() {
   const features = parseHomeStatsJson(homeStatsJson);
 
   return (
-    <section className="bg-black border-y border-white/10">
+    <section className="bg-[#080D15] border-y border-white/[0.07]">
       <div className="container mx-auto px-6 lg:px-14">
         <div className="grid grid-cols-2 lg:grid-cols-5 divide-x divide-white/10">
           {features.map((item, i) => {

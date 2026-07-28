@@ -1,7 +1,7 @@
 import { ensureDb } from "@/lib/db/ensure";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { appointments, customers, services, barbers } from "@/lib/db/schema";
+import { appointments } from "@/lib/db/schema";
 import { eq, and, sql, ne } from "drizzle-orm";
 import { jsonResponse, errorResponse } from "@/lib/api/helpers";
 

@@ -8,18 +8,23 @@ import { ArrowRight, Star } from "lucide-react";
 import { api, type Barber } from "@/lib/api/client";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 
-export default function TeamPreview() {
+interface TeamPreviewProps {
+  initialBarbers?: Barber[];
+}
+
+export default function TeamPreview({ initialBarbers = [] }: TeamPreviewProps) {
   const settings = usePublicSettings();
-  const [barbers, setBarbers] = useState<Barber[]>([]);
+  const [barbers, setBarbers] = useState<Barber[]>(initialBarbers);
 
   useEffect(() => {
+    // Her zaman fresh veri çek — admin'de değişince sitede de güncel görünsün
     api.getBarbers().then(setBarbers).catch(() => {});
   }, []);
 
   if (barbers.length === 0) return null;
 
   return (
-    <section className="py-28 bg-[#0A0A0A] relative overflow-hidden">
+    <section className="py-28 bg-[#0D1117] relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-white/[0.06]" />
 
       <div className="container mx-auto px-6 lg:px-14">
@@ -57,7 +62,7 @@ export default function TeamPreview() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: i * 0.1 }}
-              className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#111] hover:border-white/20 transition-all duration-500"
+              className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#141E2E] hover:border-[#C8703A]/40 transition-all duration-500"
             >
               <div className="relative aspect-[4/5] overflow-hidden">
                 {barber.avatar ? (
@@ -73,7 +78,7 @@ export default function TeamPreview() {
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <div className="flex items-center gap-1 mb-2 text-white/60">
+                  <div className="flex items-center gap-1 mb-2 text-[#C8703A]/80">
                     <Star size={12} fill="currentColor" />
                     <span className="text-xs font-medium">{barber.performance ?? 95}% memnuniyet</span>
                   </div>

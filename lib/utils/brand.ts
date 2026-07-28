@@ -10,12 +10,18 @@ export function businessInitials(name?: string | null, fallback = "SA"): string 
 
 export function splitBusinessNameForLogo(name?: string | null): { primary: string; secondary: string } {
   const safe = (name || "").trim();
-  if (!safe) return { primary: "SALON", secondary: "KUAFÖR" };
-  const parts = safe.split(/\s+/).filter(Boolean);
-  if (parts.length === 1) return { primary: parts[0].toUpperCase(), secondary: "" };
+  if (!safe) return { primary: "SALON", secondary: "" };
+  const words = safe.split(/\s+/).filter(Boolean);
+
+  // 1 kelime → hepsini primary
+  if (words.length === 1) return { primary: words[0].toUpperCase(), secondary: "" };
+
+  // "New Life Erkek Kuaförü" → primary: "New Life", secondary: "Erkek Kuaförü"
+  // İlk 2 kelimeyi primary, gerisini secondary yap
+  const midpoint = Math.min(2, Math.ceil(words.length / 2));
   return {
-    primary: parts[0].toUpperCase(),
-    secondary: parts.slice(1).join(" "),
+    primary: words.slice(0, midpoint).join(" "),
+    secondary: words.slice(midpoint).join(" "),
   };
 }
 
@@ -29,10 +35,8 @@ export function withBusinessName(template: string, businessName: string): string
 }
 
 export const siteLogoImageClass =
-  "h-24 sm:h-28 md:h-32 lg:h-36 w-auto max-w-[min(520px,64vw)] object-contain drop-shadow-[0_4px_14px_rgba(0,0,0,0.45)]";
-
+  "h-14 sm:h-16 md:h-20 lg:h-24 w-auto max-w-[220px] sm:max-w-[260px] md:max-w-[300px] object-contain drop-shadow-[0_6px_18px_rgba(0,0,0,0.35)] transition-all duration-300";
 export const navbarLogoImageClass =
-  "absolute left-0 top-[calc(50%+6px)] -translate-y-1/2 h-24 sm:h-28 md:h-32 lg:h-36 w-auto max-w-[min(520px,64vw)] object-contain object-left drop-shadow-[0_4px_14px_rgba(0,0,0,0.45)]";
-
+  "h-14 sm:h-16 md:h-18 lg:h-20 w-auto object-contain transition-all duration-300";
 export const mobileLogoImageClass =
   "h-16 w-auto max-w-[220px] object-contain object-left";

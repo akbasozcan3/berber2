@@ -2,6 +2,10 @@ import { db } from "@/lib/db";
 import { telegramLogs } from "@/lib/db/schema";
 import { getSetting, setSetting } from "@/lib/services/booking";
 
+function isGroupChatId(chatId: string): boolean {
+  return chatId.trim().startsWith("-");
+}
+
 export interface TelegramAppointmentData {
   customerName: string;
   phone: string;
@@ -88,19 +92,22 @@ async function verifyBotConnection(): Promise<{ connected: boolean; botUsername?
 
 export async function getTelegramStatus() {
   const tokenConfigured = Boolean(process.env.TELEGRAM_BOT_TOKEN?.trim());
-  const fromDb = (await getSetting("telegram_chat_id"))?.trim();
-  const chatIdConfigured = Boolean(fromDb || process.env.TELEGRAM_CHAT_ID?.trim());
+  const chatId = (await getSetting("telegram_chat_id"))?.trim() || process.env.TELEGRAM_CHAT_ID?.trim() || "";
+  const chatIdConfigured = Boolean(chatId);
 
   const enabled = true;
   const bot = await verifyBotConnection();
   const recipientName =
     (await getSetting("telegram_recipient_name"))?.trim() || "Mehmet Abi";
   const lastTestAt = (await getSetting("telegram_last_test_at"))?.trim() || null;
+  const chatTarget = chatId ? (isGroupChatId(chatId) ? "group" : "private") : "none";
 
   return {
     enabled,
     tokenConfigured,
     chatIdConfigured,
+    chatId: chatId || null,
+    chatTarget,
     connected: bot.connected && tokenConfigured,
     botUsername: bot.botUsername ?? null,
     recipientName,

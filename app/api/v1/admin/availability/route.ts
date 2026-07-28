@@ -1,5 +1,5 @@
 import { ensureDb } from "@/lib/db/ensure";
-import { requireAuth, getSession } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { availabilityBlocks } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";

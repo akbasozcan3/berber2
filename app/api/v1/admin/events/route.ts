@@ -13,36 +13,68 @@ export async function GET() {
     return errorResponse("Unauthorized", 401);
   }
 
+  const encoder = new TextEncoder();
+  let closed = false;
+  let removeListener: (() => void) | null = null;
+  let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
+
   const stream = new ReadableStream({
     start(controller) {
-      const encoder = new TextEncoder();
       const send = (data: string) => {
-        controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+        if (closed) return;
+        try {
+          controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+        } catch {
+          // Controller kapandıysa sessizce yoksay
+          cleanup();
+        }
       };
-
-      send(JSON.stringify({ type: "connected" }));
-
-      const remove = addNotificationListener(send);
-
-      const heartbeat = setInterval(() => {
-        send(JSON.stringify({ type: "heartbeat" }));
-      }, 30000);
 
       const cleanup = () => {
-        remove();
-        clearInterval(heartbeat);
+        if (closed) return;
+        closed = true;
+        if (heartbeatTimer) {
+          clearInterval(heartbeatTimer);
+          heartbeatTimer = null;
+        }
+        if (removeListener) {
+          removeListener();
+          removeListener = null;
+        }
+        try {
+          controller.close();
+        } catch {
+          // Zaten kapalıysa yoksay
+        }
       };
 
-      // @ts-expect-error - cancel exists on controller
-      controller.cancel = cleanup;
+      // Bağlantı mesajı
+      send(JSON.stringify({ type: "connected" }));
+
+      // Bildirim dinleyicisi
+      removeListener = addNotificationListener(send);
+
+      // Heartbeat — 25 saniyede bir (proxy timeout'ları için)
+      heartbeatTimer = setInterval(() => {
+        send(JSON.stringify({ type: "heartbeat" }));
+      }, 25000);
+
+      // Stream iptal edildiğinde temizle
+      return cleanup;
+    },
+    cancel() {
+      closed = true;
+      if (heartbeatTimer) clearInterval(heartbeatTimer);
+      if (removeListener) removeListener();
     },
   });
 
   return new Response(stream, {
     headers: {
       "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      Connection: "keep-alive",
+      "Cache-Control": "no-cache, no-transform",
+      "Connection": "keep-alive",
+      "X-Accel-Buffering": "no",
     },
   });
 }

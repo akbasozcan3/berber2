@@ -1,11 +1,11 @@
 ﻿"use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Scissors, Sparkles, Crown, ChevronRight, ChevronLeft,
-  User, Phone, Mail, Check, MessageSquare, Users, Loader2,
+  User, Phone, Mail, Check, Users, Loader2,
 } from "lucide-react";
 import { api, type Service, type Barber, type TimeSlot } from "@/lib/api/client";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
@@ -80,11 +80,9 @@ export default function Booking({
 
   useEffect(() => {
     if (initialServices.length > 0 && initialBarbers.length > 0) {
-      setLoadingCatalog(false);
       return;
     }
 
-    setLoadingCatalog(true);
     Promise.all([api.getServices(), api.getBarbers()])
       .then(([s, b]) => {
         setServices(s);
@@ -112,11 +110,6 @@ export default function Booking({
 
   const bookingHorizon = Math.min(Math.max(settings.maxFutureBooking || 30, 7), 60);
   const nextDays = getNextDays(bookingHorizon);
-
-  useEffect(() => {
-    if (step !== 3 || formData.date) return;
-    setFormData((prev) => ({ ...prev, date: nextBookableIsoDate(), time: "" }));
-  }, [step, formData.date]);
 
   useEffect(() => {
     if (!formData.date || !formData.serviceId) return;
@@ -185,8 +178,34 @@ export default function Booking({
     return Object.keys(tempErrors).length === 0;
   };
 
-  const handleNext = () => { if (validateStep()) setStep((p) => p + 1); };
-  const handlePrev = () => setStep((p) => p - 1);
+  const handleNext = () => {
+    if (!validateStep()) return;
+    const nextStep = step + 1;
+    if (nextStep === 3 && !formData.date) {
+      setFormData((prev) => ({ ...prev, date: nextBookableIsoDate(), time: "" }));
+    }
+    setStep(nextStep);
+    // Bir sonraki step'e geçince form card'ı viewport'ta ortala
+    setTimeout(() => {
+      if (!formRef.current) return;
+      const el = formRef.current;
+      const rect = el.getBoundingClientRect();
+      const viewH = window.innerHeight;
+      const scrollTo = window.scrollY + rect.top - (viewH - rect.height) / 2;
+      window.scrollTo({ top: Math.max(0, scrollTo), behavior: "smooth" });
+    }, 50);
+  };
+  const handlePrev = () => {
+    setStep((p) => p - 1);
+    setTimeout(() => {
+      if (!formRef.current) return;
+      const el = formRef.current;
+      const rect = el.getBoundingClientRect();
+      const viewH = window.innerHeight;
+      const scrollTo = window.scrollY + rect.top - (viewH - rect.height) / 2;
+      window.scrollTo({ top: Math.max(0, scrollTo), behavior: "smooth" });
+    }, 50);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -236,6 +255,8 @@ export default function Booking({
     }
   };
 
+  const formRef = useRef<HTMLDivElement>(null);
+
   const selectedService = services.find((s) => s.id === formData.serviceId);
   const selectedBarber = barbers.find((b) => b.id === formData.barberId);
   const availableSlots = slots.filter((s) => s.available);
@@ -255,7 +276,7 @@ export default function Booking({
   const getFormattedDate = (iso: string) => (iso ? formatIsoDateTr(iso) : "");
 
   return (
-    <section id="booking" className="py-16 md:py-32 bg-[#0A0A0A] relative min-h-screen text-white">
+    <section id="booking" className="py-16 md:py-32 bg-[#0D1117] relative min-h-screen text-white">
       <div className="absolute top-0 left-0 right-0 h-px bg-white/[0.06]" />
       <div className="container mx-auto px-4 sm:px-6 md:px-16 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-start">
@@ -275,7 +296,7 @@ export default function Booking({
             <div className="relative border-l border-white/10 pl-4 sm:pl-6 space-y-5 sm:space-y-8 py-2">
               {["Hizmet Seçimi", "Stilist Tercihi", "Tarih & Saat", "Kişisel Bilgiler"].map((label, i) => (
                 <div key={label} className="relative flex items-center gap-4">
-                  <div className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 text-xs font-bold transition-all ${step > i + 1 ? "bg-white text-black border-white" : step === i + 1 ? "bg-white text-black border-white shadow-[0_0_12px_rgba(255,255,255,0.18)]" : "bg-[#0A0A0A] text-white/30 border-white/15"}`}>
+                  <div className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 text-xs font-bold transition-all ${step > i + 1 ? "bg-white text-black border-white" : step === i + 1 ? "bg-white text-black border-white shadow-[0_0_12px_rgba(255,255,255,0.18)]" : "bg-[#0D1117] text-white/30 border-white/15"}`}>
                     {step > i + 1 ? <Check size={12} strokeWidth={3} /> : `0${i + 1}`}
                   </div>
                   <span className={`text-[11px] sm:text-xs font-bold uppercase tracking-wide sm:tracking-wider ${step >= i + 1 ? "text-white" : "text-white/30"}`}>{label}</span>
@@ -284,7 +305,7 @@ export default function Booking({
             </div>
           </div>
 
-          <div className="lg:col-span-8 bg-[#121212]/40 border border-white/[0.06] rounded-md p-5 sm:p-8 md:p-12 relative overflow-hidden">
+          <div ref={formRef} className="lg:col-span-8 bg-[#121212]/40 border border-white/[0.06] rounded-md p-5 sm:p-8 md:p-12 relative overflow-hidden">
             <AnimatePresence mode="wait">
               {!isSuccess ? (
                 <form key="booking" onSubmit={handleSubmit} className="space-y-10">
@@ -418,7 +439,7 @@ export default function Booking({
                                 <button
                                   type="button"
                                   onClick={() => setFormData({ ...formData, date: tomorrowIso, time: "" })}
-                                  className="text-xs text-[#D4AF37] hover:text-[#E8C547] font-semibold"
+                                  className="text-xs text-[#C8703A] hover:text-[#E8C547] font-semibold"
                                 >
                                   Yarın için saatleri göster →
                                 </button>
@@ -467,7 +488,7 @@ export default function Booking({
                                   <button
                                     type="button"
                                     onClick={() => setFormData({ ...formData, date: tomorrowIso, time: "" })}
-                                    className="text-xs text-[#D4AF37] hover:text-[#E8C547] font-semibold mt-2"
+                                    className="text-xs text-[#C8703A] hover:text-[#E8C547] font-semibold mt-2"
                                   >
                                     Yarın için saatleri göster →
                                   </button>
@@ -548,8 +569,8 @@ export default function Booking({
                         </p>
                       </div>
 
-                      <div className="flex items-start gap-3 p-4 bg-[#D4AF37]/[0.06] border border-[#D4AF37]/20 rounded-sm">
-                        <Mail size={16} className="text-[#D4AF37] shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 p-4 bg-[#C8703A]/[0.06] border border-[#C8703A]/20 rounded-sm">
+                        <Mail size={16} className="text-[#C8703A] shrink-0 mt-0.5" />
                         <p className="text-xs text-white/60 leading-relaxed">
                           <span className="text-white/80 font-medium">E-posta zorunludur.</span> Randevunuz onaylandığında onay detayları bu adrese iletilecektir.
                         </p>
@@ -558,7 +579,7 @@ export default function Booking({
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                         <div>
                           <label className="text-[9px] font-bold text-white/40 uppercase tracking-widest flex items-center gap-2 mb-1.5">
-                            <User size={10} className="text-white/60" /> Ad Soyad <span className="text-[#D4AF37]">*</span>
+                            <User size={10} className="text-white/60" /> Ad Soyad <span className="text-[#C8703A]">*</span>
                           </label>
                           <input
                             type="text"
@@ -573,7 +594,7 @@ export default function Booking({
                         </div>
                         <div>
                           <label className="text-[9px] font-bold text-white/40 uppercase tracking-widest flex items-center gap-2 mb-1.5">
-                            <Phone size={10} className="text-white/60" /> Telefon <span className="text-[#D4AF37]">*</span>
+                            <Phone size={10} className="text-white/60" /> Telefon <span className="text-[#C8703A]">*</span>
                           </label>
                           <input
                             type="tel"
@@ -582,13 +603,14 @@ export default function Booking({
                             className={`w-full bg-transparent border-b py-3 text-white focus:outline-none text-sm transition-colors ${errors.phone ? "border-red-400/60 focus:border-red-400" : "border-white/15 focus:border-white"}`}
                             placeholder="05XX XXX XX XX"
                             autoComplete="tel"
+                            maxLength={11}
                             required
                           />
                           {errors.phone && <p className="text-xs text-red-400 mt-1">{errors.phone}</p>}
                         </div>
                         <div className="md:col-span-2">
                           <label className="text-[9px] font-bold text-white/40 uppercase tracking-widest flex items-center gap-2 mb-1.5">
-                            <Mail size={10} className="text-white/60" /> E-posta <span className="text-[#D4AF37]">*</span>
+                            <Mail size={10} className="text-white/60" /> E-posta <span className="text-[#C8703A]">*</span>
                           </label>
                           <input
                             type="email"
@@ -637,7 +659,7 @@ export default function Booking({
                           <div><span className="text-white/40 block mb-0.5">Hizmet</span><span className="text-white font-semibold">{selectedService?.name} — ₺{selectedService?.price}</span></div>
                           <div><span className="text-white/40 block mb-0.5">Berber</span><span className="text-white font-semibold">{formData.noPreference ? "Otomatik atama" : selectedBarber?.name}</span></div>
                           <div><span className="text-white/40 block mb-0.5">Tarih</span><span className="text-white font-semibold">{getFormattedDate(formData.date)}</span></div>
-                          <div><span className="text-white/40 block mb-0.5">Saat</span><span className="text-[#D4AF37] font-semibold">{formData.time}</span></div>
+                          <div><span className="text-white/40 block mb-0.5">Saat</span><span className="text-[#C8703A] font-semibold">{formData.time}</span></div>
                           {formData.email.trim() && (
                             <div className="sm:col-span-2 pt-2 border-t border-white/[0.06]">
                               <span className="text-white/40 block mb-0.5">Bildirim E-postası</span>
@@ -665,11 +687,11 @@ export default function Booking({
                 </form>
               ) : (
                 <motion.div key="success" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10 sm:py-12 space-y-8">
-                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-[#D4AF37]/30 text-[#D4AF37] bg-[#D4AF37]/[0.06]">
+                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-[#C8703A]/30 text-[#C8703A] bg-[#C8703A]/[0.06]">
                     <Check size={36} strokeWidth={2.5} />
                   </div>
                   <div>
-                    <span className="inline-block text-[9px] font-bold uppercase tracking-[0.2em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full mb-4">
+                    <span className="inline-block text-[9px] font-bold uppercase tracking-[0.2em] text-[#C8703A] bg-[#C8703A]/10 border border-[#C8703A]/20 px-3 py-1 rounded-full mb-4">
                       Onay Bekleniyor
                     </span>
                     <h3 className="text-3xl font-serif font-light text-white">Randevunuz Alındı!</h3>
@@ -679,7 +701,7 @@ export default function Booking({
                     </p>
 
                     <div className="mt-5 flex items-start gap-3 p-4 bg-white/[0.03] border border-white/[0.08] rounded-sm text-left max-w-lg mx-auto">
-                      <Mail size={18} className="text-[#D4AF37] shrink-0 mt-0.5" />
+                      <Mail size={18} className="text-[#C8703A] shrink-0 mt-0.5" />
                       <p className="text-xs text-white/55 leading-relaxed">
                         Randevunuz salon tarafından <span className="text-white/80 font-medium">onaylandığında</span>,{" "}
                         <span className="text-white font-medium">{appointmentResult?.email || formData.email.trim()}</span>{" "}
@@ -695,7 +717,7 @@ export default function Booking({
                         <p><span className="text-white/40">Hizmet:</span> <span className="text-white">{appointmentResult.service}</span></p>
                         <p><span className="text-white/40">Berber:</span> <span className="text-white">{appointmentResult.barber}</span></p>
                         <p><span className="text-white/40">Tarih:</span> <span className="text-white">{getFormattedDate(appointmentResult.date)}</span></p>
-                        <p><span className="text-white/40">Saat:</span> <span className="text-[#D4AF37] font-semibold">{appointmentResult.time}</span></p>
+                        <p><span className="text-white/40">Saat:</span> <span className="text-[#C8703A] font-semibold">{appointmentResult.time}</span></p>
                         <p><span className="text-white/40">E-posta:</span> <span className="text-white/80">{appointmentResult.email}</span></p>
                       </div>
                     )}

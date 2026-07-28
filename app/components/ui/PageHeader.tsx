@@ -10,7 +10,7 @@ interface PageHeaderProps {
 
 export default function PageHeader({ title, subtitle, breadcrumb, bg }: PageHeaderProps) {
   return (
-    <div className="relative pt-[120px] bg-[#0A0A0A] overflow-hidden group">
+    <div className="relative pt-[120px] bg-[#0D1117] overflow-hidden group">
       {bg && (
         <div
           className="absolute inset-0 bg-cover bg-center opacity-40 grayscale transition-transform duration-[4s] ease-out group-hover:scale-105"
@@ -18,7 +18,7 @@ export default function PageHeader({ title, subtitle, breadcrumb, bg }: PageHead
         />
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-[#0A0A0A]/30 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0D1117] via-[#0D1117]/60 to-[#0D1117]/30 z-0" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 lg:px-10 py-14 md:py-20">
         <nav className="flex items-center gap-2 text-[10px] font-semibold tracking-[0.2em] uppercase text-white/30 mb-5">

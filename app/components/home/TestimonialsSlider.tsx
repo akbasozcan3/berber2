@@ -9,17 +9,22 @@ import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 import { getInitials } from "@/lib/utils/format";
 import SectionTitle from "@/components/ui/SectionTitle";
 
-export default function TestimonialsSlider() {
+interface TestimonialsSliderProps {
+  initialReviews?: Review[];
+}
+
+export default function TestimonialsSlider({ initialReviews = [] }: TestimonialsSliderProps) {
   const settings = usePublicSettings();
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState<Review[]>(initialReviews);
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
+    if (initialReviews.length > 0) return;
     api.getReviews(true).then((data) => {
       if (data.length > 0) setReviews(data);
       else api.getReviews().then(setReviews).catch(() => {});
     }).catch(() => {});
-  }, []);
+  }, [initialReviews.length]);
 
   const next = useCallback(() => {
     if (reviews.length === 0) return;
@@ -42,8 +47,8 @@ export default function TestimonialsSlider() {
   const review = reviews[current];
 
   return (
-    <section className="section-light py-28 relative overflow-hidden border-y border-black/[0.06]">
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 text-[240px] font-serif leading-none text-black/[0.03] select-none pointer-events-none">
+    <section className="py-28 relative overflow-hidden border-y border-black/[0.06]" style={{ backgroundColor: "#F5F2ED" }}>
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 text-[240px] font-serif leading-none text-black/[0.025] select-none pointer-events-none">
         &ldquo;
       </div>
 
@@ -144,7 +149,7 @@ export default function TestimonialsSlider() {
               </button>
               <button
                 onClick={next}
-                className="w-12 h-12 rounded-full bg-black flex items-center justify-center text-white hover:bg-black/85 transition-all duration-300"
+                className="w-12 h-12 rounded-full bg-[#C8703A] flex items-center justify-center text-white hover:bg-[#B5612E] transition-all duration-300"
                 aria-label="Sonraki"
               >
                 <ArrowRight size={16} />

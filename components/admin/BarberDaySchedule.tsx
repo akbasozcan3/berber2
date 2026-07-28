@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Clock, Scissors, Store } from "lucide-react";
@@ -10,7 +10,6 @@ import Avatar from "@/components/admin/ui/Avatar";
 import { cn } from "@/lib/admin/cn";
 import type { AdminBarber, AvailabilityBlock } from "@/lib/api/admin";
 import {
-  blocksActiveOnDate,
   getBarberDayInfo,
   getSalonStatusForDate,
   type BarberDayStatus,
@@ -69,20 +68,19 @@ export default function BarberDaySchedule({
     onDateChange(toLocalIsoDate(d));
   };
 
-  const dayBlocks = blocksActiveOnDate(blocks, date);
   const salon = getSalonStatusForDate(date, blocks);
   const dayLabel = formatIsoDateTr(date);
   const activeBarbers = barbers.filter((b) => b.available && !b.onVacation);
 
   return (
-    <Card className="mb-6 border-[#D4AF37]/25">
+    <Card className="mb-6 border-[#C8703A]/25">
       <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-6">
         <div>
-          <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#D4AF37] mb-1">
+          <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#C8703A] mb-1">
             Günlük berber müsaitliği
           </p>
-          <h3 className="text-xl font-semibold text-[#F8F8F8]">Kim müsait, kim değil?</h3>
-          <p className="text-sm text-[#71717A] mt-1">
+          <h3 className="text-xl font-semibold text-[#EEE9E0]">Kim müsait, kim değil?</h3>
+          <p className="text-sm text-[#6B7A94] mt-1">
             Berberin işi çıktıysa sadece onu kapatın — diğerleri çalışmaya devam eder.
           </p>
         </div>
@@ -105,18 +103,18 @@ export default function BarberDaySchedule({
         </div>
       </div>
 
-      <p className="text-sm text-[#A1A1AA] mb-4 font-medium">{dayLabel}</p>
+      <p className="text-sm text-[#8A9BB0] mb-4 font-medium">{dayLabel}</p>
 
       {/* Salon row */}
-      <div className="p-4 rounded-2xl border border-white/[0.08] bg-[#0A0A0A] mb-4">
+      <div className="p-4 rounded-2xl border border-white/[0.08] bg-[#0D1117] mb-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white/[0.06] flex items-center justify-center">
-              <Store className="w-5 h-5 text-[#D4AF37]" />
+              <Store className="w-5 h-5 text-[#C8703A]" />
             </div>
             <div>
-              <p className="font-semibold text-[#F8F8F8]">Tüm Salon</p>
-              <p className="text-xs text-[#71717A]">
+              <p className="font-semibold text-[#EEE9E0]">Tüm Salon</p>
+              <p className="text-xs text-[#6B7A94]">
                 {salon.closed ? "O gün salon tamamen kapalı" : "Salon açık — berberleri ayrı ayarlayın"}
               </p>
             </div>
@@ -167,8 +165,8 @@ export default function BarberDaySchedule({
 
       {/* Barber cards */}
       {barbers.length === 0 ? (
-        <p className="text-sm text-[#71717A] py-6 text-center">
-          Henüz berber eklenmemiş. <strong className="text-[#A1A1AA]">Berberler</strong> sayfasından ekleyin.
+        <p className="text-sm text-[#6B7A94] py-6 text-center">
+          Henüz berber eklenmemiş. <strong className="text-[#8A9BB0]">Berberler</strong> sayfasından ekleyin.
         </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -183,15 +181,15 @@ export default function BarberDaySchedule({
                 className={cn(
                   "rounded-2xl border p-4 transition-all",
                   info.status === "available"
-                    ? "border-white/[0.08] bg-[#0A0A0A]"
-                    : "border-white/[0.1] bg-[#0A0A0A]/80"
+                    ? "border-white/[0.08] bg-[#0D1117]"
+                    : "border-white/[0.1] bg-[#0D1117]/80"
                 )}
               >
                 <div className="flex items-start gap-3 mb-3">
                   <Avatar name={barber.name} size="md" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-[#F8F8F8] truncate">{barber.name}</p>
-                    <p className="text-xs text-[#71717A]">{barber.position}</p>
+                    <p className="font-semibold text-[#EEE9E0] truncate">{barber.name}</p>
+                    <p className="text-xs text-[#6B7A94]">{barber.position}</p>
                   </div>
                   <span
                     className={cn(
@@ -204,7 +202,7 @@ export default function BarberDaySchedule({
                 </div>
 
                 {info.detail ? (
-                  <p className="text-xs text-[#71717A] mb-3 flex items-center gap-1.5">
+                  <p className="text-xs text-[#6B7A94] mb-3 flex items-center gap-1.5">
                     <Scissors className="w-3 h-3 shrink-0" />
                     {info.detail}
                   </p>
@@ -217,7 +215,7 @@ export default function BarberDaySchedule({
                         key={r.id}
                         className="flex items-center justify-between text-xs bg-white/[0.03] rounded-lg px-2 py-1.5"
                       >
-                        <span className="text-[#A1A1AA] flex items-center gap-1">
+                        <span className="text-[#8A9BB0] flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           {r.startTime}–{r.endTime}
                         </span>
@@ -281,7 +279,7 @@ export default function BarberDaySchedule({
                     </Button>
                   )}
                   {info.status === "vacation" && (
-                    <p className="text-[10px] text-[#52525B]">Berberler sayfasından tatili kaldırın.</p>
+                    <p className="text-[10px] text-[#4A5568]">Berberler sayfasından tatili kaldırın.</p>
                   )}
                 </div>
 
@@ -311,7 +309,7 @@ export default function BarberDaySchedule({
       )}
 
       {activeBarbers.length > 0 && !salon.closed && (
-        <p className="text-xs text-[#52525B] mt-4 text-center">
+        <p className="text-xs text-[#4A5568] mt-4 text-center">
           {activeBarbers.length} berber aktif · Müşteriler randevuda sadece müsait berberleri görebilir
         </p>
       )}

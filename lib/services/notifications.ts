@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { notifications } from "@/lib/db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 
 const listeners = new Set<(data: string) => void>();
 

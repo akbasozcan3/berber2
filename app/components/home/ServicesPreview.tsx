@@ -26,7 +26,7 @@ export default function ServicesPreview({ initialServices = [] }: ServicesPrevie
   const display = services.slice(0, 4);
 
   return (
-    <section className="section-light py-24 relative overflow-hidden border-b border-black/[0.06]">
+    <section className="py-24 relative overflow-hidden border-b border-black/[0.06]" style={{ backgroundColor: "#F5F2ED" }}>
       <div className="container mx-auto px-6 lg:px-14 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div>
@@ -77,9 +77,6 @@ export default function ServicesPreview({ initialServices = [] }: ServicesPrevie
                   <div className="w-11 h-11 rounded-full border border-black/10 flex items-center justify-center text-black/50 group-hover:border-black group-hover:text-black transition-colors duration-500">
                     <Icon size={16} />
                   </div>
-                  <span className="text-[10px] font-bold tracking-wider text-black/15 group-hover:text-black/30 transition-colors duration-500">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
                 </div>
 
                 <h3 className="text-xl font-serif font-light text-black mb-3">{s.name}</h3>
@@ -94,7 +91,12 @@ export default function ServicesPreview({ initialServices = [] }: ServicesPrevie
                     </span>
                     <span className="text-lg font-serif font-medium text-black">₺{s.price}</span>
                   </div>
-                  <span className="text-xs font-light text-black/40">{s.duration} dk</span>
+                  <div className="flex items-end gap-3">
+                    <span className="text-xs font-light text-black/40">{s.duration} dk</span>
+                    <span className="text-[11px] font-bold tracking-wider text-black/15 group-hover:text-black/30 transition-colors duration-500 font-mono">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
                 </div>
               </motion.div>
             );
@@ -104,7 +106,7 @@ export default function ServicesPreview({ initialServices = [] }: ServicesPrevie
         <div className="flex justify-center mt-14">
           <Link
             href="/randevu"
-            className="group flex items-center gap-2.5 bg-black hover:bg-black/85 text-white px-10 py-4.5 rounded-full text-[10px] font-bold tracking-[0.22em] uppercase transition-all duration-300"
+            className="group flex items-center gap-2.5 bg-[#1A2235] hover:bg-[#C8703A] text-white px-10 py-4 rounded-full text-[10px] font-bold tracking-[0.22em] uppercase transition-all duration-300 border border-white/10 hover:border-[#C8703A]"
           >
             <Calendar size={14} />
             {settings.navCtaLabel || "Randevu Al"}

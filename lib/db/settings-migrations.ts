@@ -1,21 +1,18 @@
 import { db } from "@/lib/db";
-import { settings, barbers, appointments, customers } from "@/lib/db/schema";
+import { settings, barbers } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { isLegacyDefaultLunchBreak, serializeBreakTimes } from "@/lib/utils/break-times";
 import { normalizeBarberWorkingDays } from "@/lib/utils/salon-schedule";
 import { parseWorkingHoursJson, serializeWorkingHours } from "@/lib/data/working-hours";
-import {
-  mergeDuplicateCustomersByEmail,
-  removeOrphanCustomers,
-  syncCustomerStats,
-} from "@/lib/services/customers";
 
-let migrated = false;
+const globalForMigrations = globalThis as typeof globalThis & {
+  __migrationsDone?: boolean;
+};
 
 /** One-time fixes for settings that block booking unintentionally. */
 export async function runSettingsMigrations() {
-  if (migrated) return;
-  migrated = true;
+  if (globalForMigrations.__migrationsDone) return;
+  globalForMigrations.__migrationsDone = true;
 
   const row = await db.select().from(settings).where(eq(settings.key, "break_times")).limit(1);
   const value = row[0]?.value;
@@ -57,12 +54,7 @@ export async function runSettingsMigrations() {
     }
   }
 
-  await db.delete(appointments).where(eq(appointments.status, "cancelled"));
-  await mergeDuplicateCustomersByEmail();
-  await removeOrphanCustomers();
-
-  const remainingCustomers = await db.select({ id: customers.id }).from(customers);
-  for (const customer of remainingCustomers) {
-    await syncCustomerStats(customer.id);
-  }
+  // Not: iptal randevu silme ve müşteri senkronizasyonu burada kasıtlı çalıştırılmıyor.
+  // Her boot'ta tüm müşterileri tek tek sync etmek çok yavaş ve connection timeout'a yol açıyor.
+  // Bu işlemler sadece admin panelinden/randevu onayından tetiklenmeli.
 }

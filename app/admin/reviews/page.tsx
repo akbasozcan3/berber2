@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -108,7 +108,7 @@ export default function ReviewsPage() {
                     <h3 className="font-semibold text-[#F8F8F8]">{review.customerName}</h3>
                     <div className="flex gap-0.5">
                       {Array.from({ length: review.rating }).map((_, j) => (
-                        <Star key={j} className="w-3.5 h-3.5 text-[#D4AF37] fill-[#D4AF37]" />
+                        <Star key={j} className="w-3.5 h-3.5 text-[#C8703A] fill-[#C8703A]" />
                       ))}
                     </div>
                     {!review.approved && <Badge label="Onay Bekliyor" variant="gold" />}
@@ -117,7 +117,7 @@ export default function ReviewsPage() {
                   </div>
                   <p className="text-xs text-[#71717A] mt-1">{formatDate(review.createdAt)}</p>
                   {review.customerEmail && (
-                    <p className="text-xs text-[#D4AF37] mt-1">{review.customerEmail}</p>
+                    <p className="text-xs text-[#C8703A] mt-1">{review.customerEmail}</p>
                   )}
                   {editingId !== review.id ? (
                     <p className="text-sm text-[#A1A1AA] mt-3">{review.review}</p>

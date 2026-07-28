@@ -1,9 +1,7 @@
 import PageHeader from "../components/ui/PageHeader";
 import About from "../components/about/About";
-import { getPublicSettingsSnapshot } from "@/lib/data/public-server";
+import { getPageContentBySlug, getPublicSettingsSnapshot } from "@/lib/data/public-server";
 import { buildPageMetadata } from "@/lib/data/seo";
-
-export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const settings = await getPublicSettingsSnapshot();
@@ -11,7 +9,10 @@ export async function generateMetadata() {
 }
 
 export default async function HakkimizdaPage() {
-  const settings = await getPublicSettingsSnapshot();
+  const [settings, aboutPage] = await Promise.all([
+    getPublicSettingsSnapshot(),
+    getPageContentBySlug("about"),
+  ]);
   return (
     <main>
       <PageHeader
@@ -19,7 +20,7 @@ export default async function HakkimizdaPage() {
         subtitle={settings.aboutPageSubtitle}
         bg={settings.aboutPageBanner}
       />
-      <About />
+      <About initialPage={aboutPage} />
     </main>
   );
 }

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
@@ -32,19 +32,22 @@ export default function AppointmentsPage() {
   const [page, setPage] = useState(1);
   const [toast, setToast] = useState<{ text: string; ok: boolean } | null>(null);
   const [bulkLoading, setBulkLoading] = useState(false);
+  const [{ today, tomorrow }] = useState(() => {
+    const currentDate = new Date();
+    const nextDate = new Date(currentDate);
+    nextDate.setDate(currentDate.getDate() + 1);
+
+    return {
+      today: toLocalIsoDate(currentDate),
+      tomorrow: toLocalIsoDate(nextDate),
+    };
+  });
 
   const load = useCallback(() => {
     adminApi.getAppointments().then(setAppointments);
   }, []);
 
   useEffect(() => { void Promise.resolve().then(load); }, [load]);
-
-  const today = toLocalIsoDate();
-  const tomorrow = toLocalIsoDate(new Date(Date.now() + 86400000));
-
-  useEffect(() => {
-    setPage(1);
-  }, [activeFilter, search]);
 
   const filtered = appointments.filter((apt) => {
     const matchesSearch =
@@ -70,6 +73,16 @@ export default function AppointmentsPage() {
   const showToast = (text: string, ok: boolean) => {
     setToast({ text, ok });
     setTimeout(() => setToast(null), 3000);
+  };
+
+  const handleFilterChange = (filter: string) => {
+    setActiveFilter(filter);
+    setPage(1);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
   };
 
   const cancelAppointment = async (apt: AdminAppointment) => {
@@ -240,8 +253,8 @@ export default function AppointmentsPage() {
 
       <Card padding="sm" className="mb-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-2">
-          <Tabs tabs={filterTabs} activeTab={activeFilter} onChange={setActiveFilter} />
-          <SearchInput value={search} onChange={setSearch} placeholder="Ara..." className="w-full lg:w-72" />
+          <Tabs tabs={filterTabs} activeTab={activeFilter} onChange={handleFilterChange} />
+          <SearchInput value={search} onChange={handleSearchChange} placeholder="Ara..." className="w-full lg:w-72" />
         </div>
       </Card>
 
@@ -276,7 +289,7 @@ export default function AppointmentsPage() {
                   <td className="px-6 py-4 text-sm text-[#F8F8F8]">{apt.serviceName}</td>
                   <td className="px-6 py-4 text-sm text-[#A1A1AA]">{apt.barberName}</td>
                   <td className="px-6 py-4 text-sm text-[#A1A1AA]">{formatDate(apt.date)}</td>
-                  <td className="px-6 py-4 text-sm font-medium text-[#D4AF37]">{apt.time}</td>
+                  <td className="px-6 py-4 text-sm font-medium text-[#C8703A]">{apt.time}</td>
                   <td className="px-6 py-4"><Badge status={apt.status as "confirmed" | "pending" | "completed" | "cancelled"} /></td>
                   <td className="px-6 py-4 text-sm font-medium text-[#F8F8F8]">{formatCurrency(apt.price)}</td>
                   <td className="px-6 py-4">

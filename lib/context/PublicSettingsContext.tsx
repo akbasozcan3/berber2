@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api/client";
 import type { PublicSettings } from "@/lib/api/client";
 import { publicSettingsDefaults } from "@/lib/data/public-settings-defaults";
@@ -31,7 +31,7 @@ export function PublicSettingsProvider({
 }) {
   const seed = initialSettings ?? publicSettingsDefaults;
   const [settings, setSettings] = useState<PublicSettings>(seed);
-  const stickyLogo = useRef(seed.logoUrl);
+  const hasInitialSettings = Boolean(initialSettings);
 
   useEffect(() => {
     const refresh = () => {
@@ -43,27 +43,26 @@ export function PublicSettingsProvider({
         .catch(() => {});
     };
 
-    refresh();
+    if (!hasInitialSettings) refresh();
 
     const onFocus = () => refresh();
-    window.addEventListener("focus", onFocus);
-    document.addEventListener("visibilitychange", () => {
+    const onVisibilityChange = () => {
       if (document.visibilityState === "visible") refresh();
-    });
+    };
+
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     return () => {
       window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, []);
-
-  useEffect(() => {
-    if (settings.logoUrl) stickyLogo.current = settings.logoUrl;
-  }, [settings.logoUrl]);
+  }, [hasInitialSettings]);
 
   const value = useMemo<PublicSettingsContextValue>(
     () => ({
       ...settings,
-      brandLogoUrl: settings.logoUrl || stickyLogo.current,
+      brandLogoUrl: settings.logoUrl,
     }),
     [settings]
   );

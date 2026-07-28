@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -42,10 +42,10 @@ export default function Drawer({ open, onClose, title, children, footer }: Drawe
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute right-0 top-0 h-full w-full max-w-md bg-[#111111] border-l border-white/[0.06] shadow-[-20px_0_60px_rgba(0,0,0,0.4)] flex flex-col"
+            className="absolute right-0 top-0 h-full w-full max-w-md bg-[#141E2E] border-l border-white/[0.06] shadow-[-20px_0_60px_rgba(0,0,0,0.4)] flex flex-col"
           >
             <div className="flex items-center justify-between p-6 border-b border-white/[0.06]">
-              <h2 className="text-lg font-semibold text-[#F8F8F8]">{title}</h2>
+              <h2 className="text-lg font-semibold text-[#EEE9E0]">{title}</h2>
               <Button variant="ghost" size="icon" onClick={onClose}>
                 <X className="w-4 h-4" />
               </Button>

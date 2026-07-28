@@ -4,8 +4,6 @@ import { getGalleryImages, getPublicSettingsSnapshot } from "@/lib/data/public-s
 import { buildPageMetadata } from "@/lib/data/seo";
 import { mapGalleryRow, filterVisibleGalleryItems } from "@/lib/utils/gallery";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata() {
   const settings = await getPublicSettingsSnapshot();
   return buildPageMetadata(settings, settings.galleryPageTitle, settings.galleryPageSubtitle);

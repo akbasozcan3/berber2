@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { api } from "@/lib/api/client";
 
 interface AdminUser {
@@ -8,21 +9,43 @@ interface AdminUser {
   email: string;
 }
 
-const AdminSessionContext = createContext<AdminUser | null>(null);
+interface AdminSessionState {
+  user: AdminUser | null;
+  loading: boolean;
+}
+
+const AdminSessionContext = createContext<AdminSessionState>({ user: null, loading: true });
 
 export function AdminSessionProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<AdminUser | null>(null);
+  const [state, setState] = useState<AdminSessionState>({ user: null, loading: true });
+  const pathname = usePathname();
 
   useEffect(() => {
     api
       .getSession()
       .then((session) => {
-        if (session.authenticated && session.user) setUser(session.user);
+        if (session.authenticated && session.user) {
+          setState({ user: session.user, loading: false });
+        } else {
+          setState({ user: null, loading: false });
+          if (pathname !== "/admin/login") {
+            window.location.href = "/admin/login";
+          }
+        }
       })
-      .catch(() => {});
-  }, []);
+      .catch(() => {
+        setState({ user: null, loading: false });
+        if (pathname !== "/admin/login") {
+          window.location.href = "/admin/login";
+        }
+      });
+  }, [pathname]);
 
-  return <AdminSessionContext.Provider value={user}>{children}</AdminSessionContext.Provider>;
+  return (
+    <AdminSessionContext.Provider value={state}>
+      {children}
+    </AdminSessionContext.Provider>
+  );
 }
 
 export function useAdminSession() {

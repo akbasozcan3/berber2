@@ -1,4 +1,4 @@
-import { cn } from "@/lib/admin/cn";
+﻿import { cn } from "@/lib/admin/cn";
 import type { AppointmentStatus } from "@/lib/admin/types";
 import { statusConfig } from "@/lib/admin/utils";
 
@@ -34,9 +34,9 @@ export default function Badge({ status, label, variant = "default", className }:
       className={cn(
         "inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg",
         {
-          "bg-white/[0.06] text-[#A1A1AA]": variant === "default",
-          "bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20": variant === "gold",
-          "border border-white/[0.06] text-[#A1A1AA]": variant === "outline",
+          "bg-white/[0.06] text-[#8A9BB0]": variant === "default",
+          "bg-[#C8703A]/10 text-[#C8703A] border border-[#C8703A]/20": variant === "gold",
+          "border border-white/[0.06] text-[#8A9BB0]": variant === "outline",
         },
         className
       )}

@@ -5,56 +5,68 @@ import fs from "fs";
 import path from "path";
 
 function loadLocalEnv() {
-  const envPath = path.join(process.cwd(), ".env.local");
-  if (!fs.existsSync(envPath)) return;
-  const content = fs.readFileSync(envPath, "utf8");
-  for (const rawLine of content.split(/\r?\n/)) {
-    const line = rawLine.trim();
-    if (!line || line.startsWith("#")) continue;
-    const match = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
-    if (!match) continue;
-    const key = match[1];
-    let value = match[2].trim();
-    value = value.replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1");
-    if (!process.env[key]) process.env[key] = value;
+  const candidates = [
+    path.join(/* turbopackIgnore: true */ process.cwd(), ".env.local"),
+    path.join(/* turbopackIgnore: true */ process.cwd(), "..", "..", ".env.local"),
+  ];
+  for (const envPath of candidates) {
+    if (!fs.existsSync(/* turbopackIgnore: true */ envPath)) continue;
+    const content = fs.readFileSync(/* turbopackIgnore: true */ envPath, "utf8");
+    for (const rawLine of content.split(/\r?\n/)) {
+      const line = rawLine.trim();
+      if (!line || line.startsWith("#")) continue;
+      const match = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+      if (!match) continue;
+      const key = match[1];
+      let value = match[2].trim();
+      value = value.replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1");
+      if (!process.env[key]) process.env[key] = value;
+    }
+    break;
   }
 }
 
 const globalForDb = globalThis as typeof globalThis & {
   __pgPool?: Pool;
   __drizzleDb?: NodePgDatabase<typeof schema>;
+  __dbAvailable?: boolean;
 };
 
 let initialized = false;
 let initPromise: Promise<void> | null = null;
 
-function resolveConnectionString(): string {
+function normalizeConnectionString(raw: string): string {
+  // Windows'ta localhost bazen IPv6 (::1) olarak çözülür; pg bağlantısı takılabiliyor.
+  return raw.replace(/@localhost([:/])/g, "@127.0.0.1$1");
+}
+
+function resolveConnectionString(): string | null {
   if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) loadLocalEnv();
 
-  // Prefer pooled URL on Vercel/serverless (avoids prisma_migration connection limits).
   const connectionString =
     process.env.POSTGRES_URL ||
     process.env.POSTGRES_PRISMA_URL ||
     process.env.DATABASE_URL ||
     process.env.POSTGRES_CONNECTION_STRING;
 
-  if (!connectionString) {
-    throw new Error(
-      "PostgreSQL bağlantısı bulunamadı. Ortama `POSTGRES_URL` veya `DATABASE_URL` ekleyin."
-    );
-  }
+  return connectionString ? normalizeConnectionString(connectionString) : null;
+}
 
-  return connectionString;
+export function isDbAvailable(): boolean {
+  return globalForDb.__dbAvailable === true;
 }
 
 function getPool() {
   if (!globalForDb.__pgPool) {
+    const connStr = resolveConnectionString();
+    if (!connStr) throw new Error("DB_NOT_CONFIGURED");
+
     const isServerless = Boolean(process.env.VERCEL);
     globalForDb.__pgPool = new Pool({
-      connectionString: resolveConnectionString(),
-      max: isServerless ? 1 : 5,
+      connectionString: connStr,
+      max: isServerless ? 1 : 3,
       idleTimeoutMillis: isServerless ? 5000 : 30000,
-      connectionTimeoutMillis: 10000,
+      connectionTimeoutMillis: 5000,
       allowExitOnIdle: isServerless,
     });
   }
@@ -78,10 +90,21 @@ export async function initDatabase() {
   if (initialized) return;
   if (initPromise) return initPromise;
 
+  if (!resolveConnectionString()) {
+    globalForDb.__dbAvailable = false;
+    return;
+  }
+
   initPromise = (async () => {
-    const database = getPool();
-    await database.query("select 1");
-    initialized = true;
+    try {
+      await getPool().query("select 1");
+      globalForDb.__dbAvailable = true;
+      initialized = true;
+    } catch {
+      globalForDb.__dbAvailable = false;
+      initPromise = null;
+      throw new Error("DB_CONNECTION_FAILED");
+    }
   })();
 
   return initPromise;

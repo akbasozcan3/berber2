@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -54,7 +54,7 @@ export default function Modal({
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              "relative w-full bg-[#111111] border border-white/[0.06] rounded-[20px] shadow-[0_25px_60px_rgba(0,0,0,0.5)]",
+              "relative w-full bg-[#141E2E] border border-white/[0.06] rounded-[20px] shadow-[0_25px_60px_rgba(0,0,0,0.5)]",
               {
                 "max-w-md": size === "sm",
                 "max-w-lg": size === "md",
@@ -64,9 +64,9 @@ export default function Modal({
           >
             <div className="flex items-start justify-between p-6 border-b border-white/[0.06]">
               <div>
-                <h2 className="text-lg font-semibold text-[#F8F8F8]">{title}</h2>
+                <h2 className="text-lg font-semibold text-[#EEE9E0]">{title}</h2>
                 {description && (
-                  <p className="text-sm text-[#71717A] mt-1">{description}</p>
+                  <p className="text-sm text-[#6B7A94] mt-1">{description}</p>
                 )}
               </div>
               <Button variant="ghost" size="icon" onClick={onClose}>

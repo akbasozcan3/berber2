@@ -7,7 +7,10 @@ import { api, type GalleryImage } from "@/lib/api/client";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { instagramUrl } from "@/lib/utils/format";
+import { isInstagramGalleryItem } from "@/lib/utils/gallery";
 import GalleryItemCard from "@/components/gallery/GalleryItemCard";
+import GalleryLightbox from "@/components/gallery/GalleryLightbox";
+import { useGalleryLightbox } from "@/components/gallery/useGalleryLightbox";
 
 interface GalleryPreviewProps {
   initialImages?: GalleryImage[];
@@ -16,6 +19,9 @@ interface GalleryPreviewProps {
 export default function GalleryPreview({ initialImages = [] }: GalleryPreviewProps) {
   const settings = usePublicSettings();
   const [images, setImages] = useState<GalleryImage[]>(initialImages.slice(0, 6));
+
+  const { lightboxImages, photoIndex, openLightbox, closeLightbox, goPrev, goNext } =
+    useGalleryLightbox(images);
 
   const ctaHref =
     settings.homeGalleryCtaUrl?.trim() || instagramUrl(settings.instagram);
@@ -27,8 +33,9 @@ export default function GalleryPreview({ initialImages = [] }: GalleryPreviewPro
   }, [initialImages]);
 
   return (
-    <section className="py-28 bg-black relative">
+    <section className="py-28 bg-[#0D1117] relative">
       <div className="absolute top-0 left-0 right-0 h-px bg-white/[0.06]" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-white/[0.06]" />
       <div className="container mx-auto px-6 lg:px-14">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
           <div>
@@ -59,10 +66,23 @@ export default function GalleryPreview({ initialImages = [] }: GalleryPreviewPro
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
           {images.map((item, i) => (
-            <GalleryItemCard key={item.id} item={item} index={i} />
+            <GalleryItemCard
+              key={item.id}
+              item={item}
+              index={i}
+              onClick={isInstagramGalleryItem(item) ? undefined : () => openLightbox(item)}
+            />
           ))}
         </div>
       </div>
+
+      <GalleryLightbox
+        images={lightboxImages}
+        photoIndex={photoIndex}
+        onClose={closeLightbox}
+        onPrev={goPrev}
+        onNext={goNext}
+      />
     </section>
   );
 }

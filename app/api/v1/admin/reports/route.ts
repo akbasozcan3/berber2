@@ -2,7 +2,7 @@ import { ensureDb } from "@/lib/db/ensure";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { appointments, customers, services, barbers } from "@/lib/db/schema";
-import { sql, ne } from "drizzle-orm";
+import { ne } from "drizzle-orm";
 import { jsonResponse, errorResponse } from "@/lib/api/helpers";
 
 export async function GET() {
@@ -10,11 +10,8 @@ export async function GET() {
     await ensureDb();
     await requireAuth();
 
-    const monthStart = new Date().toISOString().slice(0, 7) + "-01";
     const allApts = await db.select().from(appointments).where(ne(appointments.status, "cancelled"));
     const completed = allApts.filter((a) => a.status === "completed");
-    const monthCompleted = completed.filter((a) => a.date >= monthStart);
-
     const serviceCounts: Record<string, number> = {};
     allApts.forEach((a) => {
       serviceCounts[a.serviceId] = (serviceCounts[a.serviceId] || 0) + 1;

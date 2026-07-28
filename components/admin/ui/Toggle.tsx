@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { cn } from "@/lib/admin/cn";
 
@@ -15,8 +15,8 @@ export default function Toggle({ checked, onChange, label, description, disabled
     <label className={cn("flex items-center justify-between gap-4", disabled && "opacity-50 cursor-not-allowed")}>
       {(label || description) && (
         <div>
-          {label && <p className="text-sm font-medium text-[#F8F8F8]">{label}</p>}
-          {description && <p className="text-xs text-[#71717A] mt-0.5">{description}</p>}
+          {label && <p className="text-sm font-medium text-[#EEE9E0]">{label}</p>}
+          {description && <p className="text-xs text-[#6B7A94] mt-0.5">{description}</p>}
         </div>
       )}
       <button
@@ -27,7 +27,7 @@ export default function Toggle({ checked, onChange, label, description, disabled
         onClick={() => onChange(!checked)}
         className={cn(
           "relative w-11 h-6 rounded-full transition-colors duration-200 flex-shrink-0",
-          checked ? "bg-[#D4AF37]" : "bg-[#27272A]"
+          checked ? "bg-[#C8703A]" : "bg-[#2A3548]"
         )}
       >
         <span

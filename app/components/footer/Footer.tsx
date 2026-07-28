@@ -16,7 +16,7 @@ export default function Footer() {
   const logoText = splitBusinessNameForLogo(settings.businessName);
 
   return (
-    <footer className="bg-[#050505] pt-24 pb-12 border-t border-white/[0.06] relative z-10">
+    <footer className="bg-[#080D15] pt-24 pb-12 border-t border-white/[0.06] relative z-10">
       <div className="container mx-auto px-6 md:px-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
 

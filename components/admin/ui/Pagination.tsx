@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/admin/cn";
@@ -15,7 +15,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
 
   return (
     <div className="flex items-center justify-between">
-      <p className="text-sm text-[#71717A]">
+      <p className="text-sm text-[#6B7A94]">
         Sayfa {currentPage} / {totalPages}
       </p>
       <div className="flex items-center gap-1">
@@ -34,8 +34,8 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
             className={cn(
               "w-9 h-9 text-sm font-medium rounded-xl transition-all duration-200",
               currentPage === page
-                ? "bg-[#D4AF37] text-[#090909]"
-                : "text-[#71717A] hover:bg-white/[0.04] hover:text-[#F8F8F8]"
+                ? "bg-[#C8703A] text-[#0A0F18]"
+                : "text-[#6B7A94] hover:bg-white/[0.04] hover:text-[#EEE9E0]"
             )}
           >
             {page}

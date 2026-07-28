@@ -1,20 +1,15 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import PageHeader from "@/components/admin/ui/PageHeader";
-import Button from "@/components/admin/ui/Button";
 import Card from "@/components/admin/ui/Card";
 import Tabs from "@/components/admin/ui/Tabs";
 import AvailabilityManager from "@/components/admin/AvailabilityManager";
 import { adminApi, type AdminAppointment, type AvailabilityBlock } from "@/lib/api/admin";
 import { statusConfig } from "@/lib/admin/utils";
-import { cn } from "@/lib/admin/cn";
 
 export default function CalendarPage() {
   const [view, setView] = useState("daily");
-  const [currentDate, setCurrentDate] = useState(new Date());
   const [appointments, setAppointments] = useState<AdminAppointment[]>([]);
   const [blocks, setBlocks] = useState<AvailabilityBlock[]>([]);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
@@ -46,7 +41,7 @@ export default function CalendarPage() {
         actions={
           <div className="flex items-center gap-2">
             <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-[#0A0A0A] border border-white/[0.06] rounded-xl px-3 py-2 text-sm text-[#F8F8F8]" />
+              className="bg-[#0D1117] border border-white/[0.06] rounded-xl px-3 py-2 text-sm text-[#F8F8F8]" />
           </div>
         }
       />
@@ -62,7 +57,10 @@ export default function CalendarPage() {
           <Card className="xl:col-span-2" padding="none">
             <div className="p-6 border-b border-white/[0.06]">
               <h2 className="text-lg font-semibold text-[#F8F8F8]">
-                {new Date(selectedDate).toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long" })}
+                {(() => {
+                  const [y, m, d] = selectedDate.split("-").map(Number);
+                  return new Date(y, m - 1, d).toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long" });
+                })()}
               </h2>
               <p className="text-sm text-[#71717A]">{dayApts.length} randevu</p>
             </div>
@@ -74,7 +72,7 @@ export default function CalendarPage() {
                   const config = statusConfig[apt.status as keyof typeof statusConfig] || statusConfig.pending;
                   return (
                     <div key={apt.id} className="flex items-center gap-4 p-4 hover:bg-white/[0.02]">
-                      <span className="text-sm font-semibold text-[#D4AF37] w-14">{apt.time}</span>
+                      <span className="text-sm font-semibold text-[#C8703A] w-14">{apt.time}</span>
                       <div className="flex-1">
                         <p className="text-sm font-medium text-[#F8F8F8]">{apt.customerName}</p>
                         <p className="text-xs text-[#71717A]">{apt.serviceName} · {apt.barberName}</p>

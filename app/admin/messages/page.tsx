@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -43,7 +43,7 @@ export default function MessagesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
           >
-            <Card className={cn(!msg.read && "border-[#D4AF37]/20")}>
+            <Card className={cn(!msg.read && "border-[#C8703A]/20")}>
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2 flex-wrap">
@@ -53,7 +53,7 @@ export default function MessagesPage() {
                   </div>
                   <a
                     href={`mailto:${msg.email}`}
-                    className="text-sm text-[#D4AF37] hover:underline flex items-center gap-1.5 mb-3"
+                    className="text-sm text-[#C8703A] hover:underline flex items-center gap-1.5 mb-3"
                   >
                     <Mail className="w-3.5 h-3.5" />
                     {msg.email}

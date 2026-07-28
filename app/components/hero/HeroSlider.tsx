@@ -1,7 +1,8 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowLeft, CalendarCheck } from "lucide-react";
 import { api, type HeroSlide } from "@/lib/api/client";
@@ -11,15 +12,22 @@ const FALLBACK: HeroSlide[] = [
   { id: 1, title: "Saçınız Sizin\nİmzanızdır", subtitle: "Premium Berberlik", description: "Profesyonel kadromuzla kaliteli saç & sakal bakımı.", image: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=85&w=2560&auto=format&fit=crop", badge: "Saç Kesimi", ctaText: "Hemen Randevu Al", ctaLink: "/randevu", sortOrder: 1, enabled: true },
 ];
 
-export default function HeroSlider() {
+interface HeroSliderProps {
+  initialSlides?: HeroSlide[];
+}
+
+export default function HeroSlider({ initialSlides = [] }: HeroSliderProps) {
   const { navServicesLabel, navCtaLabel } = usePublicSettings();
-  const [slides, setSlides] = useState<HeroSlide[]>(FALLBACK);
+  const [slides, setSlides] = useState<HeroSlide[]>(
+    initialSlides.length > 0 ? initialSlides : FALLBACK
+  );
   const [cur, setCur] = useState(0);
   const [auto, setAuto] = useState(true);
 
   useEffect(() => {
+    if (initialSlides.length > 0) return;
     api.getHeroSlides().then((data) => { if (data.length > 0) setSlides(data); }).catch(() => {});
-  }, []);
+  }, [initialSlides.length]);
 
   const next = useCallback(() => setCur((c) => (c + 1) % slides.length), [slides.length]);
   const prev = useCallback(() => setCur((c) => (c - 1 + slides.length) % slides.length), [slides.length]);
@@ -36,8 +44,24 @@ export default function HeroSlider() {
   return (
     <section className="relative w-full" style={{ height: "100dvh", minHeight: 520 }}>
       <AnimatePresence mode="sync">
-        <motion.div key={cur} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.2 }}
-          className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${s.image}')` }} />
+        <motion.div
+          key={cur}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.2 }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={s.image}
+            alt={s.title.replace(/\s+/g, " ").trim()}
+            fill
+            priority={cur === 0}
+            sizes="100vw"
+            className="object-cover"
+            quality={82}
+          />
+        </motion.div>
       </AnimatePresence>
       <div className="absolute inset-0 bg-black/60" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
@@ -58,10 +82,20 @@ export default function HeroSlider() {
           </motion.div>
         </AnimatePresence>
         <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-1.5 hidden sm:flex">
-          <div className="w-5 h-8 border border-white/25 rounded-full flex items-start justify-center pt-1.5">
-            <motion.div className="w-1 h-1.5 bg-white/60 rounded-full" animate={{ y: [0, 7, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} />
-          </div>
-          <span className="text-[9px] tracking-[0.25em] uppercase text-white/25">Aşağı Kaydır</span>
+          <button
+            type="button"
+            aria-label="Aşağı kaydır"
+            onClick={() => {
+              const next = document.querySelector("main > *:nth-child(2)") as HTMLElement | null;
+              if (next) next.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="flex flex-col items-center gap-1.5 group"
+          >
+            <div className="w-5 h-8 border border-white/25 rounded-full flex items-start justify-center pt-1.5 group-hover:border-white/50 transition-colors">
+              <motion.div className="w-1 h-1.5 bg-white/60 rounded-full" animate={{ y: [0, 7, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} />
+            </div>
+            <span className="text-[9px] tracking-[0.25em] uppercase text-white/25 group-hover:text-white/50 transition-colors">Aşağı Kaydır</span>
+          </button>
         </div>
       </div>
 

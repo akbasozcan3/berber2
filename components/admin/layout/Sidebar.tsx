@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard,
@@ -55,8 +55,7 @@ interface SidebarProps {
 
 export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: SidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const user = useAdminSession();
+  const { user } = useAdminSession();
   const displayName = user?.name ?? "Admin";
   const [businessName, setBusinessName] = useState("Salon");
 
@@ -70,8 +69,7 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose
     try {
       await api.logout();
     } finally {
-      router.push("/admin/login");
-      router.refresh();
+      window.location.href = "/admin/login";
     }
   };
 
@@ -79,15 +77,15 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose
     <div className="flex flex-col h-full">
       <div className={cn("p-5 border-b border-white/[0.06]", collapsed && "px-3")}>
         <Link href="/admin" className="flex items-center gap-3" onClick={onMobileClose}>
-          <div className="w-10 h-10 rounded-2xl bg-[#D4AF37] flex items-center justify-center flex-shrink-0">
-            <span className="text-[#090909] font-bold text-sm">
+          <div className="w-10 h-10 rounded-2xl bg-[#C8703A] flex items-center justify-center flex-shrink-0">
+            <span className="text-[#0A0F18] font-bold text-sm">
               {businessInitials(businessName)}
             </span>
           </div>
           {!collapsed && (
             <div>
-              <p className="text-[#F8F8F8] font-semibold text-sm tracking-wide line-clamp-1">{businessName}</p>
-              <p className="text-[#71717A] text-[10px] tracking-widest uppercase">Yönetim Paneli</p>
+              <p className="text-[#EEE9E0] font-semibold text-sm tracking-wide line-clamp-1">{businessName}</p>
+              <p className="text-[#6B7A94] text-[10px] tracking-widest uppercase">Yönetim Paneli</p>
             </div>
           )}
         </Link>
@@ -108,8 +106,8 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200",
                 isActive
-                  ? "bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20"
-                  : "text-[#71717A] hover:text-[#F8F8F8] hover:bg-white/[0.04]",
+                  ? "bg-[#C8703A]/10 text-[#C8703A] border border-[#C8703A]/20"
+                  : "text-[#6B7A94] hover:text-[#EEE9E0] hover:bg-white/[0.04]",
                 collapsed && "justify-center px-2"
               )}
               title={collapsed ? item.label : undefined}
@@ -131,15 +129,15 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose
           <Avatar name={displayName} size="sm" />
           {!collapsed && (
             <div className="min-w-0">
-              <p className="text-sm font-medium text-[#F8F8F8] truncate">{displayName}</p>
-              <p className="text-xs text-[#71717A]">Admin</p>
+              <p className="text-sm font-medium text-[#EEE9E0] truncate">{displayName}</p>
+              <p className="text-xs text-[#6B7A94]">Admin</p>
             </div>
           )}
         </div>
         <button
           onClick={handleLogout}
           className={cn(
-            "flex items-center gap-3 w-full px-3 py-2.5 rounded-2xl text-sm font-medium text-[#71717A] hover:text-red-400 hover:bg-red-500/5 transition-all duration-200",
+            "flex items-center gap-3 w-full px-3 py-2.5 rounded-2xl text-sm font-medium text-[#6B7A94] hover:text-red-400 hover:bg-red-500/5 transition-all duration-200",
             collapsed && "justify-center px-2"
           )}
         >
@@ -168,7 +166,7 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose
         {sidebarContent}
         <button
           onClick={onToggle}
-          className="absolute -right-3 top-20 w-6 h-6 bg-[#1A1A1A] border border-white/[0.06] rounded-full flex items-center justify-center text-[#71717A] hover:text-[#F8F8F8] transition-colors"
+          className="absolute -right-3 top-20 w-6 h-6 bg-[#1A1A1A] border border-white/[0.06] rounded-full flex items-center justify-center text-[#6B7A94] hover:text-[#EEE9E0] transition-colors"
         >
           <ChevronLeft
             className={cn("w-3.5 h-3.5 transition-transform duration-300", collapsed && "rotate-180")}

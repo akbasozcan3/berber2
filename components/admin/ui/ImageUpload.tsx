@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, useState } from "react";
 import { ImageIcon, Loader2, Upload } from "lucide-react";
@@ -51,8 +51,8 @@ export default function ImageUpload({
 
   return (
     <div className={className}>
-      <label className="text-xs text-[#71717A] mb-2 block">{label}</label>
-      <div className="rounded-xl border border-white/[0.08] bg-[#0A0A0A] p-4">
+      <label className="text-xs text-[#6B7A94] mb-2 block">{label}</label>
+      <div className="rounded-xl border border-white/[0.08] bg-[#0D1117] p-4">
         {value ? (
           <div
             className={cn(
@@ -70,7 +70,7 @@ export default function ImageUpload({
         ) : (
           <div
             className={cn(
-              "mb-3 rounded-lg border border-dashed border-white/10 flex flex-col items-center justify-center gap-2 text-[#52525B]",
+              "mb-3 rounded-lg border border-dashed border-white/10 flex flex-col items-center justify-center gap-2 text-[#4A5568]",
               previewClass
             )}
           >
@@ -91,13 +91,13 @@ export default function ImageUpload({
           type="button"
           disabled={uploading}
           onClick={() => inputRef.current?.click()}
-          className="w-full flex items-center justify-center gap-2 h-11 rounded-xl bg-[#1A1A1A] border border-white/[0.08] text-sm text-[#F8F8F8] hover:border-[#D4AF37]/30 transition-colors disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-2 h-11 rounded-xl bg-[#1A1A1A] border border-white/[0.08] text-sm text-[#EEE9E0] hover:border-[#C8703A]/30 transition-colors disabled:opacity-50"
         >
           {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
           {uploading ? "Yükleniyor..." : value ? "Görseli Değiştir" : "Görsel Yükle"}
         </button>
 
-        <p className="text-[10px] text-[#52525B] mt-2 text-center">
+        <p className="text-[10px] text-[#4A5568] mt-2 text-center">
           {isIcon
             ? "Kare PNG veya ICO önerilir · Maks. 5MB"
             : "Telefon veya bilgisayardan seçin · Maks. 5MB"}

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Toggle from "@/components/admin/ui/Toggle";
 import Input from "@/components/admin/ui/Input";
@@ -47,7 +47,7 @@ export default function BreakTimesEditor({ value, onChange }: Props) {
           />
         </div>
       )}
-      <p className="text-xs text-[#52525B]">
+      <p className="text-xs text-[#4A5568]">
         Kapalı tutmak için bu seçeneği kapatın — tüm çalışma saatleri randevuya açık kalır.
       </p>
     </div>

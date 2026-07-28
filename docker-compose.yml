@@ -5,9 +5,9 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=newlife
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: newlife
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
@@ -17,18 +17,21 @@ services:
     build: .
     ports:
       - "3000:3000"
+    depends_on:
+      - postgres
     environment:
-      - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
-      - ADMIN_EMAIL=${ADMIN_EMAIL:-ozcanakbas38@gmail.com}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-Ozcan2009ak}
-      - DATABASE_URL=${DATABASE_URL:-postgres://postgres:postgres@postgres:5432/newlife}
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
-      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-}
-      - ADMIN_URL=${ADMIN_URL:-http://localhost:3000/admin/appointments}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?ADMIN_EMAIL is required}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD is required}
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/newlife
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
+      HTTPS_ENABLED: ${HTTPS_ENABLED:-false}
     volumes:
-      - app-data:/app/data
+      - uploads-data:/app/public/uploads
     restart: unless-stopped
 
 volumes:
   postgres-data:
-  app-data:
+  uploads-data:

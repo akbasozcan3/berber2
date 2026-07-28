@@ -31,6 +31,8 @@ interface TelegramStatus {
   recipientName: string;
   lastTestAt: string | null;
   botUsername: string | null;
+  chatId?: string | null;
+  chatTarget?: "group" | "private" | "none";
 }
 
 function formatTestDate(iso: string | null): string {
@@ -94,11 +96,16 @@ export default function SettingsPage() {
     if (!payload.working_hours?.trim()) {
       payload.working_hours = serializeWorkingHours(parseWorkingHoursJson(""));
     }
-    await adminApi.saveSettings(payload);
+    // UI'ı hemen güncelle — kullanıcı anında geri bildirim alır
     setSettings(payload);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
-    loadTelegram();
+    // Arka planda kaydet
+    adminApi.saveSettings(payload).then(() => {
+      loadTelegram();
+    }).catch(() => {
+      showToast(false, "Kaydedilemedi, tekrar deneyin.");
+    });
   };
 
   const syncBarberHours = async () => {
@@ -305,7 +312,7 @@ export default function SettingsPage() {
               </Button>
             </div>
 
-            <div className="rounded-2xl border border-white/[0.08] bg-[#0A0A0A] divide-y divide-white/[0.06]">
+            <div className="rounded-2xl border border-white/[0.08] bg-[#0D1117] divide-y divide-white/[0.06]">
               <InfoRow label="Hazır">
                 <span className="inline-flex items-center gap-2 text-sm">
                   <span className={cn("w-2 h-2 rounded-full", telegramReady ? "bg-green-400" : "bg-yellow-400")} />
@@ -324,6 +331,16 @@ export default function SettingsPage() {
                   {status?.botUsername && (
                     <span className="text-[#52525B] text-xs">@{status.botUsername}</span>
                   )}
+                </span>
+              </InfoRow>
+
+              <InfoRow label="Bildirim Hedefi">
+                <span className="text-sm text-[#A1A1AA]">
+                  {status?.chatTarget === "group"
+                    ? `Grup (${status.chatId})`
+                    : status?.chatTarget === "private"
+                      ? `Kişisel sohbet (${status.chatId}) — gruba düşmez`
+                      : "Chat ID ayarlanmamış"}
                 </span>
               </InfoRow>
 
@@ -370,7 +387,10 @@ export default function SettingsPage() {
                   placeholder="Kişisel: 7766835593 · Grup: -100..."
                 />
                 <p className="text-xs text-[#52525B] leading-relaxed">
-                  Grup bildirimi için botu gruba ekleyin, gruba bir mesaj yazın ve Chat ID&apos;yi buraya girin.
+                  Grup bildirimi için: botu gruba ekleyin → grupta <strong>/start</strong> yazın →
+                  admin panelden &quot;Test Bildirimi Gönder&quot;e basın. Grup ID&apos;sini görmek için
+                  grupta <strong>/grupid</strong> yazın. Kişisel bot sohbetine /start yazmayın; bildirimler
+                  oraya gider.
                 </p>
                 <Input
                   label="Admin Panel URL"
@@ -426,8 +446,12 @@ export default function SettingsPage() {
         <Card>
           <h3 className="text-base font-semibold text-[#F8F8F8] mb-2">SEO & Site</h3>
           <div className="space-y-4">
-            <Input label="Site URL (https://...)" value={settings.site_url || ""} onChange={(e) => set("site_url", e.target.value)} placeholder="https://www.thebarberyasin.com" />
-            <p className="text-xs text-[#71717A]">
+<Input
+  label="Site URL (https://...)"
+  value={settings.site_url || ""}
+  onChange={(e) => set("site_url", e.target.value)}
+  placeholder="https://ornek.com"
+/>            <p className="text-xs text-[#71717A]">
               Sitemap, robots.txt ve paylaşım linkleri bu adresi kullanır. Boş bırakılırsa canlı domain otomatik seçilir.
             </p>
             <Input label="Ana Sayfa SEO Başlık (boş = otomatik)" value={settings.seo_home_title || ""} onChange={(e) => set("seo_home_title", e.target.value)} />
@@ -486,7 +510,7 @@ export default function SettingsPage() {
             <div>
               <label className="text-xs text-[#71717A] mb-2 block">Ana Sayfa Özellik Şeridi (JSON)</label>
               <textarea
-                className="w-full min-h-[120px] bg-[#0A0A0A] border border-white/[0.06] rounded-2xl px-4 py-3 text-sm font-mono text-[#F8F8F8]"
+                className="w-full min-h-[120px] bg-[#0D1117] border border-white/[0.06] rounded-2xl px-4 py-3 text-sm font-mono text-[#F8F8F8]"
                 value={settings.home_stats_json || ""}
                 onChange={(e) => set("home_stats_json", e.target.value)}
                 placeholder='[{"title":"Randevulu Hizmet","desc":"..."}]'
@@ -566,7 +590,7 @@ export default function SettingsPage() {
           <div className="space-y-2 max-h-72 overflow-y-auto">
             {logs.length === 0 && <p className="text-xs text-[#52525B]">Henüz log yok.</p>}
             {logs.map((log) => (
-              <div key={log.id} className="p-3 bg-[#0A0A0A] rounded-xl border border-white/[0.06] text-xs">
+              <div key={log.id} className="p-3 bg-[#0D1117] rounded-xl border border-white/[0.06] text-xs">
                 <div className="flex items-center gap-2 mb-1">
                   {log.status === "sent" ? (
                     <CheckCircle className="w-3.5 h-3.5 text-green-400 shrink-0" />

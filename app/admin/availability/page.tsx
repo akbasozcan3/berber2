@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
@@ -215,7 +215,7 @@ export default function AvailabilityPage() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
         <Card className="xl:col-span-2">
           <h3 className="text-sm font-semibold text-[#F8F8F8] mb-2 flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-[#D4AF37]" /> Aylık Takvim
+            <Calendar className="w-4 h-4 text-[#C8703A]" /> Aylık Takvim
           </h3>
           <p className="text-xs text-[#71717A] mb-4">Güne tıklayın — o günün berber durumunu yukarıda düzenleyin</p>
           <div className="flex items-center justify-between mb-4">
@@ -267,7 +267,7 @@ export default function AvailabilityPage() {
                   className={cn(
                     "aspect-square rounded-lg border text-xs font-medium transition-all hover:scale-105",
                     STATUS_COLORS[status] || STATUS_COLORS.available,
-                    selected && "ring-2 ring-[#D4AF37] ring-offset-2 ring-offset-[#121212]"
+                    selected && "ring-2 ring-[#C8703A] ring-offset-2 ring-offset-[#121212]"
                   )}
                 >
                   {day}
@@ -279,7 +279,7 @@ export default function AvailabilityPage() {
 
         <Card>
           <h3 className="text-sm font-semibold text-[#F8F8F8] mb-4 flex items-center gap-2">
-            <Ban className="w-4 h-4 text-[#D4AF37]" /> Toplu İşlemler
+            <Ban className="w-4 h-4 text-[#C8703A]" /> Toplu İşlemler
           </h3>
           <div className="space-y-2">
             {[
@@ -361,7 +361,7 @@ export default function AvailabilityPage() {
 
           <Card>
             <h3 className="text-sm font-semibold text-[#F8F8F8] mb-2 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#D4AF37]" /> Özel Çalışma Saatleri
+              <Clock className="w-4 h-4 text-[#C8703A]" /> Özel Çalışma Saatleri
             </h3>
             <p className="text-xs text-[#71717A] mb-4">Seçili gün: {formatDate(form.startDate)}</p>
             <div className="grid grid-cols-2 gap-3 mb-3">
@@ -399,7 +399,7 @@ export default function AvailabilityPage() {
               blocks.map((b) => (
                 <div
                   key={b.id}
-                  className="flex items-center justify-between gap-3 p-3 bg-[#0A0A0A] rounded-xl border border-white/[0.06]"
+                  className="flex items-center justify-between gap-3 p-3 bg-[#0D1117] rounded-xl border border-white/[0.06]"
                 >
                   <div className="min-w-0">
                     <p className="text-sm text-[#F8F8F8] truncate">{formatAvailabilityRule(b)}</p>
@@ -421,7 +421,7 @@ export default function AvailabilityPage() {
           <h3 className="text-sm font-semibold text-[#F8F8F8] mb-4">Son İşlemler</h3>
           <div className="space-y-2 max-h-80 overflow-y-auto">
             {audit.slice(0, 20).map((a) => (
-              <div key={a.id} className="p-3 bg-[#0A0A0A] rounded-xl border border-white/[0.06]">
+              <div key={a.id} className="p-3 bg-[#0D1117] rounded-xl border border-white/[0.06]">
                 <p className="text-sm text-[#F8F8F8]">{a.action}</p>
                 <p className="text-xs text-[#71717A]">
                   {a.adminName} · {formatDate(a.createdAt)}

@@ -2,7 +2,7 @@ import { ensureDb } from "@/lib/db/ensure";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { appointments, customers, services, barbers } from "@/lib/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import { jsonResponse, errorResponse, parseBody } from "@/lib/api/helpers";
 import { confirmAllPendingAppointments } from "@/lib/services/appointment-confirm";
 import { removeOrphanCustomers } from "@/lib/services/customers";

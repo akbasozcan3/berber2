@@ -10,6 +10,19 @@ export function formatCurrency(amount: number): string {
 }
 
 export function formatDate(date: string): string {
+  // YYYY-MM-DD string'ini doğrudan parse et, timezone kayması olmasın
+  const [year, month, day] = date.length === 10
+    ? date.split("-").map(Number)
+    : [0, 0, 0];
+
+  if (year && month && day) {
+    return new Intl.DateTimeFormat("tr-TR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(year, month - 1, day));
+  }
+
   return new Intl.DateTimeFormat("tr-TR", {
     day: "numeric",
     month: "long",
@@ -18,6 +31,17 @@ export function formatDate(date: string): string {
 }
 
 export function formatShortDate(date: string): string {
+  const [year, month, day] = date.length === 10
+    ? date.split("-").map(Number)
+    : [0, 0, 0];
+
+  if (year && month && day) {
+    return new Intl.DateTimeFormat("tr-TR", {
+      day: "numeric",
+      month: "short",
+    }).format(new Date(year, month - 1, day));
+  }
+
   return new Intl.DateTimeFormat("tr-TR", {
     day: "numeric",
     month: "short",

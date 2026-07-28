@@ -121,24 +121,29 @@ export async function PATCH(
 
     if (entity === "barbers" && body.id) {
       const id = Number(body.id);
-      const { id: _, ...updates } = body;
+      const updates = { ...body };
+      delete updates.id;
       if (typeof updates.workingDays === "string") {
         updates.workingDays = normalizeBarberWorkingDays(updates.workingDays);
       }
       await db.update(barbers).set(updates as Partial<typeof barbers.$inferInsert>).where(eq(barbers.id, id));
+      revalidatePath("/", "layout");
+      revalidatePath("/");
       return jsonResponse({ success: true });
     }
 
     if (entity === "services" && body.id) {
       const id = Number(body.id);
-      const { id: _, ...updates } = body;
+      const updates = { ...body };
+      delete updates.id;
       await db.update(services).set(updates as Partial<typeof services.$inferInsert>).where(eq(services.id, id));
       return jsonResponse({ success: true });
     }
 
     if (entity === "gallery" && body.id) {
       const id = Number(body.id);
-      const { id: _, ...raw } = body;
+      const raw = { ...body };
+      delete raw.id;
       const parsed = parseGalleryPayload(raw);
       const title = raw.title !== undefined ? String(raw.title).trim() : undefined;
       const sortOrder = raw.sortOrder !== undefined ? Number(raw.sortOrder) : undefined;

@@ -23,7 +23,7 @@ export default function ExperienceHighlights() {
   ];
 
   return (
-    <section className="section-light py-24 border-y border-black/[0.06]">
+    <section className="py-24 border-y border-black/[0.06]" style={{ backgroundColor: "#F5F2ED" }}>
       <div className="container mx-auto px-6 lg:px-14">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -55,10 +55,10 @@ export default function ExperienceHighlights() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="bg-[#F5F5F5] p-8 lg:p-10 text-center group hover:bg-white transition-colors duration-500"
+              className="bg-[#EDEAE4] p-8 lg:p-10 text-center group hover:bg-white transition-colors duration-500"
             >
               <p className="text-4xl md:text-5xl font-serif font-light text-black">
-                {item.value}
+                <span className="text-[#C8703A]">{item.value}</span>
                 <span className="text-lg text-black/30">{item.suffix}</span>
               </p>
               <p className="mt-3 text-[10px] font-bold tracking-[0.25em] uppercase text-black/40">

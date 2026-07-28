@@ -1,4 +1,4 @@
-import { cn } from "@/lib/admin/cn";
+﻿import { cn } from "@/lib/admin/cn";
 import type { HTMLAttributes } from "react";
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
@@ -16,7 +16,7 @@ export default function Card({
   return (
     <div
       className={cn(
-        "bg-[#111111] border border-white/[0.06] rounded-[18px]",
+        "bg-[#141E2E] border border-white/[0.06] rounded-[18px]",
         {
           "hover:border-white/10 hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)] transition-all duration-300": hover,
           "p-0": padding === "none",

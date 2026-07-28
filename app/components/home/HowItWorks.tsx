@@ -55,7 +55,7 @@ export default function HowItWorks() {
   }, []);
 
   return (
-    <section className="section-light py-28 relative border-y border-black/[0.06]">
+    <section className="py-28 relative border-y border-black/[0.06]" style={{ backgroundColor: "#F5F2ED" }}>
       <div className="container mx-auto px-6 lg:px-14">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -92,7 +92,7 @@ export default function HowItWorks() {
                   <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-px bg-black/10" />
                 )}
                 <div className="inline-flex flex-col items-center">
-                  <span className="text-[10px] font-bold tracking-[0.35em] text-black/35 mb-4">
+                  <span className="text-[10px] font-bold tracking-[0.35em] text-[#C8703A]/70 mb-4">
                     {item.step}
                   </span>
                   <div className="w-24 h-24 rounded-full border border-black/10 flex items-center justify-center mb-8 group-hover:border-black group-hover:bg-black/[0.03] transition-all duration-500">
@@ -114,7 +114,7 @@ export default function HowItWorks() {
         >
           <Link
             href="/randevu"
-            className="inline-flex items-center gap-3 bg-black text-white hover:bg-black/85 px-10 py-4 rounded-full text-[10px] font-bold tracking-[0.28em] uppercase transition-all duration-300"
+            className="inline-flex items-center gap-3 bg-[#1A2235] text-white hover:bg-[#C8703A] px-10 py-4 rounded-full text-[10px] font-bold tracking-[0.28em] uppercase transition-all duration-300 border border-white/10 hover:border-[#C8703A]"
           >
             {navCtaLabel || ctaLabel}
           </Link>

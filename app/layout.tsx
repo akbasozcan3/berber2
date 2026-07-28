@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
-import { Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "./components/SiteChrome";
+import { geistMono, geistSans, geistSerif } from "./fonts";
 import { getPublicSettingsServer } from "@/lib/data/public-settings";
 import { buildRootMetadata } from "@/lib/data/seo";
 
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-serif",
-});
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getPublicSettingsServer();
@@ -28,7 +20,10 @@ export default async function RootLayout({
   const initialSettings = await getPublicSettingsServer();
 
   return (
-    <html lang="tr" className={`${outfit.variable} ${playfair.variable} scroll-smooth antialiased`}>
+    <html
+      lang="tr"
+      className={`${geistSans.variable} ${geistSerif.variable} ${geistMono.variable} scroll-smooth subpixel-antialiased`}
+    >
       <head>
         {initialSettings.logoUrl ? (
           <link rel="preload" as="image" href={initialSettings.logoUrl} />
@@ -40,7 +35,7 @@ export default async function RootLayout({
           </>
         ) : null}
       </head>
-      <body className="min-h-screen text-white flex flex-col font-sans selection:bg-[#D4AF37] selection:text-black">
+      <body className="min-h-screen text-white flex flex-col font-sans selection:bg-[#C8703A] selection:text-white">
         <SiteChrome initialSettings={initialSettings}>{children}</SiteChrome>
       </body>
     </html>

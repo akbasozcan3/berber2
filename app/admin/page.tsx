@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -83,7 +83,7 @@ export default function DashboardPage() {
                 className="flex items-center gap-4 p-4 hover:bg-white/[0.02]"
               >
                 <div className="w-14 text-center flex-shrink-0">
-                  <p className="text-sm font-semibold text-[#D4AF37]">{formatTime(apt.time)}</p>
+                  <p className="text-sm font-semibold text-[#C8703A]">{formatTime(apt.time)}</p>
                 </div>
                 <Avatar name={apt.customerName} size="sm" />
                 <div className="flex-1 min-w-0">

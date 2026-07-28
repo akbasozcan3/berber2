@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
@@ -253,7 +253,7 @@ export default function ServicesPage() {
                       <input
                         value={draft?.name ?? service.name}
                         onChange={(e) => setDraftField(service.id, "name", e.target.value)}
-                        className="w-full h-10 bg-[#0A0A0A] border border-white/[0.08] rounded-xl px-3 text-sm text-[#F8F8F8]"
+                        className="w-full h-10 bg-[#0D1117] border border-white/[0.08] rounded-xl px-3 text-sm text-[#F8F8F8]"
                       />
                     </td>
                     <td className="px-4 py-3 text-sm text-[#A1A1AA]">{service.duration} dk</td>
@@ -264,10 +264,10 @@ export default function ServicesPage() {
                         step={1}
                         value={draft?.price ?? String(service.price)}
                         onChange={(e) => setDraftField(service.id, "price", e.target.value)}
-                        className="w-28 h-10 bg-[#0A0A0A] border border-[#D4AF37]/30 rounded-xl px-3 text-sm text-[#D4AF37] font-semibold"
+                        className="w-28 h-10 bg-[#0D1117] border border-[#C8703A]/30 rounded-xl px-3 text-sm text-[#C8703A] font-semibold"
                       />
                     </td>
-                    <td className="px-4 py-3 text-sm font-medium text-[#D4AF37]">
+                    <td className="px-4 py-3 text-sm font-medium text-[#C8703A]">
                       {formatCurrency(Number.isFinite(draftPrice) ? draftPrice : service.price)}
                     </td>
                     <td className="px-4 py-3">
@@ -321,7 +321,7 @@ export default function ServicesPage() {
                     <Clock className="w-3.5 h-3.5" />
                     <span className="text-sm">{service.duration} dk</span>
                   </div>
-                  <p className="text-lg font-semibold text-[#D4AF37]">{formatCurrency(service.price)}</p>
+                  <p className="text-lg font-semibold text-[#C8703A]">{formatCurrency(service.price)}</p>
                 </div>
                 <div className="mt-4">
                   <Toggle

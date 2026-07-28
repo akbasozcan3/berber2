@@ -120,17 +120,17 @@ export default function Testimonials() {
             </button>
           ) : (
             <motion.form initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              onSubmit={handleSubmit} className="max-w-lg mx-auto bg-[#111111] border border-white/[0.06] rounded-2xl p-8 text-left space-y-5">
+              onSubmit={handleSubmit} className="max-w-lg mx-auto bg-[#141E2E] border border-white/[0.06] rounded-2xl p-8 text-left space-y-5">
               <h3 className="text-lg font-semibold text-white text-center">Deneyiminizi Paylaşın</h3>
               <div>
                 <label className="text-xs text-white/40 uppercase tracking-wider block mb-2">Adınız</label>
                 <input type="text" required value={form.customerName} onChange={(e) => setForm({ ...form, customerName: e.target.value })}
-                  className="w-full bg-[#0A0A0A] border border-white/[0.06] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-white/30" />
+                  className="w-full bg-[#0D1117] border border-white/[0.06] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-white/30" />
               </div>
               <div>
                 <label className="text-xs text-white/40 uppercase tracking-wider block mb-2">E-posta</label>
                 <input type="email" required value={form.customerEmail} onChange={(e) => setForm({ ...form, customerEmail: e.target.value })}
-                  className="w-full bg-[#0A0A0A] border border-white/[0.06] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-white/30" placeholder="ornek@email.com" />
+                  className="w-full bg-[#0D1117] border border-white/[0.06] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-white/30" placeholder="ornek@email.com" />
               </div>
               <div>
                 <label className="text-xs text-white/40 uppercase tracking-wider block mb-2">Puanınız</label>
@@ -146,7 +146,7 @@ export default function Testimonials() {
               <div>
                 <label className="text-xs text-white/40 uppercase tracking-wider block mb-2">Yorumunuz</label>
                 <textarea required minLength={10} value={form.review} onChange={(e) => setForm({ ...form, review: e.target.value })}
-                  className="w-full bg-[#0A0A0A] border border-white/[0.06] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-white/30 min-h-[100px] resize-none" placeholder="Deneyiminizi anlatın..." />
+                  className="w-full bg-[#0D1117] border border-white/[0.06] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-white/30 min-h-[100px] resize-none" placeholder="Deneyiminizi anlatın..." />
               </div>
               {error && <p className="text-sm text-red-400">{error}</p>}
               <div className="flex gap-3">

@@ -108,7 +108,7 @@ export default function Services({
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.05 }}
-                  className={`group relative flex flex-col min-h-[320px] p-7 md:p-8 border rounded-2xl transition-all duration-300 hover:-translate-y-1 ${
+                  className={`group relative flex flex-col min-h-[320px] border rounded-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden ${
                     isLight
                       ? `bg-white shadow-sm hover:shadow-md ${
                           service.popular ? "border-black/25" : "border-black/[0.1] hover:border-black/20"
@@ -118,6 +118,21 @@ export default function Services({
                         }`
                   }`}
                 >
+                  {/* Hizmet görseli varsa göster */}
+                  {service.image && (
+                    <div className="relative h-44 w-full overflow-hidden shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={service.image}
+                        alt={service.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                      />
+                      <div className={`absolute inset-0 ${isLight ? "bg-black/10" : "bg-black/30"}`} />
+                    </div>
+                  )}
+
+                  <div className="flex flex-col flex-grow p-7 md:p-8">
                   {service.popular && (
                     <span
                       className={`absolute top-4 right-4 text-[8px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-md ${
@@ -127,7 +142,6 @@ export default function Services({
                       Popüler
                     </span>
                   )}
-
                   <div className="mb-6">
                     <div
                       className={`w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-300 ${
@@ -190,6 +204,7 @@ export default function Services({
                         {service.duration} dk
                       </span>
                     </div>
+                  </div>
                   </div>
                 </motion.article>
               );

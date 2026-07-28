@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowRight, Calendar, Home, Scissors } from "lucide-react";
 import { getPublicSettingsServer } from "@/lib/data/public-settings";
 
@@ -13,7 +13,7 @@ export default async function NotFound() {
   ];
 
   return (
-    <main className="relative min-h-[calc(100dvh-8rem)] flex items-center justify-center overflow-hidden bg-[#0A0A0A] pt-28 pb-24 px-6">
+    <main className="relative min-h-[calc(100dvh-8rem)] flex items-center justify-center overflow-hidden bg-[#0D1117] pt-28 pb-24 px-6">
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.035]"
         style={{

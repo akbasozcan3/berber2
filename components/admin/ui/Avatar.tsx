@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import { cn } from "@/lib/admin/cn";
 import { getInitials } from "@/lib/admin/utils";
 
@@ -47,7 +47,7 @@ export default function Avatar({ src, name, size = "md", className }: AvatarProp
   return (
     <div
       className={cn(
-        "rounded-full bg-[#1A1A1A] border border-white/[0.06] flex items-center justify-center font-medium text-[#D4AF37] flex-shrink-0",
+        "rounded-full bg-[#1A1A1A] border border-white/[0.06] flex items-center justify-center font-medium text-[#C8703A] flex-shrink-0",
         sizeMap[size],
         className
       )}

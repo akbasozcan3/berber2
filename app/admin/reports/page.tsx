@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import PageHeader from "@/components/admin/ui/PageHeader";
 import Card from "@/components/admin/ui/Card";
 import { adminApi, type ReportsData } from "@/lib/api/admin";
@@ -36,7 +36,7 @@ export default function ReportsPage() {
                 <XAxis dataKey="month" stroke="#52525B" fontSize={12} />
                 <YAxis stroke="#52525B" fontSize={12} tickFormatter={(v) => `₺${(v / 1000).toFixed(0)}K`} />
                 <Tooltip contentStyle={{ background: "#1A1A1A", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12 }} />
-                <Bar dataKey="revenue" fill="#D4AF37" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="revenue" fill="#C8703A" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -60,7 +60,7 @@ export default function ReportsPage() {
                 <span className="text-[#71717A] w-5">{i + 1}</span>
                 <span className="flex-1 text-[#F8F8F8]">{b.name}</span>
                 <span className="text-sm text-[#71717A]">{b.appointments} randevu</span>
-                <span className="text-sm font-semibold text-[#D4AF37]">{formatCurrency(b.revenue)}</span>
+                <span className="text-sm font-semibold text-[#C8703A]">{formatCurrency(b.revenue)}</span>
               </div>
             ))}
           </div>

@@ -1,12 +1,12 @@
 import { db } from "@/lib/db";
 import { settings, appointments, barbers, services, customers } from "@/lib/db/schema";
-import { eq, and, ne, inArray } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 import {
   isMultilineSettingKey,
   normalizeMultilineSettingValue,
 } from "@/lib/data/multiline-settings";
 import { parseBreakTimes } from "@/lib/utils/break-times";
-import { parseLocalIsoDate, toLocalIsoDate, isLocalIsoToday, getSalonNowMinutes } from "@/lib/utils/format";
+import { parseLocalIsoDate, isLocalIsoToday, getSalonNowMinutes } from "@/lib/utils/format";
 import { findOrUpsertCustomer } from "@/lib/services/customers";
 import { isSunday, barberWorksOnDate } from "@/lib/utils/salon-schedule";
 import {
@@ -78,6 +78,7 @@ export async function getAvailableSlots(
   const interval = Number((await getSetting("appointment_interval")) || 30);
   const breakTimes = parseBreakTimes(await getSetting("break_times"));
   const maxFuture = Number((await getSetting("max_future_booking")) || 30);
+  const maxBookingsPerSlot = Number((await getSetting("max_bookings_per_slot")) || 1);
 
   const selectedDate = parseLocalIsoDate(date);
   const today = new Date();
@@ -159,6 +160,7 @@ export async function getAvailableSlots(
         rules,
         existingAppointments,
         breakTimes,
+        maxBookingsPerSlot,
       })
     );
 
@@ -206,6 +208,7 @@ export async function createBooking(data: {
     );
     const rules = await getActiveRulesForDate(data.date);
     const breakTimes = parseBreakTimes(await getSetting("break_times"));
+    const maxBookingsPerSlot = Number((await getSetting("max_bookings_per_slot")) || 1);
     const slotStart = parseTime(data.time);
     const slotEnd = slotStart + service.duration;
 
@@ -219,6 +222,7 @@ export async function createBooking(data: {
         rules,
         existingAppointments: existingApts,
         breakTimes,
+        maxBookingsPerSlot,
       })
     );
     if (!freeBarber) throw new Error("Müsait berber bulunamadı.");

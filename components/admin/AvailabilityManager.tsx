@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Ban, Clock, User } from "lucide-react";
@@ -77,11 +77,11 @@ export default function AvailabilityManager({ date, blocks, onUpdate }: Props) {
   return (
     <Card>
       <div className="flex items-center gap-2 mb-2">
-        <Ban className="w-4 h-4 text-[#D4AF37]" />
-        <h3 className="text-sm font-semibold text-[#F8F8F8]">Müsait Değilim — Saat Kapat</h3>
+        <Ban className="w-4 h-4 text-[#C8703A]" />
+        <h3 className="text-sm font-semibold text-[#EEE9E0]">Müsait Değilim — Saat Kapat</h3>
       </div>
 
-      <p className="text-xs text-[#71717A] mb-4">
+      <p className="text-xs text-[#6B7A94] mb-4">
         {dayName}, {new Date(date).toLocaleDateString("tr-TR")} — Belirli saatleri kapatın. Müşteri randevu
         sayfasında bu saatler otomatik görünmez.
       </p>
@@ -120,24 +120,24 @@ export default function AvailabilityManager({ date, blocks, onUpdate }: Props) {
 
       <div className="space-y-2">
         {blocks.length === 0 ? (
-          <p className="text-xs text-[#52525B]">Bu gün için kural yok — tüm saatler açık.</p>
+          <p className="text-xs text-[#4A5568]">Bu gün için kural yok — tüm saatler açık.</p>
         ) : (
           blocks.map((block) => (
             <div
               key={block.id}
-              className="flex items-center justify-between gap-3 p-3 bg-[#0A0A0A] rounded-xl border border-white/[0.06]"
+              className="flex items-center justify-between gap-3 p-3 bg-[#0D1117] rounded-xl border border-white/[0.06]"
             >
               <div className="flex items-start gap-3 min-w-0">
                 <Clock className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
                 <div className="min-w-0">
-                  <p className="text-sm text-[#F8F8F8] truncate">
+                  <p className="text-sm text-[#EEE9E0] truncate">
                     {RULE_TYPE_LABELS[block.ruleType] || block.ruleType}
                     {block.ruleType === "block" || block.startTime !== "00:00"
                       ? ` · ${block.startTime}–${block.endTime}`
                       : ""}
                   </p>
-                  <p className="text-xs text-[#71717A] truncate">{block.reason}</p>
-                  <p className="text-[10px] text-[#52525B] flex items-center gap-1 mt-0.5">
+                  <p className="text-xs text-[#6B7A94] truncate">{block.reason}</p>
+                  <p className="text-[10px] text-[#4A5568] flex items-center gap-1 mt-0.5">
                     <User className="w-3 h-3" />
                     {barberName(block.barberId)}
                   </p>

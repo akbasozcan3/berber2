@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -28,7 +28,7 @@ export default function Navbar() {
   const logoText = splitBusinessNameForLogo(settings.businessName);
 
   useEffect(() => {
-    setMobileOpen(false);
+    void Promise.resolve().then(() => setMobileOpen(false));
   }, [pathname]);
 
   useEffect(() => {
@@ -57,16 +57,16 @@ export default function Navbar() {
       decoding="async"
     />
   ) : (
-    <>
-      <span className="text-base font-bold tracking-[0.25em] text-white uppercase group-hover:text-white/80 transition-colors duration-300 leading-none">
+    <div className="flex flex-col items-start justify-center">
+      <span className="text-[13px] font-bold tracking-[0.18em] text-white uppercase group-hover:text-white/80 transition-colors duration-300 leading-tight">
         {logoText.primary}
       </span>
       {logoText.secondary ? (
-        <span className="text-[8px] font-semibold tracking-[0.3em] text-white/50 uppercase mt-1 leading-none">
+        <span className="text-[9px] font-medium tracking-[0.22em] text-white/45 uppercase leading-tight mt-0.5">
           {logoText.secondary}
         </span>
       ) : null}
-    </>
+    </div>
   );
 
   const mobileBrandLogo = logoUrl ? (
@@ -87,7 +87,7 @@ export default function Navbar() {
       <header className="fixed top-0 left-0 right-0 z-50 flex flex-col w-full">
         
         {/* ─── 1. TOPBAR (Always Visible, Professional & Minimalist) ─── */}
-        <div className="w-full bg-[#050505] border-b border-white/[0.04] h-9 flex items-center">
+        <div className="w-full bg-[#080D15] border-b border-white/[0.04] h-9 flex items-center">
           <div className="w-full max-w-7xl mx-auto px-4 lg:px-10 flex items-center gap-3 text-white/50 text-[10px] font-semibold tracking-[0.12em] sm:tracking-[0.18em] uppercase">
             <a
               href={toTelHref(settings.phone)}
@@ -115,18 +115,18 @@ export default function Navbar() {
         <nav
           className={`w-full overflow-visible transition-all duration-300 ${
             scrolled
-              ? "bg-[#0A0A0A]/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.5)] py-3"
-              : "bg-[#0A0A0A]/85 backdrop-blur-sm py-4.5"
+              ? "bg-[#0D1117]/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.5)] py-3"
+              : "bg-[#0D1117]/85 backdrop-blur-sm py-4.5"
           }`}
         >
-          <div className="max-w-7xl mx-auto px-5 lg:px-10 h-14 flex items-center justify-between gap-6 overflow-visible">
+          <div className="max-w-7xl mx-auto px-5 lg:px-10 h-20 flex items-center justify-between gap-6 overflow-visible">
             
             {/* Logo — large image, compact navbar row */}
             <Link
               href="/"
               className={`shrink-0 overflow-visible group ${
                 logoUrl
-                  ? "relative block h-10 w-[14rem] sm:w-[18rem] md:w-[24rem]"
+                  ? "flex items-center shrink-0"
                   : "flex flex-col items-start min-h-10 justify-center"
               }`}
             >
@@ -157,7 +157,7 @@ export default function Navbar() {
             <div className="flex items-center gap-4">
               <Link
                 href="/randevu"
-                className="hidden md:inline-flex items-center justify-center px-6 py-2.5 border border-white/40 text-white hover:bg-white hover:text-black rounded-sm text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300"
+                className="hidden md:inline-flex items-center justify-center px-6 py-2.5 bg-[#C8703A] hover:bg-[#B5612E] text-white rounded-sm text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 border border-[#C8703A]/50"
               >
                 {settings.navCtaLabel || "Randevu Al"}
               </Link>
@@ -184,7 +184,7 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.3, ease: "easeOut" }}
-              className="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-[#0A0A0A] p-8 flex flex-col justify-between z-50 border-l border-white/[0.05]"
+              className="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-[#0D1117] p-8 flex flex-col justify-between z-50 border-l border-white/[0.05]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Top area */}
