@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { loadLocalEnv } from "@/lib/utils/load-local-env";
 import { db, initDatabase } from "./index";
 import {
   barbers, services, barberServices, reviews, galleryImages, settings, users,
@@ -6,6 +7,8 @@ import {
 } from "./schema";
 import { eq } from "drizzle-orm";
 import { LEGAL_DEFAULTS } from "../data/legal";
+
+loadLocalEnv();
 
 const now = () => new Date().toISOString();
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL?.trim() || "";

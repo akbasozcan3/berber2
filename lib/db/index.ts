@@ -1,30 +1,7 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as schema from "./schema";
-import fs from "fs";
-import path from "path";
-
-function loadLocalEnv() {
-  const candidates = [
-    path.join(/* turbopackIgnore: true */ process.cwd(), ".env.local"),
-    path.join(/* turbopackIgnore: true */ process.cwd(), "..", "..", ".env.local"),
-  ];
-  for (const envPath of candidates) {
-    if (!fs.existsSync(/* turbopackIgnore: true */ envPath)) continue;
-    const content = fs.readFileSync(/* turbopackIgnore: true */ envPath, "utf8");
-    for (const rawLine of content.split(/\r?\n/)) {
-      const line = rawLine.trim();
-      if (!line || line.startsWith("#")) continue;
-      const match = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
-      if (!match) continue;
-      const key = match[1];
-      let value = match[2].trim();
-      value = value.replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1");
-      if (!process.env[key]) process.env[key] = value;
-    }
-    break;
-  }
-}
+import { loadLocalEnv, resolveDatabaseUrlFromEnv } from "@/lib/utils/load-local-env";
 
 const globalForDb = globalThis as typeof globalThis & {
   __pgPool?: Pool;
@@ -41,13 +18,9 @@ function normalizeConnectionString(raw: string): string {
 }
 
 function resolveConnectionString(): string | null {
-  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) loadLocalEnv();
+  if (!resolveDatabaseUrlFromEnv()) loadLocalEnv();
 
-  const connectionString =
-    process.env.POSTGRES_URL ||
-    process.env.POSTGRES_PRISMA_URL ||
-    process.env.DATABASE_URL ||
-    process.env.POSTGRES_CONNECTION_STRING;
+  const connectionString = resolveDatabaseUrlFromEnv();
 
   return connectionString ? normalizeConnectionString(connectionString) : null;
 }
