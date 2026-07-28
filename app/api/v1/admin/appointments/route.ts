@@ -9,7 +9,10 @@ import { removeOrphanCustomers } from "@/lib/services/customers";
 
 export async function GET() {
   try {
-    await ensureDb();
+    if (!(await ensureDb())) {
+      return jsonResponse([]);
+    }
+
     await requireAuth();
 
     const apts = await db.select().from(appointments).orderBy(desc(appointments.createdAt));
@@ -42,8 +45,11 @@ export async function GET() {
     });
 
     return jsonResponse(enriched);
-  } catch {
-    return errorResponse("Unauthorized", 401);
+  } catch (err) {
+    if (err instanceof Error && err.message === "Unauthorized") {
+      return errorResponse("Unauthorized", 401);
+    }
+    return jsonResponse([]);
   }
 }
 

@@ -44,7 +44,12 @@ export default function DashboardPage() {
       .catch((err: Error) => {
         setStats(EMPTY_STATS);
         setTodayApts([]);
-        setLoadError(err.message || "Veriler yüklenemedi");
+        const msg = err.message || "Veriler yüklenemedi";
+        setLoadError(
+          msg === "Unauthorized"
+            ? "Oturum süresi dolmuş olabilir. Çıkış yapıp tekrar giriş yapın."
+            : msg
+        );
       });
   }, []);
 
@@ -61,9 +66,15 @@ export default function DashboardPage() {
 
       {loadError && (
         <div className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-          {loadError}. Veritabanı bağlantısını kontrol edin; Vercel&apos;de{" "}
-          <code className="text-amber-100">DATABASE_URL</code> tanımlı olmalı ve{" "}
-          <code className="text-amber-100">npm run db:setup</code> bir kez çalıştırılmalı.
+          {loadError}{" "}
+          <a
+            href="/api/v1/health"
+            target="_blank"
+            rel="noreferrer"
+            className="underline text-amber-100"
+          >
+            Veritabanı durumunu kontrol et
+          </a>
         </div>
       )}
 
