@@ -10,7 +10,7 @@ import PageHeader from "@/components/admin/ui/PageHeader";
 import Avatar from "@/components/admin/ui/Avatar";
 import { formatCurrency, formatTime } from "@/lib/admin/utils";
 import { adminApi, type AdminAppointment } from "@/lib/api/admin";
-import { normalizeDashboardStats } from "@/lib/api/helpers";
+import { normalizeDashboardStats } from "@/lib/api/dashboard-stats";
 
 interface DashboardData {
   todayAppointments: number;
