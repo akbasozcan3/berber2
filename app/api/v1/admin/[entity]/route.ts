@@ -14,6 +14,7 @@ import {
 } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { jsonResponse, errorResponse, parseBody } from "@/lib/api/helpers";
+import { formatDbError } from "@/lib/api/db-error";
 import { getSettings } from "@/lib/services/booking";
 import { normalizePhoneStorage } from "@/lib/utils/format";
 import { revalidatePath } from "next/cache";
@@ -216,7 +217,7 @@ export async function PATCH(
 
     return errorResponse("Geçersiz güncelleme", 400);
   } catch (e) {
-    return errorResponse(e instanceof Error ? e.message : "Güncellenemedi", 500);
+    return errorResponse(formatDbError(e, "Güncellenemedi"), 500);
   }
 }
 
@@ -225,17 +226,31 @@ export async function POST(
   { params }: { params: Promise<{ entity: string }> }
 ) {
   try {
-    await ensureDb();
     await requireAuth();
+
+    if (!(await ensureDb())) {
+      return errorResponse("Veritabanı bağlantısı yok. Vercel'de DATABASE_URL tanımlı olmalı.", 503);
+    }
+
     const { entity } = await params;
     const body = await parseBody<Record<string, unknown>>(request);
 
     if (entity === "barbers") {
+      const name = String(body.name || "").trim();
+      const slug = String(body.slug || "").trim().toLowerCase();
+      if (!name) return errorResponse("Berber adı gerekli", 400);
+      if (!slug) return errorResponse("Geçerli bir slug gerekli", 400);
+
+      const existing = await db.select({ id: barbers.id }).from(barbers).where(eq(barbers.slug, slug)).limit(1);
+      if (existing[0]) {
+        return errorResponse("Bu slug zaten kullanılıyor. Farklı bir ad deneyin.", 409);
+      }
+
       const [created] = await db
         .insert(barbers)
         .values({
-          name: String(body.name || ""),
-          slug: String(body.slug || "").trim().toLowerCase(),
+          name,
+          slug,
           position: String(body.position || "Berber"),
           avatar: body.avatar ? String(body.avatar) : null,
           specialty: body.specialty ? String(body.specialty) : null,
@@ -309,7 +324,7 @@ export async function POST(
 
     return errorResponse("Geçersiz oluşturma isteği", 400);
   } catch (e) {
-    return errorResponse(e instanceof Error ? e.message : "Oluşturulamadı", 500);
+    return errorResponse(formatDbError(e, "Oluşturulamadı"), 500);
   }
 }
 
