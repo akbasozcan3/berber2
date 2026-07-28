@@ -14,7 +14,8 @@ export function loadLocalEnv() {
     const key = match[1];
     let value = match[2].trim();
     value = value.replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1");
-    if (!process.env[key]) process.env[key] = value;
+    // .env.local dosyasi yerel gelistirmede her zaman onceliklidir.
+    process.env[key] = value;
   }
 }
 
