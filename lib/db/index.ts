@@ -18,7 +18,7 @@ function normalizeConnectionString(raw: string): string {
 }
 
 function resolveConnectionString(): string | null {
-  if (!resolveDatabaseUrlFromEnv()) loadLocalEnv();
+  loadLocalEnv();
 
   const connectionString = resolveDatabaseUrlFromEnv();
 

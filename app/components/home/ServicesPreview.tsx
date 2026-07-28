@@ -17,24 +17,13 @@ interface ServicesPreviewProps {
 export default function ServicesPreview({ initialServices = [] }: ServicesPreviewProps) {
   const settings = usePublicSettings();
   const [services, setServices] = useState<Service[]>(initialServices);
-  const [loading, setLoading] = useState(initialServices.length === 0);
 
   useEffect(() => {
-    let active = true;
-    api
-      .getServices()
-      .then((data) => {
-        if (!active) return;
-        if (data.length > 0) setServices(data.slice(0, 4));
-      })
-      .catch(() => {})
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
+    if (initialServices.length > 0) return;
+    api.getServices().then((data) => {
+      if (data.length > 0) setServices(data.slice(0, 4));
+    }).catch(() => {});
+  }, [initialServices.length]);
 
   const display = services.slice(0, 4);
 
@@ -69,74 +58,50 @@ export default function ServicesPreview({ initialServices = [] }: ServicesPrevie
           </Link>
         </div>
 
-        {loading && display.length === 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div
-                key={i}
-                className="min-h-[280px] rounded-sm border border-black/[0.08] bg-white animate-pulse"
-              />
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {display.map((s, i) => {
+            const Icon = ICONS[i % ICONS.length];
+            return (
+              <motion.div
+                key={s.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.06, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className={`relative flex flex-col p-8 bg-white border rounded-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)] group ${
+                  s.popular ? "border-black/30" : "border-black/[0.08]"
+                }`}
+              >
+                {s.popular && (
+                  <span className="absolute top-4 right-4 text-[8px] font-bold tracking-[0.25em] uppercase bg-black text-white px-2.5 py-1 rounded-sm">
+                    Popüler
+                  </span>
+                )}
 
-        {!loading && display.length === 0 && (
-          <div className="rounded-sm border border-black/10 bg-white px-6 py-10 text-center">
-            <p className="text-neutral-700 mb-4">Hizmetler şu an yüklenemedi.</p>
-            <Link href="/hizmetler" className="text-sm font-semibold text-black underline underline-offset-4">
-              Hizmetler sayfasına git
-            </Link>
-          </div>
-        )}
-
-        {display.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {display.map((s, i) => {
-              const Icon = ICONS[i % ICONS.length];
-              return (
-                <motion.div
-                  key={s.id}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.06, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  className={`relative flex flex-col p-8 bg-white border rounded-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)] group ${
-                    s.popular ? "border-black/30" : "border-black/[0.08]"
-                  }`}
-                >
-                  {s.popular && (
-                    <span className="absolute top-4 right-4 text-[8px] font-bold tracking-[0.25em] uppercase bg-black text-white px-2.5 py-1 rounded-sm">
-                      Popüler
-                    </span>
-                  )}
-
-                  <div className="flex items-start justify-between mb-8">
-                    <div className="w-11 h-11 rounded-full border border-black/10 flex items-center justify-center text-neutral-600 group-hover:border-black group-hover:text-black transition-colors duration-500">
-                      <Icon size={16} />
-                    </div>
-                    <span className="text-[11px] font-bold tracking-wider text-neutral-300 font-mono">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
+                <div className="flex items-start justify-between mb-8">
+                  <div className="w-11 h-11 rounded-full border border-black/10 flex items-center justify-center text-neutral-600 group-hover:border-black group-hover:text-black transition-colors duration-500">
+                    <Icon size={16} />
                   </div>
+                  <span className="text-[11px] font-bold tracking-wider text-neutral-300 font-mono">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
 
-                  <h3 className="text-xl font-serif font-semibold text-black mb-3">{s.name}</h3>
-                  <p className="text-neutral-700 text-sm leading-relaxed flex-grow mb-8">{s.description}</p>
+                <h3 className="text-xl font-serif font-semibold text-black mb-3">{s.name}</h3>
+                <p className="text-neutral-700 text-sm leading-relaxed flex-grow mb-8">{s.description}</p>
 
-                  <div className="pt-5 border-t border-black/[0.08] flex justify-between items-end">
-                    <div>
-                      <span className="block text-[8px] tracking-[0.18em] uppercase text-neutral-500 mb-0.5 font-semibold">
-                        Başlangıç
-                      </span>
-                      <span className="text-lg font-serif font-semibold text-black">₺{s.price}</span>
-                    </div>
-                    <div className="flex items-end gap-3">
-                      <span className="text-xs font-medium text-neutral-600">{s.duration} dk</span>
-                    </div>
+                <div className="pt-5 border-t border-black/[0.08] flex justify-between items-end">
+                  <div>
+                    <span className="block text-[8px] tracking-[0.18em] uppercase text-neutral-500 mb-0.5 font-semibold">
+                      Başlangıç
+                    </span>
+                    <span className="text-lg font-serif font-semibold text-black">₺{s.price}</span>
                   </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        )}
+                  <span className="text-xs font-medium text-neutral-600">{s.duration} dk</span>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
 
         <div className="flex justify-center mt-14">
           <Link
