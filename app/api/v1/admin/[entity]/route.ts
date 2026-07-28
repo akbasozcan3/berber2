@@ -46,8 +46,12 @@ export async function GET(
   { params }: { params: Promise<{ entity: string }> }
 ) {
   try {
-    await ensureDb();
     await requireAuth();
+
+    if (!(await ensureDb())) {
+      return jsonResponse([]);
+    }
+
     const { entity } = await params;
 
     switch (entity as Entity) {
@@ -66,8 +70,11 @@ export async function GET(
       default:
         return errorResponse("Geçersiz entity", 404);
     }
-  } catch {
-    return errorResponse("Unauthorized", 401);
+  } catch (err) {
+    if (err instanceof Error && err.message === "Unauthorized") {
+      return errorResponse("Unauthorized", 401);
+    }
+    return jsonResponse([]);
   }
 }
 
