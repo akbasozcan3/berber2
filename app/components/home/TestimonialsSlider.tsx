@@ -47,7 +47,7 @@ export default function TestimonialsSlider({ initialReviews = [] }: Testimonials
   const review = reviews[current];
 
   return (
-    <section className="py-28 relative overflow-hidden border-y border-black/[0.06]" style={{ backgroundColor: "#F5F2ED" }}>
+    <section className="section-light py-28 relative overflow-hidden border-y border-black/[0.08]">
       <div className="absolute top-10 left-1/2 -translate-x-1/2 text-[240px] font-serif leading-none text-black/[0.025] select-none pointer-events-none">
         &ldquo;
       </div>
@@ -57,7 +57,7 @@ export default function TestimonialsSlider({ initialReviews = [] }: Testimonials
           <div>
             <div className="flex items-center gap-3 mb-5">
               <span className="w-8 h-px bg-black/25" />
-              <span className="text-[10px] font-bold tracking-[0.38em] uppercase text-black/45">
+              <span className="type-eyebrow-light">
                 {settings.homeTestimonialsEyebrow || settings.reviewsPageTitle}
               </span>
             </div>
@@ -65,14 +65,11 @@ export default function TestimonialsSlider({ initialReviews = [] }: Testimonials
               title={settings.homeTestimonialsTitle}
               fallbackLine1="Deneyimleyenlerin"
               fallbackLine2="Gözünden"
-              className="text-4xl md:text-5xl lg:text-6xl font-serif font-light tracking-tight text-black leading-[1.05]"
-              line2ClassName="italic text-black/35"
+              className="type-display-light text-4xl md:text-5xl lg:text-[3.35rem]"
+              line2ClassName="type-display-light-accent"
             />
           </div>
-          <Link
-            href="/yorumlar"
-            className="group flex items-center gap-2 text-[10px] font-bold tracking-[0.25em] uppercase text-black/40 hover:text-black transition-colors shrink-0"
-          >
+          <Link href="/yorumlar" className="type-link-light group flex items-center gap-2 shrink-0">
             Tüm Yorumlar
             <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
           </Link>
@@ -95,7 +92,7 @@ export default function TestimonialsSlider({ initialReviews = [] }: Testimonials
                   ))}
                 </div>
 
-                <blockquote className="text-2xl md:text-3xl font-serif font-light text-black leading-[1.5] mb-10 italic">
+                <blockquote className="text-2xl md:text-3xl font-serif font-normal text-black leading-[1.5] mb-10">
                   &ldquo;{review.review}&rdquo;
                 </blockquote>
 
@@ -107,7 +104,7 @@ export default function TestimonialsSlider({ initialReviews = [] }: Testimonials
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-black">{review.customerName}</p>
-                    <p className="text-[10px] text-black/40 uppercase tracking-wider mt-0.5">
+                    <p className="text-[10px] type-label-light mt-0.5">
                       {review.source === "google" ? "Google Yorumu" : "Müşteri Yorumu"}
                     </p>
                   </div>
@@ -121,7 +118,7 @@ export default function TestimonialsSlider({ initialReviews = [] }: Testimonials
               <span className="text-5xl font-serif font-light text-black">
                 {String(current + 1).padStart(2, "0")}
               </span>
-              <span className="text-black/20 font-serif text-2xl">
+              <span className="text-neutral-300 font-serif text-2xl">
                 {" "}/ {String(reviews.length).padStart(2, "0")}
               </span>
             </div>
@@ -142,7 +139,7 @@ export default function TestimonialsSlider({ initialReviews = [] }: Testimonials
             <div className="flex gap-3">
               <button
                 onClick={prev}
-                className="w-12 h-12 rounded-full border border-black/10 flex items-center justify-center text-black/40 hover:border-black hover:text-black transition-all duration-300"
+                className="w-12 h-12 rounded-full border border-black/12 flex items-center justify-center text-neutral-500 hover:border-black hover:text-black transition-all duration-300"
                 aria-label="Önceki"
               >
                 <ArrowLeft size={16} />
@@ -163,7 +160,7 @@ export default function TestimonialsSlider({ initialReviews = [] }: Testimonials
                 ))}
               </div>
               <p className="text-xs font-semibold text-black">{settings.googleRating} / 5.0</p>
-              <p className="text-[9px] tracking-widest uppercase text-black/35 mt-0.5">
+              <p className="type-label-light mt-0.5">
                 {settings.googleReviewCount}+ Google Yorumu
               </p>
             </div>

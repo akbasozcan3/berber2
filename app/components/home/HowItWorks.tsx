@@ -55,7 +55,7 @@ export default function HowItWorks() {
   }, []);
 
   return (
-    <section className="py-28 relative border-y border-black/[0.06]" style={{ backgroundColor: "#F5F2ED" }}>
+    <section className="section-light py-28 relative border-y border-black/[0.08]">
       <div className="container mx-auto px-6 lg:px-14">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -65,15 +65,11 @@ export default function HowItWorks() {
         >
           <div className="flex items-center justify-center gap-3 mb-6">
             <span className="w-8 h-px bg-black/25" />
-            <span className="text-[10px] font-bold tracking-[0.38em] uppercase text-black/45">
-              {eyebrow}
-            </span>
+            <span className="type-eyebrow-light">{eyebrow}</span>
             <span className="w-8 h-px bg-black/25" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-serif font-light text-black tracking-tight">
-            {title}
-          </h2>
-          <p className="mt-5 text-black/45 font-light leading-relaxed">{intro}</p>
+          <h2 className="type-display-light text-4xl md:text-5xl">{title}</h2>
+          <p className="mt-5 type-body-light max-w-2xl mx-auto">{intro}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
@@ -92,14 +88,14 @@ export default function HowItWorks() {
                   <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-px bg-black/10" />
                 )}
                 <div className="inline-flex flex-col items-center">
-                  <span className="text-[10px] font-bold tracking-[0.35em] text-[#C8703A]/70 mb-4">
+                  <span className="text-[10px] font-bold tracking-[0.35em] text-[#C8703A] mb-4">
                     {item.step}
                   </span>
-                  <div className="w-24 h-24 rounded-full border border-black/10 flex items-center justify-center mb-8 group-hover:border-black group-hover:bg-black/[0.03] transition-all duration-500">
-                    <Icon size={28} className="text-black/55 group-hover:text-black transition-colors" />
+                  <div className="w-24 h-24 rounded-full border border-black/12 flex items-center justify-center mb-8 group-hover:border-black group-hover:bg-black/[0.03] transition-all duration-500">
+                    <Icon size={28} strokeWidth={1.5} className="text-neutral-600 group-hover:text-black transition-colors" />
                   </div>
-                  <h3 className="text-xl font-serif font-light text-black mb-3">{item.title}</h3>
-                  <p className="text-sm text-black/45 font-light leading-relaxed max-w-xs">{item.desc}</p>
+                  <h3 className="type-card-title-light mb-3">{item.title}</h3>
+                  <p className="type-body-light text-sm max-w-xs">{item.desc}</p>
                 </div>
               </motion.div>
             );

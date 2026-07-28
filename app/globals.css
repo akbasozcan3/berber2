@@ -67,7 +67,96 @@ html {
 
 .section-light {
   background-color: var(--section-light);
-  color: #0d1117;
+  color: #0f0f0f;
+}
+
+/* Açık bölüm tipografi — yüksek kontrast, premium okunabilirlik */
+.type-eyebrow-light {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #4a4a4a;
+}
+
+.type-display-light {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: #0a0a0a;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.type-display-light-accent {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  color: #3d3d3d;
+}
+
+.type-body-light {
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: #3f3f3f;
+  font-weight: 400;
+}
+
+.type-card-title-light {
+  font-family: var(--font-display);
+  font-size: 1.3125rem;
+  font-weight: 600;
+  color: #0a0a0a;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.type-label-light {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #5c5c5c;
+}
+
+.type-price-light {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: #0a0a0a;
+  letter-spacing: -0.02em;
+}
+
+.type-meta-light {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #525252;
+}
+
+.type-link-light {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #525252;
+  transition: color 0.25s ease;
+}
+
+.type-link-light:hover {
+  color: #0a0a0a;
+}
+
+.type-index-light {
+  font-family: var(--font-code);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #b8b8b8;
+  transition: color 0.3s ease;
+}
+
+.group:hover .type-index-light {
+  color: #737373;
 }
 
 .shadow-luxury {

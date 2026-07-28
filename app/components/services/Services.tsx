@@ -45,12 +45,8 @@ export default function Services({
         {showHeading && (
           <div className="mb-14 md:mb-20 max-w-3xl">
             <div className="flex items-center gap-4 mb-6">
-              <span className={`w-8 h-px ${isLight ? "bg-black/25" : "bg-white/40"}`} />
-              <p
-                className={`text-[10px] font-bold tracking-[0.35em] uppercase ${
-                  isLight ? "text-black/45" : "text-white/60"
-                }`}
-              >
+              <span className={`w-8 h-px ${isLight ? "bg-black/30" : "bg-white/40"}`} />
+              <p className={isLight ? "type-eyebrow-light" : "text-[10px] font-bold tracking-[0.35em] uppercase text-white/60"}>
                 {settings.servicesSectionEyebrow}
               </p>
             </div>
@@ -58,16 +54,16 @@ export default function Services({
               title={settings.servicesSectionTitle}
               fallbackLine1="Özenle Tasarlanmış"
               fallbackLine2="Bakım Ritüelleri"
-              className={`text-4xl md:text-6xl font-serif font-light tracking-tight mb-6 leading-[1.05] ${
-                isLight ? "text-black" : "text-white"
-              }`}
-              line2ClassName={`italic font-light ${isLight ? "text-black/35" : "text-white/30"}`}
+              className={
+                isLight
+                  ? "type-display-light text-4xl md:text-6xl mb-6"
+                  : "text-4xl md:text-6xl font-serif font-light tracking-tight mb-6 leading-[1.05] text-white"
+              }
+              line2ClassName={
+                isLight ? "type-display-light-accent" : "italic font-light text-white/30"
+              }
             />
-            <p
-              className={`text-base md:text-lg font-light leading-relaxed max-w-xl ${
-                isLight ? "text-black/50" : "text-white/50"
-              }`}
-            >
+            <p className={isLight ? "type-body-light max-w-xl text-base md:text-lg" : "text-base md:text-lg font-light leading-relaxed max-w-xl text-white/50"}>
               {settings.servicesSectionSubtitle}
             </p>
           </div>
@@ -92,7 +88,7 @@ export default function Services({
               isLight ? "border-black/10 bg-white" : "border-white/10 bg-white/[0.02]"
             }`}
           >
-            <p className={isLight ? "text-black/50" : "text-white/50"}>
+            <p className={isLight ? "type-body-light" : "text-white/50"}>
               Henüz online randevuya açık hizmet bulunmuyor. Bizi arayarak randevu alabilirsiniz.
             </p>
           </div>
@@ -110,8 +106,8 @@ export default function Services({
                   transition={{ duration: 0.4, delay: index * 0.05 }}
                   className={`group relative flex flex-col min-h-[320px] border rounded-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden ${
                     isLight
-                      ? `bg-white shadow-sm hover:shadow-md ${
-                          service.popular ? "border-black/25" : "border-black/[0.1] hover:border-black/20"
+                      ? `bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)] ${
+                          service.popular ? "border-black/25" : "border-black/[0.12] hover:border-black/20"
                         }`
                       : `bg-[#121212]/60 backdrop-blur-sm hover:shadow-[0_20px_50px_rgba(255,255,255,0.06)] ${
                           service.popular ? "border-white/30" : "border-white/[0.08] hover:border-white/20"
@@ -152,55 +148,40 @@ export default function Services({
                     >
                       <Icon
                         size={20}
+                        strokeWidth={1.75}
                         className={
-                          isLight ? "text-black/55 group-hover:text-black" : "text-white/70 group-hover:text-white"
+                          isLight ? "text-neutral-600 group-hover:text-black" : "text-white/70 group-hover:text-white"
                         }
                       />
                     </div>
                   </div>
 
-                  <h3
-                    className={`text-xl font-serif font-light mb-3 pr-16 ${
-                      isLight ? "text-black" : "text-white"
-                    }`}
-                  >
+                  <h3 className={isLight ? "type-card-title-light mb-3 pr-16" : "text-xl font-serif font-light mb-3 pr-16 text-white"}>
                     {service.name}
                   </h3>
 
-                  <p
-                    className={`text-sm font-light leading-relaxed flex-grow mb-8 line-clamp-3 ${
-                      isLight ? "text-black/55" : "text-white/50"
-                    }`}
-                  >
+                  <p className={`flex-grow mb-8 line-clamp-3 ${isLight ? "type-body-light" : "text-sm font-light leading-relaxed text-white/50"}`}>
                     {service.description}
                   </p>
 
                   <div
                     className={`pt-5 border-t flex justify-between items-end mt-auto ${
-                      isLight ? "border-black/[0.08]" : "border-white/[0.08]"
+                      isLight ? "border-black/[0.1]" : "border-white/[0.08]"
                     }`}
                   >
                     <div>
-                      <span
-                        className={`block text-[9px] tracking-[0.2em] uppercase mb-1 ${
-                          isLight ? "text-black/40" : "text-white/35"
-                        }`}
-                      >
+                      <span className={`block mb-1 ${isLight ? "type-label-light" : "text-[9px] tracking-[0.2em] uppercase text-white/35"}`}>
                         Fiyat
                       </span>
-                      <span className={`text-2xl font-serif font-light ${isLight ? "text-black" : "text-white"}`}>
+                      <span className={isLight ? "type-price-light text-2xl" : "text-2xl font-serif font-light text-white"}>
                         ₺{service.price}
                       </span>
                     </div>
                     <div className="text-right">
-                      <span
-                        className={`block text-[9px] tracking-[0.2em] uppercase mb-1 ${
-                          isLight ? "text-black/40" : "text-white/35"
-                        }`}
-                      >
+                      <span className={`block mb-1 ${isLight ? "type-label-light" : "text-[9px] tracking-[0.2em] uppercase text-white/35"}`}>
                         Süre
                       </span>
-                      <span className={`text-sm font-medium ${isLight ? "text-black/55" : "text-white/55"}`}>
+                      <span className={isLight ? "type-meta-light" : "text-sm font-medium text-white/55"}>
                         {service.duration} dk
                       </span>
                     </div>

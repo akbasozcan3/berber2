@@ -51,11 +51,11 @@ export default function ReviewsSection({
       <div className="container mx-auto px-6 lg:px-14 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-6 mb-10 md:mb-14">
           <div className="lg:col-span-7 rounded-2xl border border-black/[0.08] bg-white p-8 md:p-10 shadow-sm">
-            <p className="text-[10px] font-bold tracking-[0.35em] uppercase text-black/45 mb-4">
+            <p className="type-eyebrow-light mb-4">
               Google Değerlendirmesi
             </p>
             <div className="flex flex-wrap items-end gap-4 mb-4">
-              <span className="text-6xl md:text-7xl font-serif font-light text-black leading-none">
+              <span className="text-6xl md:text-7xl font-serif font-medium text-black leading-none">
                 {googleRating}
               </span>
               <div>
@@ -64,10 +64,10 @@ export default function ReviewsSection({
                     <Star key={i} size={18} className="text-black fill-black" />
                   ))}
                 </div>
-                <p className="text-black/40 text-sm">{googleReviewCount}+ müşteri yorumu</p>
+                <p className="type-meta-light">{googleReviewCount}+ müşteri yorumu</p>
               </div>
             </div>
-            <p className="text-black/50 font-light leading-relaxed max-w-xl">
+            <p className="type-body-light max-w-xl">
               {reviewsSectionIntro}
             </p>
           </div>

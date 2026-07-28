@@ -8,7 +8,7 @@ export const geistSans = Inter({
 
 export const geistSerif = Cormorant_Garamond({
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700"],
   style: ["normal", "italic"],
   variable: "--font-display-serif",
   display: "swap",
