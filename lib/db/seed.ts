@@ -395,6 +395,7 @@ export async function seedDatabase() {
     seo_keywords:
       "erkek kuaförü, barber, kuaför, saç kesimi, sakal tıraşı, Çekmeköy, Taşdelen, İstanbul",
     site_url: "",
+    loading_color: "#C8703A",
     booking_page_title: "Online Randevu",
     booking_page_subtitle:
       "Zamanınız değerlidir. Sıra beklemeden, dilediğiniz gün ve saatte yerinizi rezerve edin.",

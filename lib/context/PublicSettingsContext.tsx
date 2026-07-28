@@ -31,7 +31,6 @@ export function PublicSettingsProvider({
 }) {
   const seed = initialSettings ?? publicSettingsDefaults;
   const [settings, setSettings] = useState<PublicSettings>(seed);
-  const hasInitialSettings = Boolean(initialSettings);
 
   useEffect(() => {
     const refresh = () => {
@@ -43,21 +42,25 @@ export function PublicSettingsProvider({
         .catch(() => {});
     };
 
-    if (!hasInitialSettings) refresh();
+    refresh();
 
     const onFocus = () => refresh();
     const onVisibilityChange = () => {
       if (document.visibilityState === "visible") refresh();
     };
 
+    const onUpdated = () => refresh();
+    window.addEventListener("public-settings-updated", onUpdated);
+
     window.addEventListener("focus", onFocus);
     document.addEventListener("visibilitychange", onVisibilityChange);
 
     return () => {
+      window.removeEventListener("public-settings-updated", onUpdated);
       window.removeEventListener("focus", onFocus);
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, [hasInitialSettings]);
+  }, []);
 
   const value = useMemo<PublicSettingsContextValue>(
     () => ({

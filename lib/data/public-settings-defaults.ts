@@ -55,6 +55,7 @@ export const publicSettingsDefaults: PublicSettings = {
   maxFutureBooking: 30,
   maxBookingsPerSlot: 1,
   siteUrl: "",
+  loadingColor: "#C8703A",
   seoHomeTitle: "",
   seoDefaultDescription:
     "İstanbul Çekmeköy Taşdelen'de profesyonel saç kesimi, sakal tasarımı, cilt bakımı ve erkek bakım hizmetleri.",

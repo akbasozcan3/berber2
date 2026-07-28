@@ -125,6 +125,7 @@ export interface PublicSettings {
   maxFutureBooking: number;
   maxBookingsPerSlot: number;
   siteUrl: string;
+  loadingColor: string;
   seoHomeTitle: string;
   seoDefaultDescription: string;
   seoKeywords: string;

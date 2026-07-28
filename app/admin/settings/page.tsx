@@ -103,6 +103,7 @@ export default function SettingsPage() {
     // Arka planda kaydet
     adminApi.saveSettings(payload).then(() => {
       loadTelegram();
+      window.dispatchEvent(new Event("public-settings-updated"));
     }).catch(() => {
       showToast(false, "Kaydedilemedi, tekrar deneyin.");
     });
@@ -232,6 +233,78 @@ export default function SettingsPage() {
             <Input label="E-posta" value={settings.contact_email || ""} onChange={(e) => set("contact_email", e.target.value)} />
             <Input label="Instagram" value={settings.instagram || ""} onChange={(e) => set("instagram", e.target.value)} />
             <Input label="İletişim Metni" value={settings.contact_intro || ""} onChange={(e) => set("contact_intro", e.target.value)} placeholder="Bize Ulaşın açıklaması" />
+          </div>
+        </Card>
+
+        <Card>
+          <h3 className="text-base font-semibold text-[#F8F8F8] mb-2">Sayfa Geçiş Rengi</h3>
+          <p className="text-xs text-[#71717A] mb-6">
+            Site ve admin panelinde sayfa geçişlerinde üstte görünen çizginin rengi. Değişiklik kaydettikten sonra sayfalar arasında gezinerek önizleyebilirsiniz.
+          </p>
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              {[
+                { label: "Bakır", value: "#C8703A" },
+                { label: "Altın", value: "#D4A574" },
+                { label: "Bordo", value: "#9E3A2E" },
+                { label: "Lacivert", value: "#3B6EA8" },
+                { label: "Zümrüt", value: "#3A8F6E" },
+                { label: "Mor", value: "#7B4FA3" },
+              ].map((preset) => {
+                const active = (settings.loading_color || "#C8703A").toUpperCase() === preset.value.toUpperCase();
+                return (
+                  <button
+                    key={preset.value}
+                    type="button"
+                    onClick={() => set("loading_color", preset.value)}
+                    className={cn(
+                      "inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-medium transition-colors",
+                      active
+                        ? "border-[#C8703A] bg-[#C8703A]/10 text-[#F8F8F8]"
+                        : "border-white/10 bg-white/[0.03] text-[#A1A1AA] hover:border-white/20"
+                    )}
+                  >
+                    <span
+                      className="h-4 w-4 rounded-full border border-white/20"
+                      style={{ backgroundColor: preset.value }}
+                      aria-hidden
+                    />
+                    {preset.label}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-[88px_1fr] gap-4 items-end">
+              <label className="block">
+                <span className="mb-2 block text-xs font-medium uppercase tracking-wider text-[#71717A]">
+                  Renk Seçici
+                </span>
+                <input
+                  type="color"
+                  value={(settings.loading_color || "#C8703A").slice(0, 7)}
+                  onChange={(e) => set("loading_color", e.target.value.toUpperCase())}
+                  className="h-11 w-full cursor-pointer rounded-xl border border-white/10 bg-transparent p-1"
+                />
+              </label>
+              <Input
+                label="HEX Kodu"
+                value={settings.loading_color || "#C8703A"}
+                onChange={(e) => set("loading_color", e.target.value.toUpperCase())}
+                placeholder="#C8703A"
+              />
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-[#71717A] mb-3">Önizleme</p>
+              <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full w-2/3 rounded-full"
+                  style={{
+                    background: `linear-gradient(90deg, ${settings.loading_color || "#C8703A"}, #FFFFFF66)`,
+                    boxShadow: `0 0 14px ${settings.loading_color || "#C8703A"}66`,
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </Card>
 

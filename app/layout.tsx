@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SiteChrome from "./components/SiteChrome";
+import RouteProgressTheme from "./components/ui/RouteProgressTheme";
 import { geistMono, geistSans, geistSerif } from "./fonts";
 import { getPublicSettingsServer } from "@/lib/data/public-settings";
 import { buildRootMetadata } from "@/lib/data/seo";
+import { PublicSettingsProvider } from "@/lib/context/PublicSettingsContext";
 
 export const dynamic = "force-dynamic";
 
@@ -36,7 +38,10 @@ export default async function RootLayout({
         ) : null}
       </head>
       <body className="min-h-screen text-white flex flex-col font-sans selection:bg-[#C8703A] selection:text-white">
-        <SiteChrome initialSettings={initialSettings}>{children}</SiteChrome>
+        <PublicSettingsProvider initialSettings={initialSettings}>
+          <RouteProgressTheme />
+          <SiteChrome>{children}</SiteChrome>
+        </PublicSettingsProvider>
       </body>
     </html>
   );

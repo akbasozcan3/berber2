@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "node scripts/build.mjs",
+    "build:light": "node scripts/build.mjs",
     "prod": "npm run build && npm run start",
     "stop": "node scripts/pre-build.mjs",
     "typecheck": "tsc --noEmit",

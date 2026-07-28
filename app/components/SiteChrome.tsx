@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import Navbar from "@/app/components/navbar/Navbar";
 import Footer from "@/app/components/footer/Footer";
 import WhatsAppButton from "@/app/components/WhatsAppButton";
-import { PublicSettingsProvider, usePublicSettings } from "@/lib/context/PublicSettingsContext";
-import type { PublicSettings } from "@/lib/api/client";
+import PageTransition from "@/app/components/ui/PageTransition";
+import RouteProgressBar from "@/app/components/ui/RouteProgressBar";
+import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 
 function FaviconManager() {
   const settings = usePublicSettings();
@@ -40,13 +41,7 @@ function FaviconManager() {
   return null;
 }
 
-export default function SiteChrome({
-  children,
-  initialSettings,
-}: {
-  children: React.ReactNode;
-  initialSettings: PublicSettings;
-}) {
+export default function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith("/admin");
 
@@ -55,12 +50,15 @@ export default function SiteChrome({
   }
 
   return (
-    <PublicSettingsProvider initialSettings={initialSettings}>
+    <>
       <FaviconManager />
+      <RouteProgressBar variant="site" />
       <Navbar />
-      <div className="flex-1">{children}</div>
+      <div className="flex-1">
+        <PageTransition variant="site">{children}</PageTransition>
+      </div>
       <Footer />
       <WhatsAppButton />
-    </PublicSettingsProvider>
+    </>
   );
 }

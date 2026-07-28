@@ -5,6 +5,7 @@ import type { PublicSettings } from "@/lib/api/client";
 import { publicSettingsDefaults } from "./public-settings-defaults";
 import { parseWorkingHoursJson } from "./working-hours";
 import { normalizeMultilineSettingValue } from "./multiline-settings";
+import { normalizeHexColor } from "@/lib/utils/loading-color";
 
 function ml(value: string | undefined, fallback: string): string {
   return normalizeMultilineSettingValue(value || fallback);
@@ -55,6 +56,7 @@ export function mapSettingsToPublic(all: Record<string, string>): PublicSettings
     maxFutureBooking: Number(all.max_future_booking || publicSettingsDefaults.maxFutureBooking),
     maxBookingsPerSlot: Number(all.max_bookings_per_slot || publicSettingsDefaults.maxBookingsPerSlot),
     siteUrl: all.site_url || publicSettingsDefaults.siteUrl,
+    loadingColor: normalizeHexColor(all.loading_color, publicSettingsDefaults.loadingColor),
     seoHomeTitle: all.seo_home_title || publicSettingsDefaults.seoHomeTitle,
     seoDefaultDescription: all.seo_default_description || publicSettingsDefaults.seoDefaultDescription,
     seoKeywords: all.seo_keywords || publicSettingsDefaults.seoKeywords,
