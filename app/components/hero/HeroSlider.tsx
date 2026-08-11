@@ -91,8 +91,8 @@ export default function HeroSlider({ initialSlides = [] }: HeroSliderProps) {
             }}
             className="flex flex-col items-center gap-1.5 group"
           >
-            <div className="w-5 h-8 border border-white/25 rounded-full flex items-start justify-center pt-1.5 group-hover:border-white/50 transition-colors">
-              <motion.div className="w-1 h-1.5 bg-white/60 rounded-full" animate={{ y: [0, 7, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} />
+            <div className="w-5 h-8 border border-white/25 rounded-full flex items-start justify-center pt-1.5 group-hover:border-white/50 transition-colors overflow-hidden">
+              <span className="hero-scroll-dot block w-1 h-1.5 rounded-full bg-white/70" aria-hidden />
             </div>
             <span className="text-[9px] tracking-[0.25em] uppercase text-white/25 group-hover:text-white/50 transition-colors">Aşağı Kaydır</span>
           </button>

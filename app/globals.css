@@ -243,6 +243,22 @@ html {
   100% { background-position: 600px 0; }
 }
 
+@keyframes hero-scroll-dot {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 0.35;
+  }
+}
+
+.hero-scroll-dot {
+  animation: hero-scroll-dot 1.6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
 .loading-shimmer {
   background: linear-gradient(
     90deg,
