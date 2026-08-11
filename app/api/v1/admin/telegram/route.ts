@@ -4,9 +4,11 @@ import {
   sendTestConnection,
   getTelegramLogs,
   getTelegramStatus,
+  normalizeTelegramChatId,
 } from "@/lib/telegram";
 import { pollAndProcessTelegramUpdates } from "@/lib/telegram-bot";
-import { jsonResponse, errorResponse } from "@/lib/api/helpers";
+import { setSetting } from "@/lib/services/booking";
+import { jsonResponse, errorResponse, parseBody } from "@/lib/api/helpers";
 
 export async function GET() {
   try {
@@ -19,16 +21,27 @@ export async function GET() {
   }
 }
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
     await ensureDb();
     await requireAuth();
+
+    // Formdaki Chat ID ile test (Kaydet'e basmadan)
+    try {
+      const body = await parseBody<{ chatId?: string }>(request);
+      const incoming = normalizeTelegramChatId(body?.chatId || "");
+      if (incoming) {
+        await setSetting("telegram_chat_id", incoming);
+      }
+    } catch {
+      // Body boş olabilir — mevcut DB değeri kullanılır
+    }
 
     const poll = await pollAndProcessTelegramUpdates();
     const result = await sendTestConnection();
 
     if (!result.success) {
-      return errorResponse(result.error || "Bağlantı testi başarısız", 500);
+      return errorResponse(result.error || "Bağlantı testi başarısız", 400);
     }
 
     const status = await getTelegramStatus();

@@ -137,13 +137,23 @@ export default function SettingsPage() {
   const sendTest = async () => {
     setTesting(true);
     try {
-      const res = await fetch("/api/v1/admin/telegram", { method: "POST", credentials: "include" });
+      const res = await fetch("/api/v1/admin/telegram", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chatId: settings.telegram_chat_id || "" }),
+      });
       const data = await res.json();
       showToast(
         res.ok,
         res.ok ? "Test bildirimi gönderildi!" : data.error || "Test başarısız"
       );
-      if (data.status) setStatus(data.status);
+      if (data.status) {
+        setStatus(data.status);
+        if (data.status.chatId) {
+          setSettings((s) => ({ ...s, telegram_chat_id: data.status.chatId }));
+        }
+      }
       loadTelegram();
     } catch {
       showToast(false, "Bağlantı hatası");
@@ -462,8 +472,8 @@ export default function SettingsPage() {
                 <p className="text-xs text-[#52525B] leading-relaxed">
                   Grup bildirimi için: botu gruba ekleyin → grupta <strong>/start</strong> yazın →
                   admin panelden &quot;Test Bildirimi Gönder&quot;e basın. Grup ID&apos;sini görmek için
-                  grupta <strong>/grupid</strong> yazın. Kişisel bot sohbetine /start yazmayın; bildirimler
-                  oraya gider.
+                  grupta <strong>/grupid</strong> yazın. Grup ID <strong>-100</strong> ile başlamalı
+                  (başındaki eksi önemli). Kişisel sohbet için bota bir kez <strong>/start</strong> yazın.
                 </p>
                 <Input
                   label="Admin Panel URL"

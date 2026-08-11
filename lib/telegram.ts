@@ -2,8 +2,50 @@ import { db } from "@/lib/db";
 import { telegramLogs } from "@/lib/db/schema";
 import { getSetting, setSetting } from "@/lib/services/booking";
 
-function isGroupChatId(chatId: string): boolean {
-  return chatId.trim().startsWith("-");
+/**
+ * Telegram Chat ID'yi normalize eder.
+ * Grup/supergroup ID'leri genelde -100... şeklindedir; eksi unutulunca
+ * "Bad Request: chat not found" hatası alınır.
+ */
+export function normalizeTelegramChatId(raw: string): string {
+  let id = raw.trim().replace(/\s+/g, "");
+  if (!id) return "";
+
+  // Sadece rakam ve opsiyonel baştaki eksi
+  id = id.replace(/[^\d-]/g, "");
+  if (id.startsWith("--")) id = `-${id.replace(/^-+/, "")}`;
+
+  // 100 ile başlayan uzun ID'ler (eksi yoksa) grup ID'sidir
+  if (!id.startsWith("-") && /^100\d{9,}$/.test(id)) {
+    return `-${id}`;
+  }
+
+  return id;
+}
+
+export function isGroupChatId(chatId: string): boolean {
+  const id = normalizeTelegramChatId(chatId);
+  return id.startsWith("-");
+}
+
+function humanizeTelegramError(raw: string, chatId: string): string {
+  const msg = raw.toLowerCase();
+  if (msg.includes("chat not found")) {
+    const hint = isGroupChatId(chatId)
+      ? "Grup Chat ID yanlış olabilir veya bot gruba eklenmemiş. Botu gruba ekleyip grupta /start yazın."
+      : "Bot size mesaj gönderemiyor. Telegram'da bota /start yazın veya doğru Chat ID girin. Grup için ID -100... ile başlamalı.";
+    return `Sohbet bulunamadı (chat not found). ${hint}`;
+  }
+  if (msg.includes("bot was blocked")) {
+    return "Bot engellenmiş. Telegram'da botu engeli kaldırıp /start yazın.";
+  }
+  if (msg.includes("forbidden")) {
+    return "Bot bu sohbete mesaj gönderemiyor. Botu gruba ekleyin veya kişisel sohbette /start yazın.";
+  }
+  if (msg.includes("unauthorized") || msg.includes("token")) {
+    return "Bot token geçersiz. Vercel ortam değişkeninde TELEGRAM_BOT_TOKEN'ı kontrol edin.";
+  }
+  return raw;
 }
 
 export interface TelegramAppointmentData {
@@ -56,15 +98,38 @@ function getBotToken(): string {
 }
 
 async function getChatId(): Promise<string> {
-  const fromDb = (await getSetting("telegram_chat_id"))?.trim();
+  const fromDb = normalizeTelegramChatId((await getSetting("telegram_chat_id")) || "");
   if (fromDb) return fromDb;
 
-  const fromEnv = process.env.TELEGRAM_CHAT_ID?.trim();
+  const fromEnv = normalizeTelegramChatId(process.env.TELEGRAM_CHAT_ID || "");
   if (fromEnv) return fromEnv;
 
   throw new TelegramConfigError(
-    "TELEGRAM_CHAT_ID is not configured. Bot'a /start yazın veya admin ayarlarından Chat ID girin."
+    "Chat ID ayarlı değil. Bot'a /start yazın veya Ayarlar → Telegram → Gelişmiş ayarlardan Chat ID girin."
   );
+}
+
+/** DB'deki hatalı chat ID'yi (eksi unutulmuş grup ID vb.) kalıcı düzelt. */
+async function persistNormalizedChatId(normalized: string): Promise<void> {
+  if (!normalized) return;
+  const current = ((await getSetting("telegram_chat_id")) || "").trim();
+  if (current === normalized) return;
+  await setSetting("telegram_chat_id", normalized);
+}
+
+function chatIdCandidates(primary: string): string[] {
+  const main = normalizeTelegramChatId(primary);
+  if (!main) return [];
+  const candidates = [main];
+
+  // Eksi eksik/fazla denemeleri (chat not found için)
+  if (main.startsWith("-") && /^-\d+$/.test(main)) {
+    candidates.push(main.slice(1));
+  } else if (/^\d+$/.test(main)) {
+    candidates.push(`-${main}`);
+  }
+
+  return [...new Set(candidates)];
 }
 
 async function isEnabled(): Promise<boolean> {
@@ -92,7 +157,9 @@ async function verifyBotConnection(): Promise<{ connected: boolean; botUsername?
 
 export async function getTelegramStatus() {
   const tokenConfigured = Boolean(process.env.TELEGRAM_BOT_TOKEN?.trim());
-  const chatId = (await getSetting("telegram_chat_id"))?.trim() || process.env.TELEGRAM_CHAT_ID?.trim() || "";
+  const rawChatId =
+    (await getSetting("telegram_chat_id"))?.trim() || process.env.TELEGRAM_CHAT_ID?.trim() || "";
+  const chatId = normalizeTelegramChatId(rawChatId);
   const chatIdConfigured = Boolean(chatId);
 
   const enabled = true;
@@ -167,37 +234,57 @@ ${data.message.trim()}`;
 
 export async function sendTelegramMessage(chatId: string, text: string): Promise<TelegramApiResponse> {
   const token = getBotToken();
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
-  try {
-    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      signal: controller.signal,
-      body: JSON.stringify({
-        chat_id: chatId,
-        text,
-        disable_web_page_preview: true,
-      }),
-    });
-
-    const result = (await response.json()) as TelegramApiResponse;
-
-    if (!response.ok || !result.ok) {
-      throw new Error(result.description || `Telegram API error (${response.status})`);
-    }
-
-    return result;
-  } catch (err) {
-    if (err instanceof TelegramConfigError) throw err;
-    if (err instanceof Error && err.name === "AbortError") {
-      throw new Error("Telegram request timed out after 12 seconds.");
-    }
-    throw err instanceof Error ? err : new Error("Telegram request failed.");
-  } finally {
-    clearTimeout(timeout);
+  const candidates = chatIdCandidates(chatId);
+  if (candidates.length === 0) {
+    throw new TelegramConfigError("Geçersiz Chat ID.");
   }
+
+  let lastError = "Telegram isteği başarısız.";
+
+  for (let i = 0; i < candidates.length; i++) {
+    const candidate = candidates[i];
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    const hasMore = i < candidates.length - 1;
+
+    try {
+      const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
+        body: JSON.stringify({
+          chat_id: candidate,
+          text,
+          disable_web_page_preview: true,
+        }),
+      });
+
+      const result = (await response.json()) as TelegramApiResponse;
+
+      if (!response.ok || !result.ok) {
+        const raw = result.description || `Telegram API error (${response.status})`;
+        lastError = humanizeTelegramError(raw, candidate);
+        if (raw.toLowerCase().includes("chat not found") && hasMore) continue;
+        throw new Error(lastError);
+      }
+
+      await persistNormalizedChatId(candidate);
+      return result;
+    } catch (err) {
+      if (err instanceof TelegramConfigError) throw err;
+      if (err instanceof Error && err.name === "AbortError") {
+        throw new Error("Telegram isteği 12 saniyede zaman aşımına uğradı.");
+      }
+      const message = err instanceof Error ? err.message : lastError;
+      lastError = humanizeTelegramError(message, candidate);
+      if (message.toLowerCase().includes("chat not found") && hasMore) continue;
+      throw new Error(lastError);
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  throw new Error(lastError);
 }
 
 async function logMessage(data: {

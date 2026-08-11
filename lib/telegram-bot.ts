@@ -1,10 +1,6 @@
-import { sendTelegramMessage } from "@/lib/telegram";
+import { sendTelegramMessage, normalizeTelegramChatId, isGroupChatId } from "@/lib/telegram";
 import { getSetting, setSetting } from "@/lib/services/booking";
 import { formatPhoneDisplay } from "@/lib/utils/format";
-
-export function isGroupChatId(chatId: string): boolean {
-  return chatId.trim().startsWith("-");
-}
 
 export function isGroupChatType(type: string | undefined): boolean {
   return type === "group" || type === "supergroup";
@@ -34,10 +30,10 @@ Sorularınız için doğrudan arayabilirsiniz.${groupNote}`.replace(/\n\n\n/g, "
 
 /** Grup ID'si kişisel sohbetten önceliklidir; özel /start grup ayarını ezmez. */
 export async function saveNotificationChatId(chatId: string, chatType: string): Promise<boolean> {
-  const trimmed = chatId.trim();
+  const trimmed = normalizeTelegramChatId(chatId);
   if (!trimmed) return false;
 
-  const current = (await getSetting("telegram_chat_id"))?.trim() || "";
+  const current = normalizeTelegramChatId((await getSetting("telegram_chat_id")) || "");
   const incomingIsGroup = isGroupChatType(chatType);
   const currentIsGroup = isGroupChatId(current);
 

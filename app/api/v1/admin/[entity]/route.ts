@@ -186,6 +186,10 @@ export async function PATCH(
       for (const [key, value] of Object.entries(body)) {
         if (key === "notifications_telegram") continue;
         let stored = key === "phone" ? normalizePhoneStorage(String(value)) : String(value);
+        if (key === "telegram_chat_id") {
+          const { normalizeTelegramChatId } = await import("@/lib/telegram");
+          stored = normalizeTelegramChatId(stored);
+        }
         if (MULTILINE_SETTING_KEYS.includes(key as (typeof MULTILINE_SETTING_KEYS)[number])) {
           stored = normalizeMultilineSettingValue(stored);
         }
