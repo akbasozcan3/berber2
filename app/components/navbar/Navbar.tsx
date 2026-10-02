@@ -140,7 +140,7 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   className={`relative text-[11px] font-bold tracking-[0.18em] uppercase py-1 transition-colors duration-300 group ${
-                    isActive(link.href) ? "text-white" : "text-white/45 hover:text-white"
+                    isActive(link.href) ? "text-black" : "text-white/45 hover:text-black transition-colors duration-300"
                   }`}
                 >
                   {link.name}
@@ -203,7 +203,7 @@ export default function Navbar() {
                       href={link.href}
                       onClick={closeMobile}
                       className={`text-sm font-bold tracking-[0.15em] uppercase py-2 border-b border-white/[0.03] transition-colors ${
-                        isActive(link.href) ? "text-white" : "text-white/60 hover:text-white"
+                        isActive(link.href) ? "text-black" : "text-white/60 hover:text-black transition-colors duration-300"
                       }`}
                     >
                       {link.name}
