@@ -134,24 +134,29 @@ export default function Navbar() {
             </Link>
 
             {/* Links - Centered */}
-            <div className="hidden lg:flex items-center gap-10">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={`relative text-[11px] font-bold tracking-[0.18em] uppercase py-1 transition-colors duration-300 group ${
-                    isActive(link.href) ? "text-black" : "text-white/45 hover:text-black transition-colors duration-300"
-                  }`}
-                >
-                  {link.name}
-                  <span
-                    className={`absolute -bottom-0.5 left-0 h-[1.5px] bg-white transition-all duration-400 ${
-                      isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
-                    }`}
-                  />
-                </Link>
-              ))}
-            </div>
+          <div className="hidden lg:flex items-center gap-10">
+  {navLinks.map((link) => (
+    <Link
+      key={link.name}
+      href={link.href}
+      className={`relative text-[11px] font-bold tracking-[0.18em] uppercase py-1 transition-colors duration-300 group ${
+        isActive(link.href)
+          ? "text-black"
+          : "text-black/50 hover:text-black"
+      }`}
+    >
+      {link.name}
+
+      <span
+        className={`absolute -bottom-0.5 left-0 h-[1.5px] bg-black transition-all duration-400 ${
+          isActive(link.href)
+            ? "w-full"
+            : "w-0 group-hover:w-full"
+        }`}
+      />
+    </Link>
+  ))}
+</div>
 
             {/* CTA Button */}
             <div className="flex items-center gap-4">
@@ -195,21 +200,22 @@ export default function Navbar() {
                     <X size={20} />
                   </button>
                 </div>
-
-                <nav className="flex flex-col gap-6">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.name}
-                      href={link.href}
-                      onClick={closeMobile}
-                      className={`text-sm font-bold tracking-[0.15em] uppercase py-2 border-b border-white/[0.03] transition-colors ${
-                        isActive(link.href) ? "text-black" : "text-white/60 hover:text-black transition-colors duration-300"
-                      }`}
-                    >
-                      {link.name}
-                    </Link>
-                  ))}
-                </nav>
+<nav className="flex flex-col gap-6">
+  {navLinks.map((link) => (
+    <Link
+      key={link.name}
+      href={link.href}
+      onClick={closeMobile}
+      className={`text-sm font-bold tracking-[0.15em] uppercase py-2 border-b border-white/[0.03] transition-colors duration-300 ${
+        isActive(link.href)
+          ? "text-white"
+          : "text-white/60 hover:text-white"
+      }`}
+    >
+      {link.name}
+    </Link>
+  ))}
+</nav>
               </div>
 
               {/* Bottom area */}
