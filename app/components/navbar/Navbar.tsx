@@ -159,23 +159,38 @@ export default function Navbar() {
 </div>
 
             {/* CTA Button */}
-            <div className="flex items-center gap-4">
-              <Link
-                href="/randevu"
-                className="hidden md:inline-flex items-center justify-center px-6 py-2.5 bg-[#C8703A] hover:bg-[#B5612E] text-white rounded-sm text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 border border-[#C8703A]/50"
-              >
-                {settings.navCtaLabel || "Randevu Al"}
-              </Link>
+<div className="flex items-center gap-5">
+  <Link
+    href="/randevu"
+    className="hidden md:inline-flex items-center justify-center
+      min-w-[140px] h-11 px-6
+      bg-black hover:bg-[#B5612E]
+      text-white
+      rounded-sm
+      text-[10px] font-bold tracking-[0.2em] uppercase
+      transition-all duration-300
+      border border-black
+      hover:border-[#B5612E]
+      shadow-sm hover:shadow-md"
+  >
+    {settings.navCtaLabel || "Randevu Al"}
+  </Link>
 
-              {/* Mobile Burger Toggle */}
-              <button
-                className="lg:hidden text-white/70 hover:text-white transition-colors p-1"
-                onClick={() => setMobileOpen(!mobileOpen)}
-                aria-label="Menü"
-              >
-                {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-              </button>
-            </div>
+  {/* Mobile Burger Toggle */}
+  <button
+    className="lg:hidden flex items-center justify-center
+      w-10 h-10
+      text-black/70 hover:text-black
+      hover:bg-black/[0.04]
+      rounded-sm
+      transition-all duration-300"
+    onClick={() => setMobileOpen(!mobileOpen)}
+    aria-label="Menü"
+  >
+    {mobileOpen ? <X size={21} strokeWidth={1.8} /> : <Menu size={21} strokeWidth={1.8} />}
+  </button>
+</div>
+
           </div>
         </nav>
       </header>
@@ -218,28 +233,53 @@ export default function Navbar() {
 </nav>
               </div>
 
-              {/* Bottom area */}
-              <div className="space-y-6 pt-8 border-t border-white/[0.05]">
-                <Link
-                  href="/randevu"
-                  onClick={closeMobile}
-                  className="w-full bg-white text-black text-center py-4 rounded-sm text-[11px] font-bold tracking-[0.2em] uppercase hover:bg-white/90 transition-all block"
-                >
-                  {settings.navCtaLabel || "Randevu Al"}
-                </Link>
-                <div className="space-y-3 text-[11px] font-semibold text-white/40 tracking-wider uppercase">
-                  <a href={toTelHref(settings.phone)} className="flex items-center gap-2 hover:text-white transition-colors">
-                    <Phone size={11} className="text-white/60" /> {phoneDisplay}
-                  </a>
-                  <div className="flex items-center gap-2">
-                    <Clock size={11} className="text-white/60" /> {hoursDisplay}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </>
-  );
+     ```tsx
+{/* Bottom area */}
+<div className="space-y-6 pt-8 border-t border-black/[0.06]">
+  <Link
+    href="/randevu"
+    onClick={closeMobile}
+    className="
+      w-full
+      bg-black hover:bg-[#B5612E]
+      text-white
+      text-center
+      py-4
+      rounded-sm
+      text-[11px]
+      font-bold
+      tracking-[0.2em]
+      uppercase
+      transition-all
+      duration-300
+      block
+      border border-black hover:border-[#B5612E]
+    "
+  >
+    {settings.navCtaLabel || "Randevu Al"}
+  </Link>
+
+  <div className="space-y-3 text-[11px] font-semibold text-black/45 tracking-wider uppercase">
+    <a
+      href={toTelHref(settings.phone)}
+      className="flex items-center gap-2 text-black/55 hover:text-black transition-colors duration-300"
+    >
+      <Phone size={11} className="text-black/60" />
+      {phoneDisplay}
+    </a>
+
+    <div className="flex items-center gap-2 text-black/55">
+      <Clock size={11} className="text-black/60" />
+      {hoursDisplay}
+    </div>
+  </div>
+</div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  </>
+);
 }
+
+export default Navbar;
