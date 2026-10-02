@@ -114,9 +114,9 @@ export default function Navbar() {
         {/* ─── 2. MAIN NAVBAR ─── */}
         <nav
           className={`w-full overflow-visible transition-all duration-300 ${
-            scrolled
-              ? "bg-[#0D1117]/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.5)] py-3"
-              : "bg-[#0D1117]/85 backdrop-blur-sm py-4.5"
+           scrolled
+           ? "bg-white/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.5)] py-3"
+           : "bg-white/85 backdrop-blur-sm py-4.5"
           }`}
         >
           <div className="max-w-7xl mx-auto px-5 lg:px-10 h-20 flex items-center justify-between gap-6 overflow-visible">
@@ -184,7 +184,7 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.3, ease: "easeOut" }}
-              className="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-[#0D1117] p-8 flex flex-col justify-between z-50 border-l border-white/[0.05]"
+              className="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white p-8 flex flex-col justify-between z-50 border-l border-black/[0.05]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Top area */}
