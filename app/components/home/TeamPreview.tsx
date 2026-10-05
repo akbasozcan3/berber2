@@ -87,20 +87,21 @@ export default function TeamPreview({ initialBarbers = [] }: TeamPreviewProps) {
                   {barber.specialty && (
                     <p className="text-white/50 text-sm mt-3 font-light leading-relaxed">{barber.specialty}</p>
                   )}
-                  <div className="flex items-center gap-2 mt-4 pt-3 border-t border-white/10">
+                  <div className="flex items-center gap-2.5 mt-4 pt-3 border-t border-white/10 text-xs">
                     <a
                       href="https://www.instagram.com/mstudiohairdresser/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[10px] font-semibold text-white/70 hover:text-white px-3 py-1 rounded-full bg-white/10 hover:bg-[#E1306C]/30 border border-white/10 transition-colors"
+                      className="text-white/60 hover:text-[#E1306C] transition-colors"
                     >
                       @mstudiohairdresser
                     </a>
+                    <span className="text-white/20">·</span>
                     <a
                       href="https://www.tiktok.com/@mehmetiis"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[10px] font-semibold text-white/70 hover:text-white px-3 py-1 rounded-full bg-white/10 hover:bg-[#25F4EE]/20 border border-white/10 transition-colors"
+                      className="text-white/60 hover:text-[#25F4EE] transition-colors"
                     >
                       @mehmetiis
                     </a>

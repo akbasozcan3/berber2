@@ -72,8 +72,8 @@ export default function ServicesPreview({ initialServices = [] }: ServicesPrevie
                 }`}
               >
                 {s.popular && (
-                  <span className="absolute top-4 right-4 text-[8px] font-bold tracking-[0.22em] uppercase bg-[#C8703A] text-white px-3 py-1 rounded-full shadow-xs">
-                    Popüler
+                  <span className="absolute top-6 right-6 text-[9px] font-bold tracking-[0.25em] uppercase text-[#C8703A]">
+                    ÖNE ÇIKAN
                   </span>
                 )}
 

@@ -241,9 +241,13 @@ export default function ReviewsSection({
 
         {/* Hairline Divider & Reservation Callout */}
         <div className="mt-20 pt-14 border-t border-black/[0.08] text-center max-w-xl mx-auto space-y-4">
-          <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#C8703A]">
-            Kişiye Özel İlgi & Zanaat
-          </span>
+          <div className="flex items-center justify-center gap-3">
+            <span className="w-8 h-px bg-[#C8703A]" />
+            <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#C8703A]">
+              Kişiye Özel İlgi & Zanaat
+            </span>
+            <span className="w-8 h-px bg-[#C8703A]" />
+          </div>
           <h3 className="text-3xl font-serif font-light text-black">
             Siz de Ayrıcalıklı Bakım Deneyimini Yaşayın
           </h3>

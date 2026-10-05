@@ -153,15 +153,6 @@ export default function HeroSlider({ initialSlides = [] }: HeroSliderProps) {
           <button onClick={() => { setAuto(false); next(); }} className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:border-white/60 hover:text-white transition-all" aria-label="Sonraki"><ArrowRight size={14} /></button>
         </div>
       )}
-
-      {s.badge && (
-        <AnimatePresence mode="wait">
-          <motion.div key={cur} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.4, duration: 0.6 }}
-            className="absolute bottom-20 sm:bottom-8 right-5 lg:right-10 z-20 bg-black/40 backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
-            <span className="text-[11px] font-semibold text-white/80">{s.badge}</span>
-          </motion.div>
-        </AnimatePresence>
-      )}
     </section>
   );
 }

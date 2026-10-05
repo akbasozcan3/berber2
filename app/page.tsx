@@ -1,7 +1,6 @@
 import nextDynamic from "next/dynamic";
 import HeroSlider from "./components/hero/HeroSlider";
 import ServicesPreview from "./components/home/ServicesPreview";
-import AboutBanner from "./components/home/AboutBanner";
 import QuoteBanner from "./components/home/QuoteBanner";
 import Contact from "./components/contact/Contact";
 import StatsStrip from "./components/home/StatsStrip";
@@ -88,13 +87,13 @@ function mapReviews(rows: Awaited<ReturnType<typeof getFeaturedReviews>>): Revie
 }
 
 export default async function HomePage() {
-  const [serviceRows, galleryRows, heroRows, barberRows, reviewRows, aboutPage, quotePage] = await Promise.all([
+  const [serviceRows, galleryRows, heroRows, barberRows, reviewRows, howItWorksPage, quotePage] = await Promise.all([
     getPopularServices(4),
     getGalleryImages(6),
     getEnabledHeroSlides(),
     getAvailableBarbers(),
     getFeaturedReviews(8),
-    getPageContentBySlug("about"),
+    getPageContentBySlug("home_how_it_works"),
     getPageContentBySlug("home_quote"),
   ]);
 
@@ -110,9 +109,8 @@ export default async function HomePage() {
       <section id="stats"><StatsStrip /></section>
       <section id="hizmetler"><ServicesPreview initialServices={services} /></section>
       <section id="videolar"><VideoShowcase initialGalleryItems={gallery} /></section>
-      <section id="hakkimizda"><AboutBanner initialPage={aboutPage} /></section>
       <section id="ekip"><TeamPreview initialBarbers={barbers} /></section>
-      <section id="nasil-calisir"><HowItWorks /></section>
+      <section id="nasil-calisir"><HowItWorks initialPage={howItWorksPage} /></section>
       <section id="galeri"><GalleryPreview initialImages={gallery} /></section>
       <section id="deneyim"><ExperienceHighlights /></section>
       <section id="felsefe"><QuoteBanner initialPage={quotePage} /></section>

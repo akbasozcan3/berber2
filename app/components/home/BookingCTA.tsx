@@ -57,9 +57,11 @@ export default function BookingCTA({ initialServices = [] }: BookingCTAProps) {
             transition={{ duration: 0.8 }}
             className="lg:col-span-7 space-y-6"
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#C8703A]/15 border border-[#C8703A]/30 text-[#E5A869] text-[10px] font-bold uppercase tracking-[0.25em]">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Canlı Koltuk Rezervasyonu</span>
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-px bg-[#C8703A]" />
+              <span className="text-[10px] font-bold tracking-[0.38em] uppercase text-[#E5A869]">
+                Canlı Koltuk Rezervasyonu
+              </span>
             </div>
 
             <h2 className="text-4xl sm:text-6xl font-serif font-light text-white tracking-tight leading-[1.1]">
