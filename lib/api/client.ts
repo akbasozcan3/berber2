@@ -97,6 +97,7 @@ export interface PublicSettings {
   navReviewsLabel: string;
   navAboutLabel: string;
   navContactLabel: string;
+  navVideosLabel: string;
   servicesPageTitle: string;
   servicesPageSubtitle: string;
   servicesSectionEyebrow: string;
@@ -104,6 +105,12 @@ export interface PublicSettings {
   servicesSectionSubtitle: string;
   galleryPageTitle: string;
   galleryPageSubtitle: string;
+  videosPageTitle: string;
+  videosPageSubtitle: string;
+  videosPageBanner: string;
+  videosSectionEyebrow: string;
+  videosSectionTitle: string;
+  videosSectionSubtitle: string;
   reviewsPageTitle: string;
   reviewsPageSubtitle: string;
   aboutPageTitle: string;

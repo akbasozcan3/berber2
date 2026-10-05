@@ -29,7 +29,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: settings.navServicesLabel || "Hizmetler", href: "/hizmetler" },
-    { name: "Videolar & Reels", href: "/videolar" },
+    { name: settings.navVideosLabel || "Videolar & Reels", href: "/videolar" },
     { name: settings.navGalleryLabel || "Galeri", href: "/galeri" },
     { name: settings.navReviewsLabel || "Yorumlar", href: "/yorumlar" },
     { name: settings.navAboutLabel || "Hakkımızda", href: "/hakkimizda" },

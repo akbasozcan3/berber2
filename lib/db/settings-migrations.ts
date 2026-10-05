@@ -92,4 +92,24 @@ export async function runSettingsMigrations() {
       await db.insert(settings).values({ key: "notifications_email", value: "true" });
     }
   }
+
+  const videoKeys: Record<string, string> = {
+    nav_videos_label: "Videolar & Reels",
+    videos_page_title: "Videolar & Reels",
+    videos_page_subtitle:
+      "Mehmet İis ve M Studio Hairdresser'ın ustalıkla hazırlanan saç tasarım, sakal şekillendirme ve VIP bakım videoları.",
+    videos_page_banner:
+      "https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&w=1200&auto=format&fit=crop",
+    videos_section_eyebrow: "Reels & TikTok",
+    videos_section_title: "M Studio\nReels & Videolar",
+    videos_section_subtitle:
+      "Mehmet İis'in imza saç kesimleri, sakal heykeltıraşlığı ve VIP stüdyo dönüşümleri.",
+  };
+
+  for (const [k, v] of Object.entries(videoKeys)) {
+    const existing = await db.select().from(settings).where(eq(settings.key, k)).limit(1);
+    if (!existing[0]) {
+      await db.insert(settings).values({ key: k, value: v });
+    }
+  }
 }

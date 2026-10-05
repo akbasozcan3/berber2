@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { Save } from "lucide-react";
@@ -11,6 +11,7 @@ import ImageUpload from "@/components/admin/ui/ImageUpload";
 
 const PAGES = [
   { slug: "about", label: "Hakkımızda (Ana Sayfa + Sayfa)" },
+  { slug: "videolar", label: "Videolar & Reels Metinleri" },
   { slug: "home_quote", label: "Ana Sayfa Felsefe Banner" },
   { slug: "home_how_it_works", label: "Ana Sayfa Nasıl Çalışır" },
   { slug: "legal_privacy", label: "Gizlilik Politikası" },

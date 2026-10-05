@@ -109,7 +109,7 @@ export default async function HomePage() {
       <HeroSlider initialSlides={heroSlides} />
       <section id="stats"><StatsStrip /></section>
       <section id="hizmetler"><ServicesPreview initialServices={services} /></section>
-      <section id="videolar"><VideoShowcase /></section>
+      <section id="videolar"><VideoShowcase initialGalleryItems={gallery} /></section>
       <section id="hakkimizda"><AboutBanner initialPage={aboutPage} /></section>
       <section id="ekip"><TeamPreview initialBarbers={barbers} /></section>
       <section id="nasil-calisir"><HowItWorks /></section>

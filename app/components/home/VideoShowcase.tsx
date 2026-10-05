@@ -8,6 +8,7 @@ import InstagramIcon from "@/components/icons/InstagramIcon";
 import TikTokIcon from "@/components/icons/TikTokIcon";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 import { instagramUrl, tikTokUrl } from "@/lib/utils/format";
+import type { GalleryImage } from "@/lib/api/client";
 
 interface VideoItem {
   id: string;
@@ -73,7 +74,11 @@ const SHOWCASE_VIDEOS: VideoItem[] = [
   },
 ];
 
-export default function VideoShowcase() {
+interface VideoShowcaseProps {
+  initialGalleryItems?: GalleryImage[];
+}
+
+export default function VideoShowcase({ initialGalleryItems = [] }: VideoShowcaseProps) {
   const settings = usePublicSettings();
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
   const [isMuted, setIsMuted] = useState(true);
@@ -82,7 +87,24 @@ export default function VideoShowcase() {
   const igUrl = instagramUrl(settings.instagram);
   const ttUrl = tikTokUrl(settings.tiktok);
 
-  const filteredVideos = SHOWCASE_VIDEOS.filter((v) => {
+  const dbVideos: VideoItem[] = (initialGalleryItems || [])
+    .filter((g) => g.mediaType === "instagram" || g.mediaType === "tiktok" || g.isVideo)
+    .map((g, idx) => ({
+      id: `db-${g.id}`,
+      title: g.title,
+      category: (g.mediaType === "tiktok" ? "beard" : "styling") as VideoItem["category"],
+      platform: (g.mediaType === "tiktok" ? "tiktok" : "instagram") as VideoItem["platform"],
+      url: g.instagramUrl || (g.mediaType === "tiktok" ? ttUrl : igUrl),
+      coverUrl: g.coverUrl || g.url,
+      videoSrc: g.isVideo && g.url?.endsWith(".mp4") ? g.url : "https://videos.pexels.com/video-files/3998188/3998188-uhd_2560_1440_30fps.mp4",
+      views: `${120 + ((idx * 47) % 230)}K`,
+      duration: "0:45",
+      description: g.title,
+    }));
+
+  const allVideos = dbVideos.length > 0 ? dbVideos : SHOWCASE_VIDEOS;
+
+  const filteredVideos = allVideos.filter((v) => {
     if (categoryFilter === "all") return true;
     if (categoryFilter === "instagram") return v.platform === "instagram";
     if (categoryFilter === "tiktok") return v.platform === "tiktok";
@@ -102,15 +124,15 @@ export default function VideoShowcase() {
             <div className="flex items-center gap-3 mb-4">
               <span className="w-8 h-px bg-[#C8703A]" />
               <span className="text-[10px] font-bold tracking-[0.38em] uppercase text-[#E5A869]">
-                M Studio TV · Reels & Video
+                {settings.videosSectionEyebrow || "M Studio TV · Reels & Video"}
               </span>
             </div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-light text-white tracking-tight leading-[1.1]">
-              Mehmet İis ile <br />
-              <span className="italic text-[#E5A869] font-normal">Saç Tasarım Sanatı</span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-light text-white tracking-tight leading-[1.1] whitespace-pre-line">
+              {settings.videosSectionTitle || "Mehmet İis ile \nSaç Tasarım Sanatı"}
             </h2>
             <p className="text-white/60 text-base max-w-xl mt-4 font-light leading-relaxed">
-              Instagram ve TikTok sayfalarımızdan en popüler saç dönüşümleri, ustura geçişleri ve salon enerjisi.
+              {settings.videosSectionSubtitle ||
+                "Instagram ve TikTok sayfalarımızdan en popüler saç dönüşümleri, ustura geçişleri ve salon enerjisi."}
             </p>
           </div>
 

@@ -607,6 +607,7 @@ export default function SettingsPage() {
           <h3 className="text-base font-semibold text-[#F8F8F8] mb-6">Site Metin Yönetimi</h3>
           <div className="space-y-4">
             <Input label="Menü - Hizmetler" value={settings.nav_services_label || ""} onChange={(e) => set("nav_services_label", e.target.value)} />
+            <Input label="Menü - Videolar & Reels" value={settings.nav_videos_label || ""} onChange={(e) => set("nav_videos_label", e.target.value)} placeholder="Videolar & Reels" />
             <Input label="Menü - Galeri" value={settings.nav_gallery_label || ""} onChange={(e) => set("nav_gallery_label", e.target.value)} />
             <Input label="Menü - Yorumlar" value={settings.nav_reviews_label || ""} onChange={(e) => set("nav_reviews_label", e.target.value)} />
             <Input label="Menü - Hakkımızda" value={settings.nav_about_label || ""} onChange={(e) => set("nav_about_label", e.target.value)} />
@@ -621,6 +622,17 @@ export default function SettingsPage() {
               className="min-h-[80px]"
             />
             <Input label="Hizmetler Bölümü Açıklama" value={settings.services_section_subtitle || ""} onChange={(e) => set("services_section_subtitle", e.target.value)} />
+            <Input label="Videolar Sayfası Başlık" value={settings.videos_page_title || ""} onChange={(e) => set("videos_page_title", e.target.value)} placeholder="Videolar & Reels" />
+            <Input label="Videolar Sayfası Alt Başlık" value={settings.videos_page_subtitle || ""} onChange={(e) => set("videos_page_subtitle", e.target.value)} />
+            <Input label="Videolar Bölümü Üst Metin" value={settings.videos_section_eyebrow || ""} onChange={(e) => set("videos_section_eyebrow", e.target.value)} placeholder="Reels & TikTok" />
+            <Textarea
+              label="Videolar Bölümü Başlık (Enter ile alt satır)"
+              value={settings.videos_section_title || ""}
+              onChange={(e) => set("videos_section_title", e.target.value)}
+              placeholder={"M Studio\nReels & Videolar"}
+              className="min-h-[80px]"
+            />
+            <Input label="Videolar Bölümü Açıklama" value={settings.videos_section_subtitle || ""} onChange={(e) => set("videos_section_subtitle", e.target.value)} />
             <Input label="Galeri Sayfası Başlık" value={settings.gallery_page_title || ""} onChange={(e) => set("gallery_page_title", e.target.value)} />
             <Input label="Galeri Sayfası Alt Başlık" value={settings.gallery_page_subtitle || ""} onChange={(e) => set("gallery_page_subtitle", e.target.value)} />
             <Input label="Yorumlar Sayfası Başlık" value={settings.reviews_page_title || ""} onChange={(e) => set("reviews_page_title", e.target.value)} />
@@ -659,6 +671,12 @@ export default function SettingsPage() {
               folder="banners"
               value={settings.about_page_banner || ""}
               onChange={(url) => set("about_page_banner", url)}
+            />
+            <ImageUpload
+              label="Videolar Sayfası Banner"
+              folder="banners"
+              value={settings.videos_page_banner || ""}
+              onChange={(url) => set("videos_page_banner", url)}
             />
             <ImageUpload
               label="İletişim Sayfası Banner"

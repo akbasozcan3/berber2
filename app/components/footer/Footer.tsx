@@ -66,7 +66,7 @@ export default function Footer() {
             <ul className="space-y-4">
               {[
                 { label: settings.navServicesLabel || "Hizmetler", href: "/hizmetler" },
-                { label: "Videolar & Reels", href: "/videolar" },
+                { label: settings.navVideosLabel || "Videolar & Reels", href: "/videolar" },
                 { label: settings.navGalleryLabel || "Galeri", href: "/galeri" },
                 { label: settings.navAboutLabel || "Hakkımızda", href: "/hakkimizda" },
                 { label: settings.navReviewsLabel || "Yorumlar", href: "/yorumlar" },
