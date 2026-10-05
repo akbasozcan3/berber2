@@ -139,7 +139,7 @@ async function deliverMail(options: {
 
   const mailer = createTransporter(config);
   const businessName = sanitizeDisplayName(
-    (await getSetting("business_name"))?.trim() || "The Barber"
+    (await getSetting("business_name"))?.trim() || "M Studio Hairdresser"
   );
   const contactEmail = (await getSetting("contact_email"))?.trim().toLowerCase() || "";
   const replyTo =
@@ -226,7 +226,7 @@ export async function sendTestEmail(to?: string): Promise<EmailResult> {
 
   const recipient = normalizeRecipient(to || config.user);
   const businessName = sanitizeDisplayName(
-    (await getSetting("business_name"))?.trim() || "The Barber"
+    (await getSetting("business_name"))?.trim() || "M Studio Hairdresser"
   );
 
   return deliverMail({

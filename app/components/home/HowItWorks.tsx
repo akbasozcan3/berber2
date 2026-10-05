@@ -1,120 +1,105 @@
-﻿"use client";
+"use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { CalendarDays, Scissors, Sparkles } from "lucide-react";
+import { CalendarCheck, Compass, Sparkles, Check, ArrowRight } from "lucide-react";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 
-const ICONS = [CalendarDays, Scissors, Sparkles];
-
-const DEFAULT_STEPS = [
+const EXPERIENCE_STEPS = [
   {
     step: "01",
-    title: "Randevu Seçin",
-    desc: "Hizmet, berber, tarih ve saati online olarak birkaç tıkla belirleyin.",
+    title: "Dijital Rezervasyon",
+    desc: "Online sistemimizden hizmetinizi, ustanızı ve uygun saatinizi saniyeler içinde belirleyin. Sıra bekleme yok.",
+    icon: CalendarCheck,
   },
   {
     step: "02",
-    title: "Salona Gelin",
-    desc: "Sıra beklemeden, seçtiğiniz saatte profesyonel ekibimiz sizi karşılasın.",
+    title: "Stil Konsültasyonu",
+    desc: "Mehmet İis ile yüz hatlarınıza, kemik anatomisine ve saç yapınıza en uygun saç & sakal modelini planlayın.",
+    icon: Compass,
   },
   {
     step: "03",
-    title: "Tarzınızı Yenileyin",
-    desc: "Kişiye özel kesim ve bakımla salonumuzdan özgüvenle ayrılın.",
+    title: "Zanaat & Bakım Ritüeli",
+    desc: "Sıcak havlu kompresi, steril ustura işçiliği, saç derisi masajı ve organik bakım yağlarıyla derin yenilenme.",
+    icon: Sparkles,
+  },
+  {
+    step: "04",
+    title: "Kusursuz İmzalı Tarz",
+    desc: "Gün boyu bozulmayan mat dokulu profesyonel şekillendirme ve stüdyomuzdan yüksek özgüvenle ayrılış.",
+    icon: Check,
   },
 ];
 
-type Step = { step: string; title: string; desc: string };
-
 export default function HowItWorks() {
-  const { businessName, navCtaLabel } = usePublicSettings();
-  const [eyebrow, setEyebrow] = useState("Nasıl Çalışır?");
-  const [title, setTitle] = useState("3 Adımda Randevu");
-  const [intro, setIntro] = useState(
-    `${businessName} deneyimi basit, hızlı ve konforlu. Randevunuzu alın, gerisini bize bırakın.`
-  );
-  const [steps, setSteps] = useState<Step[]>(DEFAULT_STEPS);
-  const [ctaLabel, setCtaLabel] = useState(navCtaLabel || "Randevu Al");
-
-  useEffect(() => {
-    fetch("/api/v1/content?slug=home_how_it_works")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (!data) return;
-        if (data.subtitle) setEyebrow(data.subtitle);
-        if (data.title) setTitle(data.title);
-        if (data.content) setIntro(data.content);
-        if (Array.isArray(data.sections) && data.sections.length > 0) {
-          setSteps(data.sections);
-        }
-        if (data.meta?.ctaLabel) setCtaLabel(data.meta.ctaLabel);
-      })
-      .catch(() => {});
-  }, []);
+  const { navCtaLabel } = usePublicSettings();
 
   return (
-    <section className="section-light py-28 relative border-y border-black/[0.08]">
-      <div className="container mx-auto px-6 lg:px-14">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center max-w-2xl mx-auto mb-20"
-        >
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <span className="w-8 h-px bg-black/25" />
-            <span className="type-eyebrow-light">{eyebrow}</span>
-            <span className="w-8 h-px bg-black/25" />
+    <section className="py-20 md:py-28 bg-[#FAF9F6] relative border-b border-black/[0.08] text-neutral-900">
+      <div className="container mx-auto px-6 lg:px-14 max-w-7xl">
+        <div className="text-center max-w-2xl mx-auto mb-16 md:mb-20">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/[0.04] border border-black/[0.08] text-[#C8703A] text-[10px] font-bold uppercase tracking-[0.25em] mb-4">
+            <Sparkles size={12} />
+            <span>Salon Deneyim Yolculuğu</span>
           </div>
-          <h2 className="type-display-light text-4xl md:text-5xl">{title}</h2>
-          <p className="mt-5 type-body-light max-w-2xl mx-auto">{intro}</p>
-        </motion.div>
+          <h2 className="text-3xl sm:text-5xl font-serif font-light text-black tracking-tight leading-tight">
+            M Studio Deneyimi <br />
+            <span className="italic text-neutral-500 font-normal">Nasıl İşler?</span>
+          </h2>
+          <p className="mt-4 text-neutral-600 text-sm sm:text-base font-light leading-relaxed max-w-xl mx-auto">
+            Geleneksel berberliği modern konforla birleştiren 4 adımlı özel servis protokolümüz.
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-          {steps.map((item, i) => {
-            const Icon = ICONS[i] || CalendarDays;
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {EXPERIENCE_STEPS.map((item, i) => {
+            const Icon = item.icon;
             return (
               <motion.div
                 key={item.step}
-                initial={{ opacity: 0, y: 28 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: i * 0.12 }}
-                className="relative text-center group"
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="bg-white p-8 rounded-2xl border border-black/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_35px_rgba(0,0,0,0.07)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group"
               >
-                {i < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-px bg-black/10" />
-                )}
-                <div className="inline-flex flex-col items-center">
-                  <span className="text-[10px] font-bold tracking-[0.35em] text-[#C8703A] mb-4">
-                    {item.step}
-                  </span>
-                  <div className="w-24 h-24 rounded-full border border-black/12 flex items-center justify-center mb-8 group-hover:border-black group-hover:bg-black/[0.03] transition-all duration-500">
-                    <Icon size={28} strokeWidth={1.5} className="text-neutral-600 group-hover:text-black transition-colors" />
+                <div>
+                  <div className="flex items-center justify-between mb-8">
+                    <span className="text-xs font-mono font-bold text-[#C8703A] tracking-wider px-2.5 py-1 rounded-md bg-[#C8703A]/10">
+                      ADIM {item.step}
+                    </span>
+                    <div className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-600 group-hover:bg-[#C8703A] group-hover:text-white transition-all duration-300">
+                      <Icon size={18} />
+                    </div>
                   </div>
-                  <h3 className="type-card-title-light mb-3">{item.title}</h3>
-                  <p className="type-body-light text-sm max-w-xs">{item.desc}</p>
+
+                  <h3 className="text-xl font-serif font-semibold text-black mb-3">
+                    {item.title}
+                  </h3>
+                  <p className="text-neutral-600 text-sm font-light leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+
+                <div className="mt-8 pt-4 border-t border-black/[0.06] flex items-center justify-between text-xs text-neutral-400">
+                  <span className="font-mono">0{i + 1} / 04</span>
+                  <span className="group-hover:text-black transition-colors font-medium">Ayrıntılar</span>
                 </div>
               </motion.div>
             );
           })}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mt-16"
-        >
+        <div className="text-center mt-14 sm:mt-16">
           <Link
             href="/randevu"
-            className="inline-flex items-center gap-3 bg-[#1A2235] text-white hover:bg-[#C8703A] px-10 py-4 rounded-full text-[10px] font-bold tracking-[0.28em] uppercase transition-all duration-300 border border-white/10 hover:border-[#C8703A]"
+            className="inline-flex items-center gap-2.5 bg-black hover:bg-neutral-800 text-white px-10 py-4.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all shadow-[0_4px_20px_rgba(0,0,0,0.15)] group"
           >
-            {navCtaLabel || ctaLabel}
+            <span>{navCtaLabel || "Hemen Randevu Al"}</span>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

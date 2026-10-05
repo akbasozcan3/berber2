@@ -27,7 +27,7 @@ export async function loadEmailBranding() {
   ]);
 
   return {
-    businessName: businessName?.trim() || "The Barber",
+    businessName: businessName?.trim() || "M Studio Hairdresser",
     address: address || undefined,
     phone: phone || undefined,
     siteUrl: resolvePublicSiteUrl(siteUrlSetting),

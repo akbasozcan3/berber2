@@ -107,70 +107,16 @@ export default function Navbar() {
   return (
     <>
       {/* ─── HEADER CONTAINER ─── */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex flex-col w-full">
-        {/* ─── 1. TOPBAR (Always Visible, Sleek Luxury Dark Strip) ─── */}
-        <div className="w-full bg-[#080D15] border-b border-white/[0.06] h-9 flex items-center">
-          <div className="w-full max-w-7xl mx-auto px-4 lg:px-10 flex items-center gap-4 text-white/60 text-[10px] font-semibold tracking-[0.12em] sm:tracking-[0.18em] uppercase">
-            <a
-              href={toTelHref(settings.phone)}
-              className="flex items-center gap-1.5 hover:text-white transition-colors duration-300 shrink-0 whitespace-nowrap"
-            >
-              <Phone size={10} className="text-[#C8703A] shrink-0" />
-              <span>{phoneDisplay}</span>
-            </a>
-
-            {settings.locationShort ? (
-              <span className="hidden md:inline-flex items-center gap-1.5 border-l border-white/10 pl-3 min-w-0 truncate">
-                <MapPin size={10} className="text-[#C8703A] shrink-0" />
-                <span className="truncate">{settings.locationShort}</span>
-              </span>
-            ) : null}
-
-            {/* Social Links in Topbar */}
-            <div className="flex items-center gap-2.5 ml-auto">
-              <a
-                href={igLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-white/50 hover:text-white transition-colors"
-                title="Instagram @mstudiohairdresser"
-              >
-                <InstagramIcon size={12} className="text-[#E1306C]" />
-                <span className="hidden sm:inline text-[9px] tracking-wider font-normal lowercase">@mstudiohairdresser</span>
-              </a>
-
-              <span className="text-white/20 hidden sm:inline">·</span>
-
-              <a
-                href={ttLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-white/50 hover:text-white transition-colors"
-                title="TikTok @mehmetiis"
-              >
-                <TikTokIcon size={12} className="text-[#25F4EE]" />
-                <span className="hidden sm:inline text-[9px] tracking-wider font-normal lowercase">@mehmetiis</span>
-              </a>
-
-              <span className="text-white/20 hidden md:inline">·</span>
-
-              <div className="hidden md:flex items-center gap-1.5 min-w-0 text-white/40">
-                <Clock size={10} className="text-white/50 shrink-0" />
-                <span className="truncate">{topbarHoursDisplay}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ─── 2. MAIN NAVBAR ─── */}
+      <header className="fixed top-0 left-0 right-0 z-50 w-full">
+        {/* ─── MAIN LUXURY NAVBAR ─── */}
         <nav
           className={`w-full overflow-visible transition-all duration-300 ${
             scrolled
-              ? "bg-white/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.12)] py-2.5"
-              : "bg-white/90 backdrop-blur-md py-4 border-b border-black/[0.05]"
+              ? "bg-white/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.08)] py-3 border-b border-black/[0.06]"
+              : "bg-white/90 backdrop-blur-md py-4 border-b border-black/[0.06]"
           }`}
         >
-          <div className="max-w-7xl mx-auto px-5 lg:px-10 h-16 sm:h-20 flex items-center justify-between gap-6 overflow-visible">
+          <div className="max-w-7xl mx-auto px-5 lg:px-10 h-16 sm:h-18 flex items-center justify-between gap-6 overflow-visible">
             {/* Logo */}
             <Link
               href="/"
@@ -184,7 +130,7 @@ export default function Navbar() {
             </Link>
 
             {/* Links - Desktop */}
-            <div className="hidden lg:flex items-center gap-8 xl:gap-10">
+            <div className="hidden lg:flex items-center gap-7 xl:gap-9">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
@@ -192,7 +138,7 @@ export default function Navbar() {
                   className={`relative text-[11px] font-bold tracking-[0.18em] uppercase py-1 transition-colors duration-300 group ${
                     isActive(link.href)
                       ? "text-[#C8703A]"
-                      : "text-black/70 hover:text-black"
+                      : "text-black/75 hover:text-black"
                   }`}
                 >
                   {link.name}
@@ -205,20 +151,42 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* CTA Button & Mobile Toggle */}
+            {/* Right Quick Socials & CTA */}
             <div className="flex items-center gap-3 sm:gap-4">
+              {/* Quick Social Badges */}
+              <div className="hidden xl:flex items-center gap-2 pr-2 border-r border-black/[0.08]">
+                <a
+                  href={igLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 rounded-full border border-pink-500/20 bg-pink-50 flex items-center justify-center text-[#E1306C] hover:bg-[#E1306C] hover:text-white transition-all shadow-xs"
+                  title="Instagram @mstudiohairdresser"
+                >
+                  <InstagramIcon size={14} />
+                </a>
+                <a
+                  href={ttLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 rounded-full border border-black/10 bg-neutral-100 flex items-center justify-center text-black hover:bg-black hover:text-[#25F4EE] transition-all shadow-xs"
+                  title="TikTok @mehmetiis"
+                >
+                  <TikTokIcon size={14} />
+                </a>
+              </div>
+
               <Link
                 href="/randevu"
                 className="group relative hidden sm:inline-flex items-center justify-center gap-2.5
                   min-w-[136px] md:min-w-[155px] h-10 md:h-11 px-5 md:px-6
-                  bg-[#0A0E17] hover:bg-[#B5612E]
+                  bg-black hover:bg-[#C8703A]
                   text-white
-                  border border-white/10 hover:border-[#C8703A]
+                  border border-black hover:border-[#C8703A]
                   rounded-full
                   text-[10px] md:text-[11px] font-bold tracking-[0.18em] uppercase
                   transition-all duration-300 ease-out
-                  hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(200,112,58,0.45)]
-                  active:translate-y-0 shadow-[0_4px_14px_rgba(0,0,0,0.2)]"
+                  hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(200,112,58,0.35)]
+                  active:translate-y-0 shadow-[0_4px_14px_rgba(0,0,0,0.15)]"
               >
                 <span className="w-5 h-5 rounded-full bg-white/10 group-hover:bg-white/20 flex items-center justify-center shrink-0 transition-colors duration-300">
                   <Calendar size={12} className="text-[#E5A869] group-hover:text-white transition-colors duration-300 shrink-0" strokeWidth={2.2} />
