@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -27,10 +27,17 @@ export default function Services({
   const isLight = theme === "light";
 
   useEffect(() => {
+    if (initialServices.length > 0) {
+      setServices(initialServices);
+      setLoading(false);
+      return;
+    }
     api
       .getServices()
-      .then((data) => setServices(data))
-      .catch(() => setServices([]))
+      .then((data) => {
+        if (data.length > 0) setServices(data);
+      })
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, [initialServices]);
 

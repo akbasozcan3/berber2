@@ -4,6 +4,7 @@ import { reviews, services, galleryImages, barbers, heroSlides, pageContent } fr
 import { and, eq, desc } from "drizzle-orm";
 import { getPublicSettingsServer } from "@/lib/data/public-settings";
 import type { PageContent } from "@/lib/api/client";
+import { M_STUDIO_SERVICES } from "@/lib/data/services-fallback";
 
 export async function getApprovedReviews(limit = 50) {
   try {
@@ -38,28 +39,30 @@ export async function getFeaturedReviews(limit = 8) {
 
 export async function getPopularServices(limit = 4) {
   try {
-    if (!(await ensureDb())) return [];
-    return await db
+    if (!(await ensureDb())) return M_STUDIO_SERVICES.slice(0, limit);
+    const list = await db
       .select()
       .from(services)
       .where(eq(services.enabled, true))
       .orderBy(services.sortOrder)
       .limit(limit);
+    return list.length > 0 ? list : M_STUDIO_SERVICES.slice(0, limit);
   } catch {
-    return [];
+    return M_STUDIO_SERVICES.slice(0, limit);
   }
 }
 
 export async function getEnabledServices() {
   try {
-    if (!(await ensureDb())) return [];
-    return await db
+    if (!(await ensureDb())) return M_STUDIO_SERVICES;
+    const list = await db
       .select()
       .from(services)
       .where(eq(services.enabled, true))
       .orderBy(services.sortOrder);
+    return list.length > 0 ? list : M_STUDIO_SERVICES;
   } catch {
-    return [];
+    return M_STUDIO_SERVICES;
   }
 }
 

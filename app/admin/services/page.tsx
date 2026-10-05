@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
@@ -50,6 +50,7 @@ export default function ServicesPage() {
     duration: "30",
     price: "0",
     sortOrder: "0",
+    image: "",
   });
 
   const showToast = (ok: boolean, text: string) => {
@@ -149,10 +150,11 @@ export default function ServicesPage() {
         duration: Number(newService.duration),
         price: Number(newService.price),
         sortOrder: Number(newService.sortOrder),
+        image: newService.image.trim() || null,
         enabled: true,
         popular: false,
       });
-      setNewService({ name: "", slug: "", description: "", duration: "30", price: "0", sortOrder: "0" });
+      setNewService({ name: "", slug: "", description: "", duration: "30", price: "0", sortOrder: "0", image: "" });
       await load();
       showToast(true, "Yeni hizmet eklendi.");
     } catch (error) {
@@ -217,6 +219,7 @@ export default function ServicesPage() {
           <Input label="Fiyat (TL)" type="number" value={newService.price} onChange={(e) => setNewService((p) => ({ ...p, price: e.target.value }))} />
           <Input label="Sıra" type="number" value={newService.sortOrder} onChange={(e) => setNewService((p) => ({ ...p, sortOrder: e.target.value }))} />
           <Input label="Açıklama" value={newService.description} onChange={(e) => setNewService((p) => ({ ...p, description: e.target.value }))} />
+          <Input label="Görsel URL (Opsiyonel)" value={newService.image} onChange={(e) => setNewService((p) => ({ ...p, image: e.target.value }))} placeholder="https://images.unsplash.com/..." />
           <Button onClick={addService} className="self-end">
             <Plus className="w-4 h-4" />
             Hizmet Ekle

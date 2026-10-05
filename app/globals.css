@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme inline {
@@ -12,23 +13,41 @@
 }
 
 :root {
-  --font-ui: var(--font-geist-sans), "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: var(--font-display-serif), "Iowan Old Style", "Palatino Linotype", Georgia, "Times New Roman", serif;
+  --font-ui: "Plus Jakarta Sans", "Inter", var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Cormorant Garamond", var(--font-display-serif), "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --font-code: var(--font-geist-mono), Consolas, "Courier New", monospace;
 
-  /* Koyu lacivert/derin gece mavisi — siyahtan farklı */
+  /* Koyu lacivert/derin gece mavisi — lüks salon */
   --background: #0B1018;
   --foreground: #F3EEE7;
   --card: #141C29;
   --accent: #F3EEE7;
   --accent-foreground: #0B1018;
   --section-dark: #0B1018;
-  --section-light: #F4F0EA;
+  --section-light: #F8F7F4;
 
-  /* Bakır/amber vurgu — altın sarısından farklı */
+  /* Bakır/amber vurgu */
   --copper: #C8703A;
   --copper-light: #E8915A;
   --copper-dim: #C8703A55;
+}
+
+/* Zorunlu tipografi sınıfları — fonts her koşulda çalışsın */
+.font-serif {
+  font-family: "Cormorant Garamond", var(--font-display-serif), Georgia, serif !important;
+}
+
+.font-sans {
+  font-family: "Plus Jakarta Sans", "Inter", var(--font-geist-sans), system-ui, sans-serif !important;
+}
+
+.font-mono {
+  font-family: var(--font-geist-mono), Consolas, monospace !important;
+}
+
+h1, h2, h3 {
+  font-family: "Cormorant Garamond", var(--font-display-serif), Georgia, serif;
+  letter-spacing: -0.015em;
 }
 
 body {
