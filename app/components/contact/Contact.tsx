@@ -111,15 +111,15 @@ export default function Contact({ showHeading = true }: ContactProps) {
         {showHeading && (
           <div className="mb-16 max-w-2xl">
             <div className="flex items-center gap-3 mb-6">
-              <span className="w-8 h-px bg-white" />
-              <p className="text-[10px] font-bold tracking-[0.35em] text-white/60 uppercase">
+              <span className="w-8 h-px bg-[#C8703A]" />
+              <p className="text-[10px] font-bold tracking-[0.35em] text-[#C8703A] uppercase">
                 {settings.contactPageTitle}
               </p>
             </div>
             <h2 className="text-4xl md:text-6xl font-serif font-light tracking-tight text-white leading-[1.05] mb-5">
               {settings.contactPageTitle}
             </h2>
-            <p className="text-white/45 text-lg font-light leading-relaxed">
+            <p className="text-white/60 text-lg font-light leading-relaxed">
               {settings.contactIntro}
             </p>
           </div>
@@ -237,7 +237,7 @@ export default function Contact({ showHeading = true }: ContactProps) {
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       placeholder="Adınız Soyadınız"
-                      className="w-full bg-transparent border-b border-white/15 py-3 text-white placeholder-white/25 focus:outline-none focus:border-white/40 transition-colors text-sm"
+                      className="w-full bg-transparent border-b border-white/15 py-3 text-white placeholder-white/25 focus:outline-none focus:border-[#C8703A] transition-colors text-sm"
                     />
                   </div>
                   <div>
@@ -250,7 +250,7 @@ export default function Contact({ showHeading = true }: ContactProps) {
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       placeholder="eposta@domain.com"
-                      className="w-full bg-transparent border-b border-white/15 py-3 text-white placeholder-white/25 focus:outline-none focus:border-white/40 transition-colors text-sm"
+                      className="w-full bg-transparent border-b border-white/15 py-3 text-white placeholder-white/25 focus:outline-none focus:border-[#C8703A] transition-colors text-sm"
                     />
                   </div>
                 </div>
@@ -265,14 +265,14 @@ export default function Contact({ showHeading = true }: ContactProps) {
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Mesajınız..."
-                    className="w-full bg-transparent border-b border-white/15 py-3 text-white placeholder-white/25 focus:outline-none focus:border-white/40 transition-colors resize-none text-sm"
+                    className="w-full bg-transparent border-b border-white/15 py-3 text-white placeholder-white/25 focus:outline-none focus:border-[#C8703A] transition-colors resize-none text-sm"
                   />
                 </div>
                 {error && <p className="text-sm text-red-400">{error}</p>}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-white text-black hover:bg-white/90 py-4 rounded-full font-bold text-[10px] tracking-[0.28em] uppercase transition-all duration-300 disabled:opacity-50"
+                  className="w-full bg-white text-black hover:bg-[#C8703A] hover:text-white py-4 rounded-full font-bold text-[10px] tracking-[0.28em] uppercase transition-all duration-300 disabled:opacity-50 shadow-[0_4px_16px_rgba(255,255,255,0.1)] hover:shadow-[0_4px_20px_rgba(200,112,58,0.35)]"
                 >
                   {loading ? "Gönderiliyor..." : "Mesajı Gönder"}
                 </button>

@@ -348,7 +348,7 @@ export default function Booking({
                           isDone
                             ? "bg-white text-black border-white group-hover:scale-105"
                             : isCurrent
-                            ? "bg-white text-black border-white shadow-[0_0_14px_rgba(255,255,255,0.25)]"
+                            ? "bg-[#C8703A] text-white border-[#C8703A] shadow-[0_0_14px_rgba(200,112,58,0.45)]"
                             : "bg-[#0D1117] text-white/30 border-white/15"
                         }`}
                       >
@@ -417,7 +417,7 @@ export default function Booking({
                                 }}
                                 className={`p-5 sm:p-6 border rounded-xl cursor-pointer transition-all h-44 relative flex flex-col justify-between group ${
                                   sel
-                                    ? "border-white bg-white/[0.06] shadow-[0_4px_20px_rgba(255,255,255,0.08)]"
+                                    ? "border-[#C8703A] bg-[#C8703A]/10 shadow-[0_4px_20px_rgba(200,112,58,0.18)]"
                                     : "border-white/[0.08] bg-white/[0.02] hover:border-white/30 hover:bg-white/[0.04]"
                                 }`}
                               >
@@ -425,7 +425,7 @@ export default function Booking({
                                   <div
                                     className={`w-10 h-10 rounded-full border flex items-center justify-center transition-colors ${
                                       sel
-                                        ? "border-white text-white bg-white/10"
+                                        ? "border-[#C8703A] text-white bg-[#C8703A]"
                                         : "border-white/15 text-white/60 group-hover:text-white"
                                     }`}
                                   >
@@ -479,7 +479,7 @@ export default function Booking({
                         }
                         className={`p-5 border rounded-xl cursor-pointer transition-all flex items-center justify-between ${
                           formData.noPreference
-                            ? "border-white bg-white/[0.06] shadow-[0_4px_20px_rgba(255,255,255,0.08)]"
+                            ? "border-[#C8703A] bg-[#C8703A]/10 shadow-[0_4px_20px_rgba(200,112,58,0.18)]"
                             : "border-white/[0.08] bg-white/[0.02] hover:border-white/30 hover:bg-white/[0.04]"
                         }`}
                       >
@@ -498,7 +498,7 @@ export default function Booking({
                         <div
                           className={`w-6 h-6 rounded-full border flex items-center justify-center ${
                             formData.noPreference
-                              ? "bg-white text-black border-white"
+                              ? "bg-[#C8703A] text-white border-[#C8703A]"
                               : "border-white/20 text-transparent"
                           }`}
                         >
@@ -527,7 +527,7 @@ export default function Booking({
                                 }
                                 className={`p-5 border rounded-xl cursor-pointer transition-all text-center flex flex-col items-center justify-between group ${
                                   sel
-                                    ? "border-white bg-white/[0.06] shadow-[0_4px_20px_rgba(255,255,255,0.08)]"
+                                    ? "border-[#C8703A] bg-[#C8703A]/10 shadow-[0_4px_20px_rgba(200,112,58,0.18)]"
                                     : "border-white/[0.08] bg-white/[0.02] hover:border-white/30 hover:bg-white/[0.04]"
                                 }`}
                               >
@@ -608,7 +608,7 @@ export default function Booking({
                                 onClick={() => setFormData({ ...formData, date: day.isoDate, time: "" })}
                                 className={`flex flex-col items-center justify-center py-3.5 px-4 rounded-xl border min-w-[76px] shrink-0 transition-all ${
                                   isSelected
-                                    ? "bg-white text-black border-white shadow-[0_4px_16px_rgba(255,255,255,0.2)] font-bold scale-105"
+                                    ? "bg-[#C8703A] text-white border-[#C8703A] shadow-[0_4px_16px_rgba(200,112,58,0.35)] font-bold scale-105"
                                     : "bg-white/[0.02] border-white/[0.08] text-white/60 hover:text-white hover:border-white/30 hover:bg-white/[0.04]"
                                 }`}
                               >
@@ -667,7 +667,7 @@ export default function Booking({
                                   title={unavail ? slotUnavailableHint(s.time, s.reason) : s.time}
                                   className={`py-3 px-2 rounded-xl text-xs font-mono font-medium transition-all text-center border relative ${
                                     sel
-                                      ? "bg-white text-black border-white shadow-[0_2px_12px_rgba(255,255,255,0.25)] font-bold"
+                                      ? "bg-[#C8703A] text-white border-[#C8703A] shadow-[0_2px_12px_rgba(200,112,58,0.35)] font-bold"
                                       : unavail
                                       ? "bg-white/[0.01] border-white/[0.03] text-white/20 cursor-not-allowed line-through"
                                       : "bg-white/[0.02] border-white/[0.08] text-white/80 hover:text-white hover:border-white/30 hover:bg-white/[0.05]"
@@ -826,7 +826,7 @@ export default function Booking({
                       <button
                         type="button"
                         onClick={handleNext}
-                        className="bg-white text-black hover:bg-white/90 px-8 sm:px-10 py-4 rounded-full text-[11px] font-bold tracking-widest uppercase flex items-center gap-2 transition-all shadow-[0_4px_20px_rgba(255,255,255,0.15)]"
+                        className="bg-white text-black hover:bg-[#C8703A] hover:text-white px-8 sm:px-10 py-4 rounded-full text-[11px] font-bold tracking-widest uppercase flex items-center gap-2 transition-all duration-300 shadow-[0_4px_20px_rgba(255,255,255,0.15)] hover:shadow-[0_4px_25px_rgba(200,112,58,0.35)]"
                       >
                         İleri <ChevronRight size={14} />
                       </button>
@@ -834,7 +834,7 @@ export default function Booking({
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="bg-white text-black hover:bg-white/90 px-8 sm:px-12 py-4 rounded-full text-[11px] font-bold tracking-widest uppercase disabled:opacity-50 transition-all shadow-[0_4px_20px_rgba(255,255,255,0.2)]"
+                        className="bg-white text-black hover:bg-[#C8703A] hover:text-white px-8 sm:px-12 py-4 rounded-full text-[11px] font-bold tracking-widest uppercase disabled:opacity-50 transition-all duration-300 shadow-[0_4px_20px_rgba(255,255,255,0.2)] hover:shadow-[0_4px_25px_rgba(200,112,58,0.35)]"
                       >
                         {isSubmitting ? "Kaydediliyor..." : "Randevuyu Onayla"}
                       </button>

@@ -36,8 +36,8 @@ export default function TeamPreview({ initialBarbers = [] }: TeamPreviewProps) {
             transition={{ duration: 0.8 }}
           >
             <div className="flex items-center gap-3 mb-6">
-              <span className="w-8 h-px bg-white" />
-              <span className="text-[10px] font-bold tracking-[0.38em] uppercase text-white/60">
+              <span className="w-8 h-px bg-[#C8703A]" />
+              <span className="text-[10px] font-bold tracking-[0.38em] uppercase text-[#C8703A]">
                 {settings.homeTeamEyebrow}
               </span>
             </div>

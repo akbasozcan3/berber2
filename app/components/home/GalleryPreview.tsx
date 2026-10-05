@@ -12,13 +12,16 @@ import GalleryItemCard from "@/components/gallery/GalleryItemCard";
 import GalleryLightbox from "@/components/gallery/GalleryLightbox";
 import { useGalleryLightbox } from "@/components/gallery/useGalleryLightbox";
 
+import { M_STUDIO_GALLERY_FALLBACK } from "@/lib/data/gallery-fallback";
+
 interface GalleryPreviewProps {
   initialImages?: GalleryImage[];
 }
 
 export default function GalleryPreview({ initialImages = [] }: GalleryPreviewProps) {
   const settings = usePublicSettings();
-  const [images, setImages] = useState<GalleryImage[]>(initialImages.slice(0, 6));
+  const sourceImages = initialImages.length > 0 ? initialImages : M_STUDIO_GALLERY_FALLBACK;
+  const [images, setImages] = useState<GalleryImage[]>(sourceImages.slice(0, 6));
 
   const { lightboxImages, photoIndex, openLightbox, closeLightbox, goPrev, goNext } =
     useGalleryLightbox(images);
@@ -29,7 +32,9 @@ export default function GalleryPreview({ initialImages = [] }: GalleryPreviewPro
 
   useEffect(() => {
     if (initialImages.length > 0) return;
-    api.getGallery().then((data) => setImages(data.slice(0, 6))).catch(() => {});
+    api.getGallery().then((data) => {
+      if (data.length > 0) setImages(data.slice(0, 6));
+    }).catch(() => {});
   }, [initialImages]);
 
   return (
@@ -40,8 +45,8 @@ export default function GalleryPreview({ initialImages = [] }: GalleryPreviewPro
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
           <div>
             <div className="flex items-center gap-3 mb-5">
-              <span className="w-8 h-px bg-white" />
-              <span className="text-[10px] font-bold tracking-[0.38em] uppercase text-white/60">
+              <span className="w-8 h-px bg-[#C8703A]" />
+              <span className="text-[10px] font-bold tracking-[0.38em] uppercase text-[#C8703A]">
                 {settings.homeGalleryEyebrow || settings.navGalleryLabel}
               </span>
             </div>

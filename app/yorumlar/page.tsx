@@ -8,6 +8,8 @@ export async function generateMetadata() {
   return buildPageMetadata(settings, settings.reviewsPageTitle, settings.reviewsPageSubtitle);
 }
 
+import { M_STUDIO_REVIEWS_FALLBACK } from "@/lib/data/reviews-fallback";
+
 export default async function YorumlarPage() {
   const [reviews, settings] = await Promise.all([
     getApprovedReviews(50),
@@ -25,6 +27,8 @@ export default async function YorumlarPage() {
     createdAt: r.createdAt,
   }));
 
+  const initialReviews = mapped.length > 0 ? mapped : M_STUDIO_REVIEWS_FALLBACK;
+
   return (
     <main>
       <PageHeader
@@ -34,7 +38,7 @@ export default async function YorumlarPage() {
         bg={settings.reviewsPageBanner}
       />
       <ReviewsSection
-        initialReviews={mapped}
+        initialReviews={initialReviews}
         googleRating={settings.googleRating}
         googleReviewCount={settings.googleReviewCount}
       />

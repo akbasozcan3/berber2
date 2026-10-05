@@ -8,6 +8,8 @@ import GalleryItemCard from "@/components/gallery/GalleryItemCard";
 import GalleryLightbox from "@/components/gallery/GalleryLightbox";
 import { useGalleryLightbox } from "@/components/gallery/useGalleryLightbox";
 import { isInstagramGalleryItem, isTikTokGalleryItem } from "@/lib/utils/gallery";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import TikTokIcon from "@/components/icons/TikTokIcon";
 
@@ -127,6 +129,28 @@ export default function Gallery({ initialImages = [] }: GalleryProps) {
               }
             />
           ))}
+        </div>
+
+        {/* Hairline Divider & Reservation Callout */}
+        <div className="mt-20 pt-12 border-t border-white/[0.08] text-center max-w-2xl mx-auto space-y-4">
+          <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#C8703A]">
+            Kişisel İmza Stiliniz
+          </p>
+          <h3 className="text-2xl sm:text-3xl font-serif font-light text-white">
+            Beğendiğiniz Modeli Hayata Geçirelim
+          </h3>
+          <p className="text-white/60 text-sm font-light leading-relaxed">
+            Görsellerimizdeki saç veya sakal tasarımını kendi yüz anatomisine özel uygulatmak için Mehmet İis&apos;ten anında randevu alabilirsiniz.
+          </p>
+          <div className="pt-2">
+            <Link
+              href="/randevu"
+              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-bold tracking-[0.2em] uppercase transition-all shadow-[0_4px_20px_rgba(255,255,255,0.15)]"
+            >
+              <span>Randevu Al</span>
+              <ArrowRight size={13} />
+            </Link>
+          </div>
         </div>
       </div>
 

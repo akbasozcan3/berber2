@@ -71,9 +71,13 @@ const SHOWCASE_VIDEOS: VideoItem[] = [
 
 interface VideoShowcaseProps {
   initialGalleryItems?: GalleryImage[];
+  isStandalonePage?: boolean;
 }
 
-export default function VideoShowcase({ initialGalleryItems = [] }: VideoShowcaseProps) {
+export default function VideoShowcase({
+  initialGalleryItems = [],
+  isStandalonePage = false,
+}: VideoShowcaseProps) {
   const settings = usePublicSettings();
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
 
@@ -285,15 +289,38 @@ export default function VideoShowcase({ initialGalleryItems = [] }: VideoShowcas
           ))}
         </div>
 
-        {/* Bottom CTA to View All & Follow */}
+        {/* Bottom CTA */}
         <div className="mt-16 text-center">
-          <Link
-            href="/videolar"
-            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#C8703A]/60 text-white text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300"
-          >
-            <span>Tüm Video & Reels Koleksiyonunu Gör</span>
-            <ExternalLink size={12} />
-          </Link>
+          {isStandalonePage ? (
+            <div className="max-w-xl mx-auto p-8 rounded-2xl bg-white/[0.02] border border-white/[0.08] space-y-4">
+              <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#C8703A]">
+                Kişiye Özel Dönüşüm
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-serif font-light text-white">
+                Videolardaki Saç & Sakal Tasarımını Deneyimleyin
+              </h3>
+              <p className="text-white/60 text-sm font-light leading-relaxed">
+                Mehmet İis&apos;in usta dokunuşlarıyla tarzınızı baştan yaratmak için hemen yerinizi ayırtın.
+              </p>
+              <div className="pt-2">
+                <Link
+                  href="/randevu"
+                  className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-bold tracking-[0.2em] uppercase transition-all shadow-[0_4px_20px_rgba(255,255,255,0.15)]"
+                >
+                  <span>Mehmet İis ile Randevu Al</span>
+                  <ExternalLink size={12} />
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <Link
+              href="/videolar"
+              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#C8703A]/60 text-white text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300"
+            >
+              <span>Tüm Video & Reels Koleksiyonunu Gör</span>
+              <ExternalLink size={12} />
+            </Link>
+          )}
         </div>
       </div>
     </section>

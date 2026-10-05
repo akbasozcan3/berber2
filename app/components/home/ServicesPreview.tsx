@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -36,8 +36,8 @@ export default function ServicesPreview({ initialServices = [] }: ServicesPrevie
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="w-8 h-px bg-black/25" />
-              <span className="text-[10px] font-bold tracking-[0.38em] uppercase text-neutral-600">
+              <span className="w-8 h-px bg-[#C8703A]" />
+              <span className="text-[10px] font-bold tracking-[0.38em] uppercase text-[#C8703A]">
                 {settings.servicesSectionEyebrow || settings.navServicesLabel}
               </span>
             </div>
@@ -67,12 +67,12 @@ export default function ServicesPreview({ initialServices = [] }: ServicesPrevie
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                className={`relative flex flex-col p-8 bg-white border rounded-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)] group ${
-                  s.popular ? "border-black/30" : "border-black/[0.08]"
+                className={`relative flex flex-col p-8 bg-white border rounded-2xl transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)] group ${
+                  s.popular ? "border-[#C8703A]/40 shadow-sm" : "border-black/[0.08] hover:border-[#C8703A]/40"
                 }`}
               >
                 {s.popular && (
-                  <span className="absolute top-4 right-4 text-[8px] font-bold tracking-[0.25em] uppercase bg-black text-white px-2.5 py-1 rounded-sm">
+                  <span className="absolute top-4 right-4 text-[8px] font-bold tracking-[0.22em] uppercase bg-[#C8703A] text-white px-3 py-1 rounded-full shadow-xs">
                     Popüler
                   </span>
                 )}

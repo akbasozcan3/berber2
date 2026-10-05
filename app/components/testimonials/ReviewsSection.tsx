@@ -1,7 +1,8 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
-import { Star, Send, CheckCircle, Quote, Mail } from "lucide-react";
+import Link from "next/link";
+import { Star, Send, CheckCircle, CheckCircle2, Quote, Mail, ArrowRight } from "lucide-react";
 import { api, type Review } from "@/lib/api/client";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 import { getInitials } from "@/lib/utils/format";
@@ -202,26 +203,34 @@ export default function ReviewsSection({
             {reviews.map((item) => (
               <article
                 key={item.id}
-                className="flex flex-col h-full p-7 rounded-2xl border border-black/[0.08] bg-white hover:border-black/20 hover:shadow-sm transition-all"
+                className="flex flex-col h-full p-7 rounded-2xl border border-black/[0.08] bg-white hover:border-[#C8703A]/40 hover:shadow-lg transition-all duration-300 group"
               >
-                <div className="flex gap-1 text-black mb-4">
-                  {Array.from({ length: item.rating }).map((_, i) => (
-                    <Star key={i} size={14} fill="currentColor" strokeWidth={0} />
-                  ))}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex gap-1 text-[#C8703A]">
+                    {Array.from({ length: item.rating }).map((_, i) => (
+                      <Star key={i} size={15} fill="currentColor" strokeWidth={0} />
+                    ))}
+                  </div>
+                  <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded-full">
+                    <CheckCircle2 size={11} className="text-[#C8703A]" />
+                    Doğrulanmış
+                  </span>
                 </div>
-                <p className="text-black/60 font-light text-sm leading-relaxed italic flex-1 mb-6">
+
+                <p className="text-neutral-700 font-light text-sm leading-relaxed italic flex-1 mb-6">
                   &ldquo;{item.review}&rdquo;
                 </p>
+
                 <div className="flex items-center gap-3 pt-5 border-t border-black/[0.06]">
-                  <div className="w-10 h-10 rounded-full bg-black/[0.04] border border-black/10 flex items-center justify-center shrink-0">
-                    <span className="text-xs font-bold text-black/60">
+                  <div className="w-10 h-10 rounded-full bg-neutral-100 border border-black/10 flex items-center justify-center shrink-0 group-hover:border-[#C8703A]/40 transition-colors">
+                    <span className="text-xs font-bold text-neutral-800">
                       {getInitials(item.customerName)}
                     </span>
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-sm font-medium text-black truncate">{item.customerName}</h4>
-                    <p className="text-[10px] text-black/35 uppercase tracking-wider">
-                      {item.source === "google" ? "Google" : "Web Sitesi"}
+                    <h4 className="text-sm font-semibold text-neutral-900 truncate">{item.customerName}</h4>
+                    <p className="text-[10px] text-neutral-500 uppercase tracking-wider">
+                      {item.source === "google" ? "Google İncelemesi" : "M Studio Misafiri"}
                     </p>
                   </div>
                 </div>
@@ -229,6 +238,28 @@ export default function ReviewsSection({
             ))}
           </div>
         )}
+
+        {/* Hairline Divider & Reservation Callout */}
+        <div className="mt-20 pt-14 border-t border-black/[0.08] text-center max-w-xl mx-auto space-y-4">
+          <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#C8703A]">
+            Kişiye Özel İlgi & Zanaat
+          </span>
+          <h3 className="text-3xl font-serif font-light text-black">
+            Siz de Ayrıcalıklı Bakım Deneyimini Yaşayın
+          </h3>
+          <p className="text-neutral-600 text-sm font-light leading-relaxed">
+            Mehmet İis ve ekibinin titiz işçiliği ile tanışmak için hemen yerinizi ayırtın.
+          </p>
+          <div className="pt-2">
+            <Link
+              href="/randevu"
+              className="inline-flex items-center gap-2 bg-black hover:bg-neutral-800 text-white px-9 py-4 rounded-full text-xs font-bold uppercase tracking-widest transition-all shadow-md"
+            >
+              <span>Randevu Al</span>
+              <ArrowRight size={13} />
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );

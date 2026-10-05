@@ -3,6 +3,7 @@ import Gallery from "../components/gallery/Gallery";
 import { getGalleryImages, getPublicSettingsSnapshot } from "@/lib/data/public-server";
 import { buildPageMetadata } from "@/lib/data/seo";
 import { mapGalleryRow, filterVisibleGalleryItems } from "@/lib/utils/gallery";
+import { M_STUDIO_GALLERY_FALLBACK } from "@/lib/data/gallery-fallback";
 
 export async function generateMetadata() {
   const settings = await getPublicSettingsSnapshot();
@@ -15,7 +16,8 @@ export default async function GaleriPage() {
     getGalleryImages(),
   ]);
 
-  const initialImages = filterVisibleGalleryItems(galleryRows.map(mapGalleryRow));
+  const mapped = filterVisibleGalleryItems(galleryRows.map(mapGalleryRow));
+  const initialImages = mapped.length > 0 ? mapped : M_STUDIO_GALLERY_FALLBACK;
 
   return (
     <main>

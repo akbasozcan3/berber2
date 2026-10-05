@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
@@ -32,11 +32,11 @@ export default function ExperienceHighlights() {
           className="text-center mb-16"
         >
           <div className="flex items-center justify-center gap-3 mb-5">
-            <span className="w-8 h-px bg-black/25" />
-            <span className="type-eyebrow-light">
+            <span className="w-8 h-px bg-[#C8703A]" />
+            <span className="type-eyebrow-light text-[#C8703A]">
               {experienceEyebrow} {businessName}
             </span>
-            <span className="w-8 h-px bg-black/25" />
+            <span className="w-8 h-px bg-[#C8703A]" />
           </div>
           <SectionTitle
             title={experienceTitle}

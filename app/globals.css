@@ -34,7 +34,7 @@
 
 /* Zorunlu tipografi sınıfları — fonts her koşulda çalışsın */
 .font-serif {
-  font-family: "Cormorant Garamond", var(--font-display-serif), Georgia, serif !important;
+  font-family: "Cormorant Garamond", var(--font-display-serif), "Playfair Display", Georgia, serif !important;
 }
 
 .font-sans {
@@ -45,9 +45,39 @@
   font-family: var(--font-geist-mono), Consolas, monospace !important;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
   font-family: "Cormorant Garamond", var(--font-display-serif), Georgia, serif;
   letter-spacing: -0.015em;
+}
+
+/* İnce Çizgiler (Hairline) Tasarım Sistemi */
+.hairline-border-dark {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hairline-border-light {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.hairline-divider-dark {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.hairline-divider-light {
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.07);
+}
+
+.hairline-copper {
+  width: 2rem;
+  height: 1px;
+  background-color: #C8703A;
+}
+
+.hairline-glow-copper {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 112, 58, 0.4), transparent);
 }
 
 body {

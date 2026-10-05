@@ -3,6 +3,7 @@ import VideoShowcase from "../components/home/VideoShowcase";
 import { getPublicSettingsSnapshot, getGalleryImages } from "@/lib/data/public-server";
 import { buildPageMetadata } from "@/lib/data/seo";
 import { mapGalleryRow, filterVisibleGalleryItems } from "@/lib/utils/gallery";
+import { M_STUDIO_GALLERY_FALLBACK } from "@/lib/data/gallery-fallback";
 
 export async function generateMetadata() {
   const settings = await getPublicSettingsSnapshot();
@@ -20,7 +21,8 @@ export default async function VideolarPage() {
     getGalleryImages(),
   ]);
 
-  const initialImages = filterVisibleGalleryItems(galleryRows.map(mapGalleryRow));
+  const mapped = filterVisibleGalleryItems(galleryRows.map(mapGalleryRow));
+  const initialImages = mapped.length > 0 ? mapped : M_STUDIO_GALLERY_FALLBACK;
 
   return (
     <main>
@@ -33,7 +35,7 @@ export default async function VideolarPage() {
         breadcrumb={settings.navVideosLabel || "Videolar & Reels"}
         bg={settings.videosPageBanner || settings.galleryPageBanner || "/images/hero-1.jpg"}
       />
-      <VideoShowcase initialGalleryItems={initialImages} />
+      <VideoShowcase initialGalleryItems={initialImages} isStandalonePage={true} />
     </main>
   );
 }

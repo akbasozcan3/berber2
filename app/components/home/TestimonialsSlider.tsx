@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,6 +8,7 @@ import { api, type Review } from "@/lib/api/client";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 import { getInitials } from "@/lib/utils/format";
 import SectionTitle from "@/components/ui/SectionTitle";
+import { M_STUDIO_REVIEWS_FALLBACK } from "@/lib/data/reviews-fallback";
 
 interface TestimonialsSliderProps {
   initialReviews?: Review[];
@@ -15,14 +16,17 @@ interface TestimonialsSliderProps {
 
 export default function TestimonialsSlider({ initialReviews = [] }: TestimonialsSliderProps) {
   const settings = usePublicSettings();
-  const [reviews, setReviews] = useState<Review[]>(initialReviews);
+  const sourceReviews = initialReviews.length > 0 ? initialReviews : M_STUDIO_REVIEWS_FALLBACK;
+  const [reviews, setReviews] = useState<Review[]>(sourceReviews);
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     if (initialReviews.length > 0) return;
     api.getReviews(true).then((data) => {
       if (data.length > 0) setReviews(data);
-      else api.getReviews().then(setReviews).catch(() => {});
+      else api.getReviews().then((all) => {
+        if (all.length > 0) setReviews(all);
+      }).catch(() => {});
     }).catch(() => {});
   }, [initialReviews.length]);
 
@@ -56,8 +60,8 @@ export default function TestimonialsSlider({ initialReviews = [] }: Testimonials
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
           <div>
             <div className="flex items-center gap-3 mb-5">
-              <span className="w-8 h-px bg-black/25" />
-              <span className="type-eyebrow-light">
+              <span className="w-8 h-px bg-[#C8703A]" />
+              <span className="type-eyebrow-light text-[#C8703A]">
                 {settings.homeTestimonialsEyebrow || settings.reviewsPageTitle}
               </span>
             </div>
@@ -88,7 +92,7 @@ export default function TestimonialsSlider({ initialReviews = [] }: Testimonials
               >
                 <div className="flex gap-1 mb-8">
                   {[...Array(review.rating)].map((_, i) => (
-                    <Star key={i} size={14} className="text-black fill-current" strokeWidth={0} />
+                    <Star key={i} size={16} className="text-[#C8703A] fill-current" strokeWidth={0} />
                   ))}
                 </div>
 

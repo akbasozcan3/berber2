@@ -104,15 +104,23 @@ export default function HeroSlider({ initialSlides = [] }: HeroSliderProps) {
       <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-5">
         <AnimatePresence mode="wait">
           <motion.div key={cur} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} className="w-full max-w-2xl flex flex-col items-center">
-            {s.subtitle && <span className="text-[10px] font-bold tracking-[0.35em] uppercase text-white/60 mb-4">{s.subtitle}</span>}
-            <h1 className="font-serif text-white leading-[1.15] mb-5 whitespace-pre-line text-3xl sm:text-5xl md:text-6xl font-light tracking-tight drop-shadow-lg">{s.title}</h1>
-            <p className="text-white/70 text-base md:text-lg font-light leading-relaxed max-w-lg mb-8">{s.description}</p>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
-              <Link href={s.ctaLink || "/randevu"} className="group flex items-center justify-center gap-1.5 bg-white hover:bg-white/90 text-black px-7 sm:px-12 py-4 sm:py-6 rounded-full text-[13px] sm:text-[14px] font-semibold tracking-wide transition-all duration-500 shadow-[0_4px_20px_rgba(255,255,255,0.2)]">
-                <CalendarCheck size={15} />{s.ctaText || navCtaLabel || "Randevu Al"}<ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} className="w-full max-w-3xl flex flex-col items-center">
+            {s.subtitle && (
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-8 h-px bg-[#C8703A]" />
+                <span className="text-[10px] font-bold tracking-[0.35em] uppercase text-[#E5A869]">
+                  {s.subtitle}
+                </span>
+                <span className="w-8 h-px bg-[#C8703A]" />
+              </div>
+            )}
+            <h1 className="font-serif text-white leading-[1.08] mb-6 whitespace-pre-line text-4xl sm:text-6xl md:text-7xl font-light tracking-tight drop-shadow-xl">{s.title}</h1>
+            <p className="text-white/70 text-base md:text-lg font-light leading-relaxed max-w-xl mb-8">{s.description}</p>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto">
+              <Link href={s.ctaLink || "/randevu"} className="group flex items-center justify-center gap-2 bg-white hover:bg-[#C8703A] text-black hover:text-white px-8 sm:px-12 py-4 sm:py-5 rounded-full text-[12px] sm:text-[13px] font-bold tracking-[0.18em] uppercase transition-all duration-300 shadow-[0_4px_25px_rgba(255,255,255,0.25)] hover:shadow-[0_4px_25px_rgba(200,112,58,0.4)]">
+                <CalendarCheck size={16} />{s.ctaText || navCtaLabel || "Randevu Al"}<ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href="/hizmetler" className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-7 sm:px-12 py-4 sm:py-6 rounded-full text-[11px] sm:text-[12px] font-semibold tracking-wide transition-colors">{navServicesLabel}</Link>
+              <Link href="/hizmetler" className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-7 sm:px-10 py-4 sm:py-5 rounded-full text-[11px] sm:text-[12px] font-bold tracking-[0.16em] uppercase transition-colors">{navServicesLabel}</Link>
             </div>
           </motion.div>
         </AnimatePresence>
