@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Play, Volume2, VolumeX, X, ExternalLink, Calendar, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { Play, ExternalLink, Sparkles } from "lucide-react";
 import Link from "next/link";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import TikTokIcon from "@/components/icons/TikTokIcon";
@@ -17,7 +17,6 @@ interface VideoItem {
   platform: "instagram" | "tiktok";
   url: string;
   coverUrl: string;
-  videoSrc?: string;
   views: string;
   duration: string;
   description: string;
@@ -31,19 +30,17 @@ const SHOWCASE_VIDEOS: VideoItem[] = [
     platform: "instagram",
     url: "https://www.instagram.com/mstudiohairdresser/",
     coverUrl: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&h=1200&fit=crop",
-    videoSrc: "https://videos.pexels.com/video-files/3998188/3998188-uhd_2560_1440_30fps.mp4",
     views: "185K",
     duration: "0:45",
     description: "Mehmet İis'ten kusursuz milimetrik skin fade geçişi ve tepe quiff şekillendirme sanatı.",
   },
   {
     id: "vid-2",
-    title: "Sakal Heykeltıraşlığı & Ustura",
+    title: "Sakal Heykeltıraşlığı & Ustura Çizgileri",
     category: "beard",
     platform: "tiktok",
     url: "https://www.tiktok.com/@mehmetiis",
     coverUrl: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&h=1200&fit=crop",
-    videoSrc: "https://videos.pexels.com/video-files/3998188/3998188-uhd_2560_1440_30fps.mp4",
     views: "240K",
     duration: "0:38",
     description: "Geleneksel ustura keskinliği, sıcak havlu kompresi ve organik yağlarla sakal çizgisi oluşturma.",
@@ -55,19 +52,17 @@ const SHOWCASE_VIDEOS: VideoItem[] = [
     platform: "instagram",
     url: "https://www.instagram.com/mstudiohairdresser/",
     coverUrl: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&h=1200&fit=crop",
-    videoSrc: "https://videos.pexels.com/video-files/3998188/3998188-uhd_2560_1440_30fps.mp4",
     views: "115K",
     duration: "0:52",
     description: "Modern katmanlı kesim, doğal hacim ve özel doku verici kil ile gün boyu bozulmayan stil.",
   },
   {
     id: "vid-4",
-    title: "Sıcak Havlu & Kafa Masajı",
+    title: "Sıcak Havlu & Kafa Masajı VIP",
     category: "vip",
     platform: "tiktok",
     url: "https://www.tiktok.com/@mehmetiis",
     coverUrl: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&h=1200&fit=crop",
-    videoSrc: "https://videos.pexels.com/video-files/3998188/3998188-uhd_2560_1440_30fps.mp4",
     views: "310K",
     duration: "1:05",
     description: "Yoğun bir günün ardından zihni ve cildi yenileyen M Studio imza aromaterapik VIP bakım ritüeli.",
@@ -80,8 +75,6 @@ interface VideoShowcaseProps {
 
 export default function VideoShowcase({ initialGalleryItems = [] }: VideoShowcaseProps) {
   const settings = usePublicSettings();
-  const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
-  const [isMuted, setIsMuted] = useState(true);
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
 
   const igUrl = instagramUrl(settings.instagram);
@@ -96,7 +89,6 @@ export default function VideoShowcase({ initialGalleryItems = [] }: VideoShowcas
       platform: (g.mediaType === "tiktok" ? "tiktok" : "instagram") as VideoItem["platform"],
       url: g.instagramUrl || (g.mediaType === "tiktok" ? ttUrl : igUrl),
       coverUrl: g.coverUrl || g.url,
-      videoSrc: g.isVideo && g.url?.endsWith(".mp4") ? g.url : "https://videos.pexels.com/video-files/3998188/3998188-uhd_2560_1440_30fps.mp4",
       views: `${120 + ((idx * 47) % 230)}K`,
       duration: "0:45",
       description: g.title,
@@ -111,15 +103,21 @@ export default function VideoShowcase({ initialGalleryItems = [] }: VideoShowcas
     return v.category === categoryFilter;
   });
 
+  const handleOpenVideo = (videoUrl: string) => {
+    if (typeof window !== "undefined") {
+      window.open(videoUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
-    <section className="py-28 bg-[#060910] relative overflow-hidden border-t border-b border-white/[0.06]">
+    <section className="py-24 sm:py-28 bg-[#060910] relative overflow-hidden border-t border-b border-white/[0.06]">
       {/* Decorative background glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[#C8703A]/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute -bottom-20 right-10 w-[400px] h-[300px] bg-[#25F4EE]/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="container mx-auto px-6 lg:px-14 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <span className="w-8 h-px bg-[#C8703A]" />
@@ -167,11 +165,11 @@ export default function VideoShowcase({ initialGalleryItems = [] }: VideoShowcas
         </div>
 
         {/* Filter Categories */}
-        <div className="flex flex-wrap items-center gap-2 mb-12">
+        <div className="flex flex-wrap items-center gap-2 mb-10">
           {[
             { id: "all", label: "Tüm Videolar" },
             { id: "instagram", label: "Instagram Reels" },
-            { id: "tiktok", label: "TikTok Trendleri" },
+            { id: "tiktok", label: "TikTok Videoları" },
             { id: "fade", label: "Skin Fade" },
             { id: "beard", label: "Sakal Tasarımı" },
             { id: "vip", label: "VIP Bakım" },
@@ -195,53 +193,55 @@ export default function VideoShowcase({ initialGalleryItems = [] }: VideoShowcas
           {filteredVideos.map((video, idx) => (
             <motion.div
               key={video.id}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.08, duration: 0.5 }}
-              className="group relative rounded-2xl overflow-hidden bg-[#0D131F] border border-white/[0.08] hover:border-[#C8703A]/50 transition-all duration-500 shadow-xl hover:shadow-[0_16px_40px_rgba(0,0,0,0.4)] flex flex-col"
+              transition={{ delay: idx * 0.06, duration: 0.4 }}
+              className="group relative rounded-2xl overflow-hidden bg-[#0D131F] border border-white/[0.08] hover:border-[#C8703A]/60 transition-all duration-500 shadow-xl hover:shadow-[0_16px_40px_rgba(0,0,0,0.5)] flex flex-col cursor-pointer"
+              onClick={() => handleOpenVideo(video.url)}
             >
-              {/* Media Container (Vertical Phone Reel Aspect 9:14) */}
-              <div
-                className="relative aspect-[9/13] w-full overflow-hidden cursor-pointer"
-                onClick={() => setActiveVideo(video)}
-              >
+              {/* Media Container (Vertical Phone Reel Aspect 9:13) */}
+              <div className="relative aspect-[9/13] w-full overflow-hidden">
                 {/* Background Poster Image */}
                 <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-108"
                   style={{ backgroundImage: `url('${video.coverUrl}')` }}
                 />
 
                 {/* Ambient Dark Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/20 group-hover:from-black/90 transition-colors" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-black/20 group-hover:from-black/95 transition-colors" />
 
                 {/* Platform Badge (Top Left) */}
                 <div className="absolute top-3.5 left-3.5 z-20">
                   {video.platform === "instagram" ? (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-black/70 backdrop-blur-md text-white border border-[#E1306C]/40 shadow-md">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-black/75 backdrop-blur-md text-white border border-[#E1306C]/40 shadow-md">
                       <InstagramIcon size={12} className="text-[#E1306C]" />
-                      Reel
+                      Reels
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-black/75 backdrop-blur-md text-white border border-[#25F4EE]/40 shadow-md">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-black/80 backdrop-blur-md text-white border border-[#25F4EE]/40 shadow-md">
                       <TikTokIcon size={11} className="text-[#25F4EE]" />
                       TikTok
                     </span>
                   )}
                 </div>
 
-                {/* Views & Duration Badge (Top Right) */}
+                {/* Views Badge (Top Right) */}
                 <div className="absolute top-3.5 right-3.5 z-20">
-                  <span className="px-2.5 py-1 rounded-full text-[9px] font-medium bg-black/70 backdrop-blur-md text-white/80 border border-white/10">
+                  <span className="px-2.5 py-1 rounded-full text-[9px] font-medium bg-black/70 backdrop-blur-md text-white/90 border border-white/10">
                     {video.views} izlenme
                   </span>
                 </div>
 
-                {/* Center Animated Play Button */}
-                <div className="absolute inset-0 flex items-center justify-center z-20">
-                  <div className="w-14 h-14 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center text-white group-hover:scale-115 group-hover:bg-[#C8703A] group-hover:border-[#C8703A] transition-all duration-300 shadow-2xl">
-                    <Play size={20} fill="currentColor" className="ml-0.5" />
+                {/* Center Direct Play / Launch Button */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center z-20 gap-2">
+                  <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white group-hover:scale-115 group-hover:bg-[#C8703A] group-hover:border-[#C8703A] transition-all duration-300 shadow-2xl">
+                    <Play size={22} fill="currentColor" className="ml-0.5" />
                   </div>
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-3 py-1 rounded-full bg-black/85 text-[10px] font-bold tracking-wider uppercase text-white border border-white/20 flex items-center gap-1">
+                    <span>{video.platform === "tiktok" ? "TikTok'ta Oynat" : "Instagram'da Oynat"}</span>
+                    <ExternalLink size={10} />
+                  </span>
                 </div>
 
                 {/* Bottom Overlay Title & Subtitle */}
@@ -258,24 +258,27 @@ export default function VideoShowcase({ initialGalleryItems = [] }: VideoShowcas
 
               {/* Card Footer with Direct Links */}
               <div className="p-4 bg-[#090E17] border-t border-white/[0.06] flex items-center justify-between gap-2">
-                <button
-                  type="button"
-                  onClick={() => setActiveVideo(video)}
-                  className="text-xs font-semibold text-white/80 hover:text-white flex items-center gap-1.5 transition-colors"
+                <a
+                  href={video.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-xs font-semibold text-white/80 hover:text-white flex items-center gap-1.5 transition-colors group-hover:text-[#E5A869]"
                 >
                   <Play size={12} fill="currentColor" className="text-[#C8703A]" />
                   <span>Videoyu Oynat</span>
-                </button>
+                </a>
 
                 <a
                   href={video.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] font-medium text-white/50 hover:text-[#E5A869] flex items-center gap-1 transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-[11px] font-semibold text-white/60 hover:text-white flex items-center gap-1.5 transition-colors px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/10 hover:border-white/30"
                   title="Sosyal Medyada Aç"
                 >
                   <span>{video.platform === "instagram" ? "Instagram" : "TikTok"}</span>
-                  <ExternalLink size={11} />
+                  <ExternalLink size={11} className="text-[#C8703A]" />
                 </a>
               </div>
             </motion.div>
@@ -285,110 +288,14 @@ export default function VideoShowcase({ initialGalleryItems = [] }: VideoShowcas
         {/* Bottom CTA to View All & Follow */}
         <div className="mt-16 text-center">
           <Link
-            href="/galeri"
+            href="/videolar"
             className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#C8703A]/60 text-white text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300"
           >
-            <span>Tüm Galeri ve Videoları İncele</span>
-            <ExternalLink size={13} className="text-[#C8703A]" />
+            <span>Tüm Video & Reels Koleksiyonunu Gör</span>
+            <ExternalLink size={12} />
           </Link>
         </div>
       </div>
-
-      {/* Video Modal Player */}
-      <AnimatePresence>
-        {activeVideo && (
-          <div
-            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
-            onClick={() => setActiveVideo(null)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.25 }}
-              className="relative w-full max-w-lg bg-[#0A0E17] border border-white/15 rounded-2xl overflow-hidden shadow-2xl flex flex-col"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Top Bar */}
-              <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#070B12]">
-                <div className="flex items-center gap-2.5">
-                  {activeVideo.platform === "instagram" ? (
-                    <InstagramIcon size={16} className="text-[#E1306C]" />
-                  ) : (
-                    <TikTokIcon size={15} className="text-[#25F4EE]" />
-                  )}
-                  <div>
-                    <h4 className="text-sm font-semibold text-white leading-tight">
-                      {activeVideo.title}
-                    </h4>
-                    <span className="text-[10px] text-white/50 tracking-wider">
-                      Mehmet İis · {activeVideo.platform === "instagram" ? "@mstudiohairdresser" : "@mehmetiis"}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setIsMuted(!isMuted)}
-                    className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
-                    aria-label={isMuted ? "Sesi Aç" : "Sesi Kapat"}
-                  >
-                    {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
-                  </button>
-                  <button
-                    onClick={() => setActiveVideo(null)}
-                    className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
-                    aria-label="Kapat"
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Video Player */}
-              <div className="relative aspect-[9/14] max-h-[65vh] bg-black flex items-center justify-center overflow-hidden">
-                <video
-                  src={activeVideo.videoSrc}
-                  autoPlay
-                  loop
-                  muted={isMuted}
-                  playsInline
-                  controls
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* Modal Description & Actions */}
-              <div className="p-5 bg-[#090E17] border-t border-white/10 space-y-4">
-                <p className="text-xs text-white/70 leading-relaxed font-light">
-                  {activeVideo.description}
-                </p>
-
-                <div className="flex flex-col sm:flex-row items-center gap-3">
-                  <Link
-                    href="/randevu"
-                    onClick={() => setActiveVideo(null)}
-                    className="w-full sm:flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-full bg-[#C8703A] hover:bg-[#B5612E] text-white text-xs font-bold tracking-wider uppercase transition-all shadow-md shadow-[#C8703A]/30"
-                  >
-                    <Calendar size={14} />
-                    <span>Bu Stili İstiyorum - Randevu Al</span>
-                  </Link>
-
-                  <a
-                    href={activeVideo.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full sm:w-auto flex items-center justify-center gap-2 py-3 px-5 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-xs font-medium transition-colors"
-                  >
-                    <span>{activeVideo.platform === "instagram" ? "Instagram'da Takip Et" : "TikTok'ta Takip Et"}</span>
-                    <ExternalLink size={13} />
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

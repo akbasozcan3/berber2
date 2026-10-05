@@ -9,7 +9,42 @@ import { api, type HeroSlide } from "@/lib/api/client";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 
 const FALLBACK: HeroSlide[] = [
-  { id: 1, title: "Saçınız Sizin\nİmzanızdır", subtitle: "Premium Berberlik", description: "Profesyonel kadromuzla kaliteli saç & sakal bakımı.", image: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=85&w=2560&auto=format&fit=crop", badge: "Saç Kesimi", ctaText: "Hemen Randevu Al", ctaLink: "/randevu", sortOrder: 1, enabled: true },
+  {
+    id: 1,
+    title: "Kişisel Tarzınızın\nİmzası",
+    subtitle: "M Studio Hairdresser · Mehmet İis",
+    description: "İstanbul Çekmeköy Taşdelen'de usta ellerle saç ve sakal tasarımı. Sıra beklemeden randevunuzu oluşturun.",
+    image: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=85&w=2560&auto=format&fit=crop",
+    badge: "Master Hair Stylist",
+    ctaText: "Randevu Al",
+    ctaLink: "/randevu",
+    sortOrder: 1,
+    enabled: true,
+  },
+  {
+    id: 2,
+    title: "Sakal Heykeltıraşlığı &\nUstura Çizgileri",
+    subtitle: "Geleneksel & Modern Zanaat",
+    description: "Yüz hatlarınıza özel sakal tasarımı, sıcak havlu kompresi ve organik yağ bakımları ile kusursuz keskinlik.",
+    image: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=85&w=2560&auto=format&fit=crop",
+    badge: "Sakal & Bakım",
+    ctaText: "Hizmetleri İncele",
+    ctaLink: "/hizmetler",
+    sortOrder: 2,
+    enabled: true,
+  },
+  {
+    id: 3,
+    title: "M Studio TV\nReels & Videolar",
+    subtitle: "Mehmet İis ile Trend Stiller",
+    description: "TikTok ve Instagram'da milyonlarca izlenen saç kesim ve dönüşüm videolarımızı hemen keşfedin.",
+    image: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?q=85&w=2560&auto=format&fit=crop",
+    badge: "Reels & TikTok",
+    ctaText: "Videoları İzle",
+    ctaLink: "/videolar",
+    sortOrder: 3,
+    enabled: true,
+  },
 ];
 
 interface HeroSliderProps {

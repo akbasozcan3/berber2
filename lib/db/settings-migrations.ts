@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { settings, barbers } from "@/lib/db/schema";
+import { settings, barbers, heroSlides } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { isLegacyDefaultLunchBreak, serializeBreakTimes } from "@/lib/utils/break-times";
 import { normalizeBarberWorkingDays } from "@/lib/utils/salon-schedule";
@@ -110,6 +110,51 @@ export async function runSettingsMigrations() {
     const existing = await db.select().from(settings).where(eq(settings.key, k)).limit(1);
     if (!existing[0]) {
       await db.insert(settings).values({ key: k, value: v });
+    }
+  }
+
+  const slidesInDb = await db.select().from(heroSlides).orderBy(heroSlides.sortOrder);
+  if (slidesInDb.length === 0) {
+    const defaultSlides = [
+      {
+        title: "Kişisel Tarzınızın\nİmzası",
+        subtitle: "M Studio Hairdresser · Mehmet İis",
+        description: "Profesyonel kadromuzla kaliteli saç & sakal tasarımı. Randevu alın, fark yaratan tarzınıza kavuşun.",
+        image: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=85&w=2560&auto=format&fit=crop",
+        badge: "Master Hair Stylist",
+        ctaText: "Randevu Al",
+        ctaLink: "/randevu",
+        sortOrder: 1,
+        enabled: true,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        title: "Sakal Heykeltıraşlığı &\nUstura Çizgileri",
+        subtitle: "Geleneksel & Modern Zanaat",
+        description: "Yüz hatlarınıza özel sakal şekillendirme, sıcak havlu tıraşı ve premium doğal bakım yağları.",
+        image: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=85&w=2560&auto=format&fit=crop",
+        badge: "Sakal Tasarımı",
+        ctaText: "Hizmetleri Gör",
+        ctaLink: "/hizmetler",
+        sortOrder: 2,
+        enabled: true,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        title: "M Studio TV\nReels & Videolar",
+        subtitle: "Mehmet İis ile Trend Stiller",
+        description: "TikTok ve Instagram'da milyonlarca izlenen saç kesim ve dönüşüm videolarımızı hemen keşfedin.",
+        image: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?q=85&w=2560&auto=format&fit=crop",
+        badge: "Reels & TikTok",
+        ctaText: "Videoları İzle",
+        ctaLink: "/videolar",
+        sortOrder: 3,
+        enabled: true,
+        createdAt: new Date().toISOString(),
+      },
+    ];
+    for (const s of defaultSlides) {
+      await db.insert(heroSlides).values(s);
     }
   }
 }
