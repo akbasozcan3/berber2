@@ -65,12 +65,13 @@ export default function Footer() {
             </h4>
             <ul className="space-y-4">
               {[
-                { label: settings.navServicesLabel, href: "/hizmetler" },
-                { label: settings.navGalleryLabel, href: "/galeri" },
-                { label: settings.navAboutLabel, href: "/hakkimizda" },
-                { label: settings.navReviewsLabel, href: "/yorumlar" },
+                { label: settings.navServicesLabel || "Hizmetler", href: "/hizmetler" },
+                { label: "Videolar & Reels", href: "/videolar" },
+                { label: settings.navGalleryLabel || "Galeri", href: "/galeri" },
+                { label: settings.navAboutLabel || "Hakkımızda", href: "/hakkimizda" },
+                { label: settings.navReviewsLabel || "Yorumlar", href: "/yorumlar" },
                 { label: settings.navCtaLabel || "Randevu", href: "/randevu" },
-                { label: settings.navContactLabel, href: "/iletisim" },
+                { label: settings.navContactLabel || "İletişim", href: "/iletisim" },
               ].map((item) => (
                 <li key={item.label}>
                   <Link

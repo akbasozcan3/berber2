@@ -29,7 +29,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: settings.navServicesLabel || "Hizmetler", href: "/hizmetler" },
-    { name: "Videolar & Reels", href: "/#videolar" },
+    { name: "Videolar & Reels", href: "/videolar" },
     { name: settings.navGalleryLabel || "Galeri", href: "/galeri" },
     { name: settings.navReviewsLabel || "Yorumlar", href: "/yorumlar" },
     { name: settings.navAboutLabel || "Hakkımızda", href: "/hakkimizda" },
@@ -209,17 +209,21 @@ export default function Navbar() {
             <div className="flex items-center gap-3 sm:gap-4">
               <Link
                 href="/randevu"
-                className="hidden sm:inline-flex items-center justify-center gap-2
-                  min-w-[130px] md:min-w-[150px] h-10 md:h-11 px-5 md:px-6
-                  bg-black hover:bg-[#C8703A]
+                className="group relative hidden sm:inline-flex items-center justify-center gap-2.5
+                  min-w-[136px] md:min-w-[155px] h-10 md:h-11 px-5 md:px-6
+                  bg-[#0A0E17] hover:bg-[#B5612E]
                   text-white
+                  border border-white/10 hover:border-[#C8703A]
                   rounded-full
                   text-[10px] md:text-[11px] font-bold tracking-[0.18em] uppercase
-                  transition-all duration-300
-                  shadow-[0_4px_14px_rgba(0,0,0,0.18)] hover:shadow-[0_6px_20px_rgba(200,112,58,0.35)]"
+                  transition-all duration-300 ease-out
+                  hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(200,112,58,0.45)]
+                  active:translate-y-0 shadow-[0_4px_14px_rgba(0,0,0,0.2)]"
               >
-                <Calendar size={13} className="text-[#C8703A] group-hover:text-white" />
-                <span>{settings.navCtaLabel || "Randevu Al"}</span>
+                <span className="w-5 h-5 rounded-full bg-white/10 group-hover:bg-white/20 flex items-center justify-center shrink-0 transition-colors duration-300">
+                  <Calendar size={12} className="text-[#E5A869] group-hover:text-white transition-colors duration-300 shrink-0" strokeWidth={2.2} />
+                </span>
+                <span className="transition-colors duration-300">{settings.navCtaLabel || "Randevu Al"}</span>
               </Link>
 
               {/* Mobile Burger Toggle */}
@@ -318,8 +322,8 @@ export default function Navbar() {
                 <Link
                   href="/randevu"
                   onClick={closeMobile}
-                  className="w-full flex items-center justify-center gap-2
-                    bg-[#C8703A] hover:bg-[#B5612E]
+                  className="w-full flex items-center justify-center gap-2.5
+                    bg-gradient-to-r from-[#C8703A] to-[#B5612E] hover:from-[#B5612E] hover:to-[#9E4E20]
                     text-white
                     text-center
                     py-3.5
@@ -332,7 +336,7 @@ export default function Navbar() {
                     duration-300
                     shadow-[0_4px_16px_rgba(200,112,58,0.4)]"
                 >
-                  <Calendar size={14} />
+                  <Calendar size={14} className="text-white shrink-0" strokeWidth={2.2} />
                   <span>{settings.navCtaLabel || "Hemen Randevu Al"}</span>
                 </Link>
 

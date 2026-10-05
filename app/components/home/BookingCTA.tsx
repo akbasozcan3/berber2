@@ -1,10 +1,10 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Phone, Scissors } from "lucide-react";
+import { ArrowRight, Phone, Scissors, Calendar } from "lucide-react";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 import { formatPhoneDisplay, toTelHref } from "@/lib/utils/format";
 import SectionTitle from "@/components/ui/SectionTitle";
@@ -100,9 +100,10 @@ export default function BookingCTA({ initialServices = [] }: BookingCTAProps) {
             <div className="flex flex-col sm:flex-row gap-4 mt-2">
               <Link
                 href="/randevu"
-                className="group flex-1 flex items-center justify-center gap-3 bg-[#C8703A] text-white hover:bg-[#B5612E] px-8 py-5 rounded-full text-[10px] font-bold tracking-[0.28em] uppercase transition-all duration-300"
+                className="group flex-1 flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#C8703A] to-[#B5612E] hover:from-[#B5612E] hover:to-[#9E4E20] text-white px-8 py-5 rounded-full text-[10px] font-bold tracking-[0.24em] uppercase transition-all duration-300 shadow-[0_6px_25px_rgba(200,112,58,0.35)] hover:shadow-[0_8px_30px_rgba(200,112,58,0.5)] hover:-translate-y-0.5 active:translate-y-0"
               >
-                {settings.bookingPageTitle || settings.navCtaLabel || "Randevu Al"}
+                <Calendar size={14} className="text-white shrink-0" strokeWidth={2.2} />
+                <span>{settings.bookingPageTitle || settings.navCtaLabel || "Randevu Al"}</span>
                 <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
