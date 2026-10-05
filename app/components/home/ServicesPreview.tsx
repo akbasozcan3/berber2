@@ -81,7 +81,7 @@ export default function ServicesPreview({ initialServices = [] }: ServicesPrevie
                   <div className="w-11 h-11 rounded-full border border-black/10 flex items-center justify-center text-neutral-600 group-hover:border-black group-hover:text-black transition-colors duration-500">
                     <Icon size={16} />
                   </div>
-                  <span className="text-[11px] font-bold tracking-wider text-neutral-300 font-mono">
+                  <span className="text-[11px] top-3 relative font-bold tracking-wider text-neutral-300 font-mono">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                 </div>

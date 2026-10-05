@@ -207,10 +207,19 @@ export function formatWorkingHoursTopbar(hours: WorkingHour[]): string {
 }
 
 export function instagramUrl(handle?: string | null): string {
-  const safe = handle ?? "";
-  if (!safe) return "https://instagram.com/";
+  const safe = (handle ?? "").trim();
+  if (!safe) return "https://www.instagram.com/mstudiohairdresser/";
+  if (safe.startsWith("http://") || safe.startsWith("https://")) return safe;
   const clean = safe.replace(/^@/, "");
-  return `https://instagram.com/${clean}`;
+  return `https://www.instagram.com/${clean}/`;
+}
+
+export function tikTokUrl(handle?: string | null): string {
+  const safe = (handle ?? "").trim();
+  if (!safe) return "https://www.tiktok.com/@mehmetiis";
+  if (safe.startsWith("http://") || safe.startsWith("https://")) return safe;
+  const clean = safe.replace(/^@/, "");
+  return `https://www.tiktok.com/@${clean}`;
 }
 
 export function getInitials(name: string): string {

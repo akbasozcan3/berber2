@@ -241,7 +241,8 @@ export default function SettingsPage() {
               Logo yokken navbar/footer metin logosu, SEO başlıkları, admin panel ve Telegram mesajlarında görünür.
             </p>
             <Input label="E-posta" value={settings.contact_email || ""} onChange={(e) => set("contact_email", e.target.value)} />
-            <Input label="Instagram" value={settings.instagram || ""} onChange={(e) => set("instagram", e.target.value)} />
+            <Input label="Instagram" value={settings.instagram || ""} onChange={(e) => set("instagram", e.target.value)} placeholder="https://www.instagram.com/mstudiohairdresser/" />
+            <Input label="TikTok" value={settings.tiktok || ""} onChange={(e) => set("tiktok", e.target.value)} placeholder="https://www.tiktok.com/@mehmetiis" />
             <Input label="İletişim Metni" value={settings.contact_intro || ""} onChange={(e) => set("contact_intro", e.target.value)} placeholder="Bize Ulaşın açıklaması" />
           </div>
         </Card>

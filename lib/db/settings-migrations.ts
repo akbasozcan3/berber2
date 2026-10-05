@@ -9,7 +9,7 @@ const globalForMigrations = globalThis as typeof globalThis & {
   __migrationsDone?: boolean;
 };
 
-/** One-time fixes for settings that block booking unintentionally. */
+/** One-time fixes for settings that block booking unintentionally and migrate salon branding. */
 export async function runSettingsMigrations() {
   if (globalForMigrations.__migrationsDone) return;
   globalForMigrations.__migrationsDone = true;
@@ -37,11 +37,50 @@ export async function runSettingsMigrations() {
     }
   }
 
+  // 1. Business name migration
+  const bNameRow = await db.select().from(settings).where(eq(settings.key, "business_name")).limit(1);
+  if (!bNameRow[0] || bNameRow[0].value === "New Life Erkek Kuaförü" || !bNameRow[0].value) {
+    if (bNameRow[0]) {
+      await db.update(settings).set({ value: "M Studio Hairdresser" }).where(eq(settings.key, "business_name"));
+    } else {
+      await db.insert(settings).values({ key: "business_name", value: "M Studio Hairdresser" });
+    }
+  }
+
+  // 2. Instagram migration
+  const igRow = await db.select().from(settings).where(eq(settings.key, "instagram")).limit(1);
+  if (!igRow[0] || igRow[0].value.includes("newlife") || !igRow[0].value) {
+    if (igRow[0]) {
+      await db.update(settings).set({ value: "https://www.instagram.com/mstudiohairdresser/" }).where(eq(settings.key, "instagram"));
+    } else {
+      await db.insert(settings).values({ key: "instagram", value: "https://www.instagram.com/mstudiohairdresser/" });
+    }
+  }
+
+  // 3. TikTok migration
+  const ttRow = await db.select().from(settings).where(eq(settings.key, "tiktok")).limit(1);
+  if (!ttRow[0] || !ttRow[0].value) {
+    if (ttRow[0]) {
+      await db.update(settings).set({ value: "https://www.tiktok.com/@mehmetiis" }).where(eq(settings.key, "tiktok"));
+    } else {
+      await db.insert(settings).values({ key: "tiktok", value: "https://www.tiktok.com/@mehmetiis" });
+    }
+  }
+
   const allBarbers = await db.select().from(barbers);
   for (const barber of allBarbers) {
     const normalized = normalizeBarberWorkingDays(barber.workingDays);
+    const updates: Partial<typeof barbers.$inferInsert> = {};
     if (normalized !== barber.workingDays) {
-      await db.update(barbers).set({ workingDays: normalized }).where(eq(barbers.id, barber.id));
+      updates.workingDays = normalized;
+    }
+    if (barber.name === "Mehmet Abi") {
+      updates.name = "Mehmet İis";
+      updates.position = "Kurucu & Master Hairdresser";
+      updates.specialty = "Klasik & Modern Saç Tasarımı, Sakal Heykeltıraşlığı, VIP Bakım";
+    }
+    if (Object.keys(updates).length > 0) {
+      await db.update(barbers).set(updates).where(eq(barbers.id, barber.id));
     }
   }
 
@@ -53,8 +92,4 @@ export async function runSettingsMigrations() {
       await db.insert(settings).values({ key: "notifications_email", value: "true" });
     }
   }
-
-  // Not: iptal randevu silme ve müşteri senkronizasyonu burada kasıtlı çalıştırılmıyor.
-  // Her boot'ta tüm müşterileri tek tek sync etmek çok yavaş ve connection timeout'a yol açıyor.
-  // Bu işlemler sadece admin panelinden/randevu onayından tetiklenmeli.
 }

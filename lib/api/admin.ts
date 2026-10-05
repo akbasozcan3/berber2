@@ -58,7 +58,7 @@ export const adminApi = {
     title: string;
     url: string;
     sortOrder?: number;
-    mediaType?: "image" | "instagram";
+    mediaType?: "image" | "instagram" | "tiktok";
     instagramUrl?: string | null;
     coverUrl?: string | null;
     isVideo?: boolean;
@@ -190,7 +190,7 @@ export interface AdminGallery {
   id: number;
   url: string;
   title: string;
-  mediaType: "image" | "instagram";
+  mediaType: "image" | "instagram" | "tiktok";
   instagramUrl: string | null;
   coverUrl: string | null;
   isVideo: boolean;

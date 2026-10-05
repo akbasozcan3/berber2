@@ -1,16 +1,26 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
 import WhatsAppIcon from "@/app/components/icons/WhatsAppIcon";
+import TikTokIcon from "@/components/icons/TikTokIcon";
+import InstagramIcon from "@/components/icons/InstagramIcon";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
-import { instagramUrl, formatPhoneDisplay, formatWorkingHoursSummary, toTelHref, toWhatsAppHref } from "@/lib/utils/format";
+import {
+  instagramUrl,
+  tikTokUrl,
+  formatPhoneDisplay,
+  formatWorkingHoursSummary,
+  toTelHref,
+  toWhatsAppHref,
+} from "@/lib/utils/format";
 import { splitBusinessNameForLogo, siteLogoImageClass } from "@/lib/utils/brand";
 
 export default function Footer() {
   const settings = usePublicSettings();
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
   const insta = instagramUrl(settings.instagram);
+  const tiktok = tikTokUrl(settings.tiktok);
   const phoneDisplay = formatPhoneDisplay(settings.phone);
   const hoursDisplay = formatWorkingHoursSummary(settings.workingHours);
   const logoText = splitBusinessNameForLogo(settings.businessName);
@@ -121,16 +131,17 @@ export default function Footer() {
           {/* Social */}
           <div>
             <h4 className="text-white text-[9px] font-bold uppercase tracking-[0.28em] mb-6">
-              Sosyal Medya
+              Sosyal Medya & İletişim
             </h4>
             <div className="flex flex-wrap gap-3">
               {settings.phone ? (
                 <a
-                  href={toWhatsAppHref(settings.phone, `Merhaba ${settings.businessName || "salon"}, bilgi almak istiyorum.`)}
+                  href={toWhatsAppHref(settings.phone, `Merhaba ${settings.businessName || "M Studio"}, randevu ve bilgi almak istiyorum.`)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-full border border-[#25D366]/30 bg-[#25D366]/10 flex items-center justify-center text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all duration-300"
                   aria-label="WhatsApp"
+                  title="WhatsApp"
                 >
                   <WhatsAppIcon className="w-4 h-4" />
                 </a>
@@ -139,17 +150,31 @@ export default function Footer() {
                 href={insta}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:bg-white/90 hover:text-black hover:border-white/50 transition-all duration-300"
+                className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-[#E1306C] hover:bg-[#E1306C] hover:text-white hover:border-[#E1306C] transition-all duration-300"
                 aria-label="Instagram"
+                title="Instagram @mstudiohairdresser"
               >
-                <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                </svg>
+                <InstagramIcon size={16} />
+              </a>
+              <a
+                href={tiktok}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-[#25F4EE] hover:bg-black hover:text-[#FE2C55] hover:border-[#FE2C55]/60 transition-all duration-300"
+                aria-label="TikTok"
+                title="TikTok @mehmetiis"
+              >
+                <TikTokIcon size={16} />
               </a>
             </div>
-            <p className="text-white/30 text-xs mt-4">{settings.instagram}</p>
+            <div className="mt-4 space-y-1 text-xs">
+              <a href={insta} target="_blank" rel="noopener noreferrer" className="block text-white/50 hover:text-white transition-colors">
+                Instagram: <span className="text-white/80">@mstudiohairdresser</span>
+              </a>
+              <a href={tiktok} target="_blank" rel="noopener noreferrer" className="block text-white/50 hover:text-white transition-colors">
+                TikTok: <span className="text-white/80">@mehmetiis</span>
+              </a>
+            </div>
           </div>
         </div>
 

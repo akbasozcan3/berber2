@@ -19,6 +19,7 @@ export function mapSettingsToPublic(all: Record<string, string>): PublicSettings
     address: all.address || publicSettingsDefaults.address,
     phone: all.phone || publicSettingsDefaults.phone,
     instagram: all.instagram || publicSettingsDefaults.instagram,
+    tiktok: all.tiktok || publicSettingsDefaults.tiktok,
     googleMaps: all.google_maps || publicSettingsDefaults.googleMaps,
     contactEmail: all.contact_email || publicSettingsDefaults.contactEmail,
     contactIntro: all.contact_intro || publicSettingsDefaults.contactIntro,

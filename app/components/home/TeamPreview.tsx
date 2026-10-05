@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -85,8 +85,26 @@ export default function TeamPreview({ initialBarbers = [] }: TeamPreviewProps) {
                   <h3 className="text-2xl font-serif font-light text-white">{barber.name}</h3>
                   <p className="text-white/60 text-xs tracking-[0.2em] uppercase mt-1">{barber.position}</p>
                   {barber.specialty && (
-                    <p className="text-white/50 text-sm mt-3 font-light">{barber.specialty}</p>
+                    <p className="text-white/50 text-sm mt-3 font-light leading-relaxed">{barber.specialty}</p>
                   )}
+                  <div className="flex items-center gap-2 mt-4 pt-3 border-t border-white/10">
+                    <a
+                      href="https://www.instagram.com/mstudiohairdresser/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] font-semibold text-white/70 hover:text-white px-3 py-1 rounded-full bg-white/10 hover:bg-[#E1306C]/30 border border-white/10 transition-colors"
+                    >
+                      @mstudiohairdresser
+                    </a>
+                    <a
+                      href="https://www.tiktok.com/@mehmetiis"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] font-semibold text-white/70 hover:text-white px-3 py-1 rounded-full bg-white/10 hover:bg-[#25F4EE]/20 border border-white/10 transition-colors"
+                    >
+                      @mehmetiis
+                    </a>
+                  </div>
                 </div>
               </div>
             </motion.article>

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import {
@@ -11,9 +11,19 @@ import {
   Navigation,
 } from "lucide-react";
 import WhatsAppIcon from "@/app/components/icons/WhatsAppIcon";
+import TikTokIcon from "@/components/icons/TikTokIcon";
+import InstagramIcon from "@/components/icons/InstagramIcon";
 import { api } from "@/lib/api/client";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
-import { formatPhoneDisplay, formatWorkingHoursSummary, googleMapsEmbedUrl, instagramUrl, toTelHref, toWhatsAppHref } from "@/lib/utils/format";
+import {
+  formatPhoneDisplay,
+  formatWorkingHoursSummary,
+  googleMapsEmbedUrl,
+  instagramUrl,
+  tikTokUrl,
+  toTelHref,
+  toWhatsAppHref,
+} from "@/lib/utils/format";
 
 interface ContactProps {
   showHeading?: boolean;
@@ -153,20 +163,35 @@ export default function Contact({ showHeading = true }: ContactProps) {
                 href={instagramUrl(settings.instagram)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-4 p-5 rounded-2xl border border-white/[0.06] bg-white/[0.03] hover:border-white/20 transition-all"
+                className="flex items-center gap-4 p-5 rounded-2xl border border-white/[0.06] bg-white/[0.03] hover:border-[#E1306C]/40 transition-all group"
               >
-                <div className="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                  </svg>
+                <div className="w-11 h-11 rounded-full border border-white/20 bg-gradient-to-tr from-[#833ab4]/30 to-[#fd1d1d]/30 flex items-center justify-center text-[#E1306C] group-hover:scale-105 transition-transform">
+                  <InstagramIcon size={18} />
                 </div>
                 <div>
-                  <p className="text-[9px] font-bold tracking-[0.25em] text-white/35 uppercase mb-1">
+                  <p className="text-[9px] font-bold tracking-[0.25em] text-[#E1306C]/70 uppercase mb-1">
                     Instagram
                   </p>
-                  <p className="text-white text-sm">{settings.instagram}</p>
+                  <p className="text-white text-sm font-medium">@mstudiohairdresser</p>
+                </div>
+              </a>
+            )}
+
+            {settings.tiktok && (
+              <a
+                href={tikTokUrl(settings.tiktok)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-5 rounded-2xl border border-white/[0.06] bg-white/[0.03] hover:border-[#25F4EE]/40 transition-all group"
+              >
+                <div className="w-11 h-11 rounded-full border border-white/20 bg-black/60 flex items-center justify-center text-[#25F4EE] group-hover:scale-105 transition-transform">
+                  <TikTokIcon size={18} />
+                </div>
+                <div>
+                  <p className="text-[9px] font-bold tracking-[0.25em] text-[#25F4EE]/70 uppercase mb-1">
+                    TikTok
+                  </p>
+                  <p className="text-white text-sm font-medium">@mehmetiis</p>
                 </div>
               </a>
             )}

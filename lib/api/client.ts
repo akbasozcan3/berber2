@@ -73,7 +73,7 @@ export interface GalleryImage {
   id: number;
   url: string;
   title: string;
-  mediaType: "image" | "instagram";
+  mediaType: "image" | "instagram" | "tiktok";
   instagramUrl: string | null;
   coverUrl: string | null;
   isVideo: boolean;
@@ -88,6 +88,7 @@ export interface PublicSettings {
   address: string;
   phone: string;
   instagram: string;
+  tiktok: string;
   googleMaps: string;
   contactEmail: string;
   contactIntro: string;

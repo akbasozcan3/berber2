@@ -39,7 +39,7 @@ const menuItems = [
   { href: "/admin/services", label: "Hizmetler", icon: Sparkles },
   { href: "/admin/hero", label: "Banner / Slider", icon: Layout },
   { href: "/admin/content", label: "İçerik / Makale", icon: FileText },
-  { href: "/admin/gallery", label: "Galeri & Instagram", icon: Image },
+  { href: "/admin/gallery", label: "Galeri, Reels & TikTok", icon: Image },
   { href: "/admin/reviews", label: "Yorumlar", icon: Star },
   { href: "/admin/messages", label: "Mesajlar", icon: MessageSquare },
   { href: "/admin/reports", label: "Raporlar", icon: BarChart3 },

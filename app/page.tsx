@@ -24,6 +24,7 @@ export async function generateMetadata() {
 }
 
 const TeamPreview = nextDynamic(() => import("./components/home/TeamPreview"));
+const VideoShowcase = nextDynamic(() => import("./components/home/VideoShowcase"));
 const HowItWorks = nextDynamic(() => import("./components/home/HowItWorks"));
 const ExperienceHighlights = nextDynamic(() => import("./components/home/ExperienceHighlights"));
 const TestimonialsSlider = nextDynamic(() => import("./components/home/TestimonialsSlider"));
@@ -108,6 +109,7 @@ export default async function HomePage() {
       <HeroSlider initialSlides={heroSlides} />
       <section id="stats"><StatsStrip /></section>
       <section id="hizmetler"><ServicesPreview initialServices={services} /></section>
+      <section id="videolar"><VideoShowcase /></section>
       <section id="hakkimizda"><AboutBanner initialPage={aboutPage} /></section>
       <section id="ekip"><TeamPreview initialBarbers={barbers} /></section>
       <section id="nasil-calisir"><HowItWorks /></section>

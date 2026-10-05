@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 const LEGAL_DEFAULTS: Record<string, { title: string; content: string }> = {
   legal_privacy: {
     title: "Gizlilik Politikası",
-    content: `<p>New Life Erkek Kuaförü olarak kişisel verilerinizin güvenliğine önem veriyoruz. Randevu ve iletişim formları aracılığıyla paylaştığınız ad, telefon, e-posta ve mesaj bilgileri yalnızca hizmet sunumu ve iletişim amacıyla kullanılır.</p><p>Verileriniz üçüncü taraflarla paylaşılmaz; yasal zorunluluklar dışında ifşa edilmez. Verilerinize erişim, düzeltme veya silme talepleriniz için bizimle iletişime geçebilirsiniz.</p>`,
+    content: `<p>M Studio Hairdresser olarak kişisel verilerinizin güvenliğine önem veriyoruz. Randevu ve iletişim formları aracılığıyla paylaştığınız ad, telefon, e-posta ve mesaj bilgileri yalnızca hizmet sunumu ve iletişim amacıyla kullanılır.</p><p>Verileriniz üçüncü taraflarla paylaşılmaz; yasal zorunluluklar dışında ifşa edilmez. Verilerinize erişim, düzeltme veya silme talepleriniz için bizimle iletişime geçebilirsiniz.</p>`,
   },
   legal_kvkk: {
     title: "KVKK Aydınlatma Metni",

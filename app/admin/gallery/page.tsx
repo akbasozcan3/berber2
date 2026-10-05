@@ -1,9 +1,10 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Plus, Save, Trash2 } from "lucide-react";
+import { Plus, Save, Trash2, Video } from "lucide-react";
 import InstagramIcon from "@/components/icons/InstagramIcon";
+import TikTokIcon from "@/components/icons/TikTokIcon";
 import PageHeader from "@/components/admin/ui/PageHeader";
 import Card from "@/components/admin/ui/Card";
 import Button from "@/components/admin/ui/Button";
@@ -14,12 +15,18 @@ import ImageUpload from "@/components/admin/ui/ImageUpload";
 import Tabs from "@/components/admin/ui/Tabs";
 import Badge from "@/components/admin/ui/Badge";
 import { adminApi, type AdminGallery } from "@/lib/api/admin";
-import { getGalleryDisplayUrl, isValidInstagramPostUrl, normalizeInstagramPostUrl } from "@/lib/utils/gallery";
+import {
+  getGalleryDisplayUrl,
+  isValidInstagramPostUrl,
+  normalizeInstagramPostUrl,
+  isValidTikTokPostUrl,
+  normalizeTikTokPostUrl,
+} from "@/lib/utils/gallery";
 
 type GalleryDraft = {
   title: string;
   url: string;
-  mediaType: "image" | "instagram";
+  mediaType: "image" | "instagram" | "tiktok";
   instagramUrl: string;
   coverUrl: string;
   isVideo: boolean;
@@ -35,10 +42,11 @@ const emptyDraft = (): GalleryDraft => ({
 });
 
 function toDraft(item: AdminGallery): GalleryDraft {
+  const mType = (item.mediaType as "image" | "instagram" | "tiktok") || "image";
   return {
     title: item.title,
     url: item.url,
-    mediaType: item.mediaType === "instagram" ? "instagram" : "image",
+    mediaType: mType,
     instagramUrl: item.instagramUrl || "",
     coverUrl: item.coverUrl || "",
     isVideo: item.isVideo,
@@ -49,7 +57,7 @@ export default function GalleryPage() {
   const [images, setImages] = useState<AdminGallery[]>([]);
   const [drafts, setDrafts] = useState<Record<number, GalleryDraft>>({});
   const [newItem, setNewItem] = useState<GalleryDraft>(emptyDraft());
-  const [addMode, setAddMode] = useState<"image" | "instagram">("instagram");
+  const [addMode, setAddMode] = useState<"image" | "instagram" | "tiktok">("instagram");
   const [toast, setToast] = useState("");
 
   const showToast = (msg: string) => {
@@ -72,13 +80,21 @@ export default function GalleryPage() {
     if (!d.title.trim()) return "Başlık gerekli.";
     if (d.mediaType === "instagram") {
       const ig = normalizeInstagramPostUrl(d.instagramUrl);
-      if (!ig) return "Instagram gönderi linki gerekli.";
+      if (!ig) return "Instagram linki gerekli.";
       if (!isValidInstagramPostUrl(ig)) {
-        return "Geçerli bir Instagram post/reel linki girin.";
+        return "Geçerli bir Instagram linki girin (örn: https://www.instagram.com/mstudiohairdresser/).";
       }
       const thumb = d.coverUrl.trim() || d.url.trim();
       if (!thumb) return "Kapak görseli yükleyin (video için zorunlu).";
       if (d.isVideo && !d.coverUrl.trim()) return "Video içerikler için kapak görseli zorunludur.";
+    } else if (d.mediaType === "tiktok") {
+      const tt = normalizeTikTokPostUrl(d.instagramUrl);
+      if (!tt) return "TikTok video veya profil linki gerekli.";
+      if (!isValidTikTokPostUrl(tt)) {
+        return "Geçerli bir TikTok linki girin (örn: https://www.tiktok.com/@mehmetiis).";
+      }
+      const thumb = d.coverUrl.trim() || d.url.trim();
+      if (!thumb) return "TikTok videosu için kapak görseli yükleyin.";
     } else if (!d.url.trim()) {
       return "Görsel yükleyin.";
     }
@@ -87,15 +103,22 @@ export default function GalleryPage() {
 
   const payloadFromDraft = (d: GalleryDraft, sortOrder: number) => {
     const cover = d.coverUrl.trim();
-    const url = d.mediaType === "instagram" ? cover || d.url.trim() : d.url.trim();
+    const url = d.mediaType !== "image" ? cover || d.url.trim() : d.url.trim();
+    let socialUrl: string | null = null;
+    if (d.mediaType === "instagram") {
+      socialUrl = normalizeInstagramPostUrl(d.instagramUrl);
+    } else if (d.mediaType === "tiktok") {
+      socialUrl = normalizeTikTokPostUrl(d.instagramUrl);
+    }
+
     return {
       title: d.title.trim(),
       url,
       sortOrder,
       mediaType: d.mediaType,
-      instagramUrl: d.mediaType === "instagram" ? normalizeInstagramPostUrl(d.instagramUrl) : null,
+      instagramUrl: socialUrl,
       coverUrl: cover || null,
-      isVideo: d.mediaType === "instagram" ? d.isVideo : false,
+      isVideo: d.mediaType === "tiktok" ? true : d.mediaType === "instagram" ? d.isVideo : false,
     };
   };
 
@@ -113,7 +136,11 @@ export default function GalleryPage() {
   };
 
   const addImage = async () => {
-    const draft = { ...newItem, mediaType: addMode };
+    const draft = {
+      ...newItem,
+      mediaType: addMode,
+      isVideo: addMode === "tiktok" ? true : newItem.isVideo,
+    };
     const err = validateDraft(draft);
     if (err) {
       showToast(err);
@@ -121,7 +148,13 @@ export default function GalleryPage() {
     }
     await adminApi.createGallery(payloadFromDraft(draft, images.length + 1));
     setNewItem(emptyDraft());
-    showToast(addMode === "instagram" ? "Instagram içeriği eklendi." : "Görsel eklendi.");
+    showToast(
+      addMode === "instagram"
+        ? "Instagram içeriği eklendi."
+        : addMode === "tiktok"
+        ? "TikTok videosu eklendi."
+        : "Görsel eklendi."
+    );
     load();
   };
 
@@ -139,7 +172,8 @@ export default function GalleryPage() {
   };
 
   const instagramCount = images.filter((i) => i.mediaType === "instagram").length;
-  const imageCount = images.length - instagramCount;
+  const tiktokCount = images.filter((i) => i.mediaType === "tiktok").length;
+  const imageCount = images.filter((i) => i.mediaType === "image" || !i.mediaType).length;
 
   return (
     <div>
@@ -150,32 +184,33 @@ export default function GalleryPage() {
       )}
 
       <PageHeader
-        title="Galeri & Instagram"
-        description="Salon görselleri ve Instagram post/reel linkleri — videolar için kapak görseli ekleyin."
+        title="Galeri, Instagram Reels & TikTok Videoları"
+        description="M Studio Hairdresser ve Mehmet İis videoları, Instagram & TikTok paylaşımları ve stüdyo görselleri."
       />
 
       <Card className="mb-6">
         <Tabs
           className="mb-6 w-fit"
           tabs={[
-            { id: "instagram", label: "Instagram Ekle", count: instagramCount },
-            { id: "image", label: "Görsel Ekle", count: imageCount },
+            { id: "instagram", label: "Instagram Reel / Post", count: instagramCount },
+            { id: "tiktok", label: "TikTok Video", count: tiktokCount },
+            { id: "image", label: "Salon Görseli", count: imageCount },
           ]}
           activeTab={addMode}
-          onChange={(id) => setAddMode(id as "image" | "instagram")}
+          onChange={(id) => setAddMode(id as "image" | "instagram" | "tiktok")}
         />
 
         {addMode === "instagram" ? (
           <div className="space-y-5">
             <Input
               label="Başlık"
-              placeholder="Örn: Fade Kesim Reel"
+              placeholder="Örn: Skin Fade & Saç Tasarımı - Mehmet İis"
               value={newItem.title}
               onChange={(e) => setNewItem((p) => ({ ...p, title: e.target.value }))}
             />
             <Input
-              label="Instagram Gönderi Linki"
-              placeholder="https://www.instagram.com/reel/..."
+              label="Instagram Gönderi / Reel Linki"
+              placeholder="https://www.instagram.com/reel/... veya https://www.instagram.com/mstudiohairdresser/"
               value={newItem.instagramUrl}
               onChange={(e) => setNewItem((p) => ({ ...p, instagramUrl: e.target.value }))}
             />
@@ -196,10 +231,35 @@ export default function GalleryPage() {
               onChange={(url) => setNewItem((p) => ({ ...p, coverUrl: url, url }))}
             />
           </div>
+        ) : addMode === "tiktok" ? (
+          <div className="space-y-5">
+            <Input
+              label="Başlık"
+              placeholder="Örn: Sakal Heykeltıraşlığı & Geçiş - Mehmet İis"
+              value={newItem.title}
+              onChange={(e) => setNewItem((p) => ({ ...p, title: e.target.value }))}
+            />
+            <Input
+              label="TikTok Video / Profil Linki"
+              placeholder="https://www.tiktok.com/@mehmetiis veya video linki"
+              value={newItem.instagramUrl}
+              onChange={(e) => setNewItem((p) => ({ ...p, instagramUrl: e.target.value }))}
+            />
+            <p className="text-xs text-[#71717A]">
+              TikTok içerikleri sitede video olarak listelenir ve direkt olarak Mehmet İis TikTok profiline bağlanır.
+            </p>
+            <ImageUpload
+              label="Video Kapak / Önizleme Görseli (zorunlu)"
+              folder="gallery"
+              value={newItem.coverUrl || newItem.url}
+              onChange={(url) => setNewItem((p) => ({ ...p, coverUrl: url, url, isVideo: true }))}
+            />
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <Input
               label="Başlık"
+              placeholder="Örn: Salon İç Mekan & Berber Koltuğu"
               value={newItem.title}
               onChange={(e) => setNewItem((p) => ({ ...p, title: e.target.value }))}
             />
@@ -214,7 +274,11 @@ export default function GalleryPage() {
 
         <Button onClick={addImage} className="mt-5">
           <Plus className="w-4 h-4" />
-          {addMode === "instagram" ? "Instagram İçeriği Ekle" : "Görsel Ekle"}
+          {addMode === "instagram"
+            ? "Instagram İçeriği Ekle"
+            : addMode === "tiktok"
+            ? "TikTok Videosu Ekle"
+            : "Görsel Ekle"}
         </Button>
       </Card>
 
@@ -228,20 +292,41 @@ export default function GalleryPage() {
           const missingCover = !preview;
 
           return (
-            <Card key={img.id} padding="none" className={`mb-4 break-inside-avoid overflow-hidden ${missingCover ? "ring-1 ring-red-500/40" : ""}`}>
+            <Card
+              key={img.id}
+              padding="none"
+              className={`mb-4 break-inside-avoid overflow-hidden ${
+                missingCover ? "ring-1 ring-red-500/40" : ""
+              }`}
+            >
               <div className="relative h-56 bg-[#141E2E]">
                 {preview ? (
                   <Image src={preview} alt={d.title} fill className="object-cover" unoptimized />
                 ) : (
                   <div className="h-full flex items-center justify-center">
-                    <InstagramIcon size={32} className="text-white/20" />
+                    {d.mediaType === "tiktok" ? (
+                      <TikTokIcon size={32} className="text-white/20" />
+                    ) : d.mediaType === "instagram" ? (
+                      <InstagramIcon size={32} className="text-white/20" />
+                    ) : (
+                      <Video size={32} className="text-white/20" />
+                    )}
                   </div>
                 )}
-                <div className="absolute top-3 left-3">
-                  <Badge
-                    variant={d.mediaType === "instagram" ? "gold" : "default"}
-                    label={d.mediaType === "instagram" ? (d.isVideo ? "Reel" : "Instagram") : "Görsel"}
-                  />
+                <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                  {d.mediaType === "tiktok" ? (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#000000]/80 text-[#25F4EE] border border-[#FE2C55]/30 backdrop-blur-sm">
+                      <TikTokIcon size={11} />
+                      TikTok Video
+                    </span>
+                  ) : d.mediaType === "instagram" ? (
+                    <Badge
+                      variant="gold"
+                      label={d.isVideo ? "Instagram Reel" : "Instagram Post"}
+                    />
+                  ) : (
+                    <Badge variant="default" label="Görsel" />
+                  )}
                 </div>
               </div>
               {missingCover && (
@@ -255,13 +340,19 @@ export default function GalleryPage() {
                   value={d.mediaType}
                   onChange={(e) =>
                     updateDraft(img.id, {
-                      mediaType: e.target.value as "image" | "instagram",
-                      isVideo: e.target.value === "image" ? false : d.isVideo,
+                      mediaType: e.target.value as "image" | "instagram" | "tiktok",
+                      isVideo:
+                        e.target.value === "tiktok"
+                          ? true
+                          : e.target.value === "image"
+                          ? false
+                          : d.isVideo,
                     })
                   }
                   options={[
                     { value: "image", label: "Salon Görseli" },
                     { value: "instagram", label: "Instagram Post / Reel" },
+                    { value: "tiktok", label: "TikTok Videosu" },
                   ]}
                 />
                 <Input
@@ -288,6 +379,21 @@ export default function GalleryPage() {
                       folder="gallery"
                       value={d.coverUrl || d.url}
                       onChange={(url) => updateDraft(img.id, { coverUrl: url, url })}
+                      previewHeightClass="h-32"
+                    />
+                  </>
+                ) : d.mediaType === "tiktok" ? (
+                  <>
+                    <Input
+                      label="TikTok Video / Profil Linki"
+                      value={d.instagramUrl}
+                      onChange={(e) => updateDraft(img.id, { instagramUrl: e.target.value })}
+                    />
+                    <ImageUpload
+                      label="Video Kapak Görseli"
+                      folder="gallery"
+                      value={d.coverUrl || d.url}
+                      onChange={(url) => updateDraft(img.id, { coverUrl: url, url, isVideo: true })}
                       previewHeightClass="h-32"
                     />
                   </>

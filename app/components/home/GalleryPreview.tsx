@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import { api, type GalleryImage } from "@/lib/api/client";
 import { usePublicSettings } from "@/lib/context/PublicSettingsContext";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { instagramUrl } from "@/lib/utils/format";
-import { isInstagramGalleryItem } from "@/lib/utils/gallery";
+import { isInstagramGalleryItem, isTikTokGalleryItem } from "@/lib/utils/gallery";
 import GalleryItemCard from "@/components/gallery/GalleryItemCard";
 import GalleryLightbox from "@/components/gallery/GalleryLightbox";
 import { useGalleryLightbox } from "@/components/gallery/useGalleryLightbox";
@@ -70,7 +70,7 @@ export default function GalleryPreview({ initialImages = [] }: GalleryPreviewPro
               key={item.id}
               item={item}
               index={i}
-              onClick={isInstagramGalleryItem(item) ? undefined : () => openLightbox(item)}
+              onClick={isInstagramGalleryItem(item) || isTikTokGalleryItem(item) ? undefined : () => openLightbox(item)}
             />
           ))}
         </div>

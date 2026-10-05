@@ -105,7 +105,7 @@ export default function ScrollVideo() {
             </div>
 
             <div className="flex items-center gap-6 text-xs tracking-[0.35em] text-gray-500 uppercase font-medium">
-              <span>New Life Felsefesi</span>
+              <span>M Studio Felsefesi</span>
               <span className="w-2 h-2 rounded-full bg-white/20" />
               <span>Çekmeköy</span>
             </div>

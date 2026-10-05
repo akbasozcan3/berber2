@@ -15,9 +15,9 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL?.trim() || "";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 
 const GOOGLE_REVIEWS = [
-  { name: "Ahmet Nazik", rating: 5, review: "Gayet başarılı memnun kaldım tavsiye ederim", featured: true },
+  { name: "Ahmet Nazik", rating: 5, review: "Gayet başarılı memnun kaldım tavsiye ederim. Mehmet İis'in işçiliği gerçekten harika.", featured: true },
   { name: "Turgay Mert Erdem", rating: 5, review: "Yıllardır Mehmet Bey'e tıraş olurum, bir kere üzgün ayrılmadım.", featured: true },
-  { name: "Yakup Akbaş", rating: 5, review: "Kendini Mehmet'in eline bırak, adam işi biliyor.", featured: true },
+  { name: "Yakup Akbaş", rating: 5, review: "Kendini Mehmet'in eline bırak, adam işi biliyor. M Studio Taşdelen'de tek geçerim.", featured: true },
   { name: "Yusuf Keçeci", rating: 5, review: "Mehmet abiye çok teşekkür ederim, müşteriyle çok iyi ilgileniyorlar.", featured: true },
   { name: "Bedirhan Tanrıverdi", rating: 5, review: "Çok iyi çok beğendim. Mehmet beyden daha iyisi bu Taşdelen'de yok.", featured: true },
 ];
@@ -59,28 +59,28 @@ export async function ensureTelegramSettings() {
 
   const defaults: Record<string, string> = {
     notifications_telegram: "true",
-    telegram_recipient_name: "Mehmet Abi",
-    contact_email: "info@newlifeerkekkuaforu.com",
+    telegram_recipient_name: "Mehmet İis",
+    contact_email: "info@mstudiohairdresser.com",
     contact_intro:
-      "Her türlü soru, randevu sorgulama ve istekleriniz için ekibimizle dilediğiniz an iletişime geçebilirsiniz.",
+      "Her türlü soru, randevu sorgulama ve istekleriniz için Mehmet İis ve ekibimizle dilediğiniz an iletişime geçebilirsiniz.",
     nav_services_label: "Hizmetler",
-    nav_gallery_label: "Galeri",
+    nav_gallery_label: "Galeri & Reels",
     nav_reviews_label: "Yorumlar",
     nav_about_label: "Hakkımızda",
     nav_contact_label: "İletişim",
-    services_page_title: "Hizmetlerimiz",
-    services_page_subtitle: "Profesyonel saç kesimi, sakal tasarımı, cilt bakımı ve lüks VIP paketlerimizi keşfedin.",
-    services_section_eyebrow: "Küratörlü Hizmetlerimiz",
-    services_section_title: "Özenle Tasarlanmış\nBakım Ritüelleri",
-    services_section_subtitle: "Klasik berberlik geleneklerini çağdaş tekniklerle harmanlayarak, her seansı ayrıcalıklı bir deneyime dönüştürüyoruz.",
-    gallery_page_title: "Galeri",
-    gallery_page_subtitle: "Stüdyomuzdan saç tasarımı, sakal tıraşı ve bakım çalışmalarımıza göz atın.",
+    services_page_title: "M Studio Hizmetleri",
+    services_page_subtitle: "Mehmet İis ustalığıyla profesyonel saç kesimi, sakal tasarımı, cilt bakımı ve lüks VIP paketler.",
+    services_section_eyebrow: "M Studio Hairdresser",
+    services_section_title: "Özenle Tasarlanmış\nSaç & Bakım Ritüelleri",
+    services_section_subtitle: "Geleneksel berberlik ustalığını modern teknikler ve titiz işçilikle harmanlıyoruz.",
+    gallery_page_title: "Reels & Videolar",
+    gallery_page_subtitle: "Instagram ve TikTok paylaşımlarımız, saç dönüşümleri ve stüdyomuzdan özel anlar.",
     reviews_page_title: "Müşteri Yorumları",
-    reviews_page_subtitle: "Gerçek müşteri deneyimleri ve değerlendirmeleri",
+    reviews_page_subtitle: "Gerçek müşteri deneyimleri ve Mehmet İis değerlendirmeleri",
     about_page_title: "Hakkımızda",
-    about_page_subtitle: "Sade, temiz ve profesyonel hizmet anlayışımızla tanışın.",
+    about_page_subtitle: "M Studio Hairdresser vizyonu ve profesyonel hizmet anlayışıyla tanışın.",
     contact_page_title: "İletişim",
-    contact_page_subtitle: "Sorularınız ve talepleriniz için bizimle iletişime geçin.",
+    contact_page_subtitle: "Sorularınız ve randevu talepleriniz için bizimle iletişime geçin.",
     services_page_banner: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=1200&auto=format&fit=crop",
     gallery_page_banner: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&w=1200&auto=format&fit=crop",
     reviews_page_banner: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=1200&auto=format&fit=crop",
@@ -98,9 +98,30 @@ export async function ensureTelegramSettings() {
 
 export async function ensureCMS() {
   const slides = [
-    { title: "Saçınız Sizin\nİmzanızdır", subtitle: "Premium Berberlik", description: "Profesyonel kadromuzla kaliteli saç & sakal bakımı. Randevu alın, fark yaratan tarzınıza kavuşun.", image: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=85&w=2560&auto=format&fit=crop", badge: "Saç Kesimi", sortOrder: 1 },
-    { title: "Sakalınız da\nTarzınızın Parçası", subtitle: "Ustura İşçiliği", description: "Yüz hatlarınıza özel sakal şekillendirme, sıcak havlu tıraşı ve premium cilt bakımı.", image: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=85&w=2560&auto=format&fit=crop", badge: "Sakal Tıraşı", sortOrder: 2 },
-    { title: "Kendinize En İyi\nBakımı Hak Ediyorsunuz", subtitle: "VIP Deneyim", description: "Saç, sakal, cilt bakımı ve kafa masajından oluşan lüks VIP paketimizle ayrıcalığı yaşayın.", image: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=85&w=2560&auto=format&fit=crop", badge: "VIP Paket", sortOrder: 3 },
+    {
+      title: "Kişisel Tarzınızın\nİmzası",
+      subtitle: "M Studio Hairdresser · Mehmet İis",
+      description: "Profesyonel kadromuzla kaliteli saç & sakal tasarımı. Randevu alın, fark yaratan tarzınıza kavuşun.",
+      image: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=85&w=2560&auto=format&fit=crop",
+      badge: "Master Hair Stylist",
+      sortOrder: 1,
+    },
+    {
+      title: "Sakal Heykeltıraşlığı &\nUstura İşçiliği",
+      subtitle: "Geleneksel & Modern Zanaat",
+      description: "Yüz hatlarınıza özel sakal şekillendirme, sıcak havlu tıraşı ve premium doğal bakım yağları.",
+      image: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=85&w=2560&auto=format&fit=crop",
+      badge: "Sakal Tasarımı",
+      sortOrder: 2,
+    },
+    {
+      title: "Ayrıcalıklı VIP Bakım &\nLüks Konfor",
+      subtitle: "M Studio VIP Deneyim",
+      description: "Saç, sakal, derinlemesine yüz bakımı ve kafa masajından oluşan lüks VIP paketimizle ayrıcalığı yaşayın.",
+      image: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=85&w=2560&auto=format&fit=crop",
+      badge: "VIP Deneyim",
+      sortOrder: 3,
+    },
   ];
 
   const existingSlides = await db.select().from(heroSlides).limit(1);
@@ -123,12 +144,12 @@ export async function ensureCMS() {
     .limit(1);
 
   if (existingAbout.length === 0) {
-    const aboutArticle = `<p>New Life Erkek Kuaförü, İstanbul Çekmeköy Taşdelen'de erkek bakımında kaliteyi ve konforu bir araya getiren modern bir berber salonudur.</p><h3>Hikayemiz</h3><p>Salonumuz, geleneksel berberlik ustalığını çağdaş tasarım anlayışıyla birleştirerek Taşdelen bölgesinde fark yaratan bir adres haline gelmiştir.</p><h3>Misyonumuz</h3><p>Erkek bakımını sıradan bir rutinden çıkarıp, özgüveninizi artıran bir ritüele dönüştürmek.</p>`;
+    const aboutArticle = `<p>M Studio Hairdresser, İstanbul Çekmeköy Taşdelen'de Mehmet İis öncülüğünde erkek bakımında zanaatı, kaliteyi ve konforu bir araya getiren modern bir saç tasarım stüdyosudur.</p><h3>Hikayemiz</h3><p>Mehmet İis'in yıllara dayanan deneyimi ve saç sanatına olan tutkusu, modern salon atmosferi ve hijyen standartlarıyla buluşarak Taşdelen'de fark yaratan bir marka haline gelmiştir.</p><h3>Misyonumuz</h3><p>Erkek bakımını sıradan bir tıraş rutini olmaktan çıkarıp, tarzınızı ve özgüveninizi en üst seviyeye taşıyan bir sanat ritüeline dönüştürmek.</p>`;
 
     await db.insert(pageContent).values({
       slug: "about",
-      title: "New Life Deneyimi",
-      subtitle: "Hakkımızda & Hikayemiz",
+      title: "M Studio Deneyimi",
+      subtitle: "Hakkımızda & Mehmet İis",
       heroImage:
         "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1000&auto=format&fit=crop",
       content: aboutArticle,
@@ -143,11 +164,11 @@ export async function ensureCMS() {
 
     await db.insert(pageContent).values({
       slug: "home_about",
-      title: "New Life\nDeneyimi",
+      title: "M Studio\nDeneyimi",
       subtitle: "Hakkımızda",
       heroImage:
         "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1200&auto=format&fit=crop",
-      content: "Saç ve sakal bakımını sıradan bir ihtiyaçtan öteye taşıyoruz.",
+      content: "Saç ve sakal bakımını sıradan bir ihtiyaçtan öteye taşıyoruz. Mehmet İis ustalığıyla tanışın.",
       sections: JSON.stringify([
         { title: "Zanaat", desc: "Özenli İşçilik" },
         { title: "Konfor", desc: "Rahat Deneyim" },
@@ -166,7 +187,7 @@ export async function ensureCMS() {
         "Her kesim ve sakal tasarımı, tarzınızı yansıtan benzersiz bir imzadır.",
       sections: JSON.stringify({
         description:
-          "New Life Erkek Kuaförü olarak, modern tasarım tekniklerini geleneksel berberlik titizliğiyle harmanlıyoruz.",
+          "M Studio Hairdresser olarak, Mehmet İis ustalığında modern tasarım tekniklerini geleneksel berberlik titizliğiyle harmanlıyoruz.",
       }),
       meta: null,
       updatedAt: now(),
@@ -197,14 +218,14 @@ export async function ensureCMS() {
   if (howExists.length === 0) {
     await db.insert(pageContent).values({
       slug: "home_how_it_works",
-      title: "3 Adımda Randevu",
+      title: "3 Adımda Kolay Randevu",
       subtitle: "Nasıl Çalışır?",
       heroImage: null,
-      content: "New Life deneyimi basit, hızlı ve konforlu. Randevunuzu alın, gerisini bize bırakın.",
+      content: "M Studio deneyimi hızlı, konforlu ve randevulu. Mehmet İis ile yerinizi ayırtın, gerisini bize bırakın.",
       sections: JSON.stringify([
-        { step: "01", title: "Randevu Seçin", desc: "Hizmet, berber, tarih ve saati online olarak birkaç tıkla belirleyin." },
-        { step: "02", title: "Salona Gelin", desc: "Sıra beklemeden, seçtiğiniz saatte profesyonel ekibimiz sizi karşılasın." },
-        { step: "03", title: "Tarzınızı Yenileyin", desc: "Kişiye özel kesim ve bakımla salonumuzdan özgüvenle ayrılın." },
+        { step: "01", title: "Randevu Seçin", desc: "Hizmet, tarih ve saati online sistemimizden saniyeler içinde belirleyin." },
+        { step: "02", title: "Stüdyoya Gelin", desc: "Sıra beklemeden, randevu saatinizde Mehmet İis ve ekibimiz tarafından karşılanın." },
+        { step: "03", title: "Tarzınızı Yenileyin", desc: "Kişiye özel saç kesimi ve sakal tasarımı ile stüdyomuzdan özgüvenle ayrılın." },
       ]),
       meta: JSON.stringify({ ctaLabel: "Hemen Randevu Al" }),
       updatedAt: now(),
@@ -219,66 +240,66 @@ export async function seedDatabase() {
 
   const serviceData = [
     {
-      name: "Klasik Saç Kesimi",
+      name: "Klasik & Modern Saç Kesimi",
       slug: "sac-kesimi",
-      description: "Yüz hatlarınıza uygun profesyonel saç kesimi ve şekillendirme.",
+      description: "Yüz hatlarınıza özel oranlarda profesyonel saç kesimi, yıkama ve şekillendirme.",
       duration: 30,
-      price: 400,
+      price: 450,
       image:
         "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400&h=300&fit=crop",
       popular: true,
       sortOrder: 1,
     },
     {
-      name: "Sakal Tasarımı",
+      name: "Sakal Heykeltıraşlığı & Ustura",
       slug: "sakal",
-      description: "Ustura ile sakal şekillendirme ve bakım.",
-      duration: 20,
-      price: 250,
+      description: "Ustura ile sakal hatlarının belirlenmesi, sıcak havlu ritüeli ve organik sakal yağı bakımı.",
+      duration: 25,
+      price: 300,
       image:
         "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400&h=300&fit=crop",
       popular: true,
       sortOrder: 2,
     },
     {
-      name: "Saç + Sakal Kombo",
+      name: "Saç + Sakal Full Kombo",
       slug: "sac-sakal",
-      description: "Tam bakım paketi: saç kesimi ve sakal tasarımı.",
-      duration: 45,
-      price: 550,
+      description: "Eksiksiz erkek bakım paketi: saç kesimi, sakal tasarımı, saç yıkama ve fön şekillendirme.",
+      duration: 50,
+      price: 650,
       image:
         "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=400&h=300&fit=crop",
       popular: true,
       sortOrder: 3,
     },
     {
-      name: "Çocuk Saç Kesimi",
-      slug: "cocuk",
-      description: "12 yaş altı çocuklar için özel saç kesimi.",
-      duration: 25,
-      price: 300,
+      name: "Damat & Özel Gün Tasarımı",
+      slug: "damat-ozel-gun",
+      description: "Düğün, nişan ve özel davetler için kusursuz saç, sakal, cilt arındırma ve stil çalışması.",
+      duration: 60,
+      price: 850,
       image:
         "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400&h=300&fit=crop",
       popular: false,
       sortOrder: 4,
     },
     {
-      name: "Saç Bakımı",
+      name: "Keratin & Canlandırıcı Saç Bakımı",
       slug: "sac-bakimi",
-      description: "Profesyonel saç bakımı ve maske uygulaması.",
+      description: "Yıpranmış saç telleri için derinlemesine onarıcı keratin maskesi ve kafa derisi masajı.",
       duration: 40,
-      price: 350,
+      price: 400,
       image:
         "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=300&fit=crop",
       popular: false,
       sortOrder: 5,
     },
     {
-      name: "VIP Deneyim",
-      slug: "vip",
-      description: "Premium saç kesimi, sakal, yüz maskesi ve kafa masajı.",
+      name: "M Studio VIP Deneyim",
+      slug: "vip-deneyim",
+      description: "Saç kesimi, sakal tasarımı, yüz buharı & kil maskesi, kafa masajı ve özel içecek ikramı.",
       duration: 90,
-      price: 900,
+      price: 1100,
       image:
         "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400&h=300&fit=crop",
       popular: true,
@@ -288,77 +309,101 @@ export async function seedDatabase() {
 
   const barberData = [
     {
-      name: "Mehmet Abi",
-      slug: "mehmet",
-      position: "Kurucu & Usta Berber",
+      name: "Mehmet İis",
+      slug: "mehmet-iis",
+      position: "Kurucu & Master Hairdresser",
       avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
-      specialty: "Klasik Kesim & VIP Bakım",
-      performance: 98,
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+      specialty: "Klasik & Modern Saç Tasarımı, Sakal Heykeltıraşlığı, VIP Bakım",
+      performance: 99,
       sortOrder: 1,
     },
   ];
 
   const galleryData = [
     {
-      url: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70b?w=600&h=800&fit=crop",
-      title: "Salon İç Mekan",
+      url: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&h=1000&fit=crop",
+      title: "Skin Fade & Quiff Kesimi",
+      mediaType: "instagram",
+      instagramUrl: "https://www.instagram.com/mstudiohairdresser/",
+      coverUrl: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&h=1000&fit=crop",
+      isVideo: true,
       sortOrder: 1,
     },
     {
-      url: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=600&h=400&fit=crop",
-      title: "Saç Kesimi",
+      url: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&h=1000&fit=crop",
+      title: "Sakal Tasarımı & Ustura Çizgileri",
+      mediaType: "tiktok",
+      instagramUrl: "https://www.tiktok.com/@mehmetiis",
+      coverUrl: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&h=1000&fit=crop",
+      isVideo: true,
       sortOrder: 2,
     },
     {
-      url: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600&h=500&fit=crop",
-      title: "Sakal Tasarımı",
+      url: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&h=1000&fit=crop",
+      title: "İtalyan Dokulu Saç Kesimi",
+      mediaType: "instagram",
+      instagramUrl: "https://www.instagram.com/mstudiohairdresser/",
+      coverUrl: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&h=1000&fit=crop",
+      isVideo: true,
       sortOrder: 3,
     },
     {
-      url: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=600&h=700&fit=crop",
-      title: "Berber Koltuğu",
+      url: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&h=1000&fit=crop",
+      title: "Sıcak Havlu Tıraşı & Bakım",
+      mediaType: "tiktok",
+      instagramUrl: "https://www.tiktok.com/@mehmetiis",
+      coverUrl: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&h=1000&fit=crop",
+      isVideo: true,
       sortOrder: 4,
     },
     {
-      url: "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=600&h=500&fit=crop",
-      title: "Salon Atmosferi",
+      url: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&h=1000&fit=crop",
+      title: "M Studio Atmosferi & Detaylar",
+      mediaType: "image",
+      coverUrl: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&h=1000&fit=crop",
+      isVideo: false,
       sortOrder: 5,
     },
     {
-      url: "https://images.unsplash.com/photo-1593702275687-f6b0f4d0c5e3?w=600&h=750&fit=crop",
-      title: "Ustura İşçiliği",
+      url: "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=800&h=1000&fit=crop",
+      title: "Saç Dönüşümü & Şekillendirme",
+      mediaType: "instagram",
+      instagramUrl: "https://www.instagram.com/mstudiohairdresser/",
+      coverUrl: "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=800&h=1000&fit=crop",
+      isVideo: true,
       sortOrder: 6,
     },
   ];
 
   const settingsData: Record<string, string> = {
-    business_name: "New Life Erkek Kuaförü",
+    business_name: "M Studio Hairdresser",
     logo_url: "",
     favicon_url: "",
     address: "Taşdelen Mah. Dekor Sok. No:26B, 34788 Çekmeköy / İstanbul",
     phone: "+905327104355",
-    instagram: "@newlifekuaforr",
-    google_maps: "https://maps.google.com/?q=New+Life+Erkek+Kuaförü+Taşdelen",
-    contact_email: "info@newlifeerkekkuaforu.com",
+    instagram: "https://www.instagram.com/mstudiohairdresser/",
+    tiktok: "https://www.tiktok.com/@mehmetiis",
+    google_maps: "https://maps.google.com/?q=M+Studio+Hairdresser+Taşdelen",
+    contact_email: "info@mstudiohairdresser.com",
     contact_intro:
-      "Her türlü soru, randevu sorgulama ve istekleriniz için ekibimizle dilediğiniz an iletişime geçebilirsiniz.",
+      "Her türlü soru, randevu sorgulama ve istekleriniz için Mehmet İis ve ekibimizle dilediğiniz an iletişime geçebilirsiniz.",
     nav_services_label: "Hizmetler",
-    nav_gallery_label: "Galeri",
+    nav_gallery_label: "Galeri & Reels",
     nav_reviews_label: "Yorumlar",
     nav_about_label: "Hakkımızda",
     nav_contact_label: "İletişim",
-    services_page_title: "Hizmetlerimiz",
-    services_page_subtitle: "Profesyonel saç kesimi, sakal tasarımı, cilt bakımı ve lüks VIP paketlerimizi keşfedin.",
-    services_section_eyebrow: "Küratörlü Hizmetlerimiz",
-    services_section_title: "Özenle Tasarlanmış\nBakım Ritüelleri",
+    services_page_title: "M Studio Hizmetleri",
+    services_page_subtitle: "Mehmet İis ustalığıyla profesyonel saç kesimi, sakal tasarımı, cilt bakımı ve lüks VIP paketler.",
+    services_section_eyebrow: "M Studio Hairdresser",
+    services_section_title: "Özenle Tasarlanmış\nSaç & Bakım Ritüelleri",
     services_section_subtitle: "Klasik berberlik geleneklerini çağdaş tekniklerle harmanlayarak, her seansı ayrıcalıklı bir deneyime dönüştürüyoruz.",
-    gallery_page_title: "Galeri",
-    gallery_page_subtitle: "Stüdyomuzdan saç tasarımı, sakal tıraşı ve bakım çalışmalarımıza göz atın.",
+    gallery_page_title: "Reels & Videolar",
+    gallery_page_subtitle: "Instagram ve TikTok paylaşımlarımız, saç dönüşümleri ve stüdyomuzdan özel anlar.",
     reviews_page_title: "Müşteri Yorumları",
-    reviews_page_subtitle: "Gerçek müşteri deneyimleri ve değerlendirmeleri",
+    reviews_page_subtitle: "Gerçek müşteri deneyimleri ve Mehmet İis değerlendirmeleri",
     about_page_title: "Hakkımızda",
-    about_page_subtitle: "Sade, temiz ve profesyonel hizmet anlayışımızla tanışın.",
+    about_page_subtitle: "M Studio Hairdresser kalitesi ve profesyonel hizmet anlayışıyla tanışın.",
     contact_page_title: "İletişim",
     contact_page_subtitle: "Sorularınız ve talepleriniz için bizimle iletişime geçin.",
     services_page_banner: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=1200&auto=format&fit=crop",
@@ -383,32 +428,33 @@ export async function seedDatabase() {
     notifications_telegram: "true",
     notifications_email: "true",
     telegram_chat_id: process.env.TELEGRAM_CHAT_ID?.trim() || "",
-    telegram_recipient_name: "Mehmet Abi",
+    telegram_recipient_name: "Mehmet İis",
     telegram_last_test_at: "",
     admin_url: "http://localhost:3000/admin/appointments",
-    google_rating: "4.87",
-    google_review_count: "30",
+    google_rating: "4.92",
+    google_review_count: "85",
     location_short: "Taşdelen, Çekmeköy / İstanbul",
     footer_intro:
-      "İstanbul Çekmeköy Taşdelen'de profesyonel saç kesimi, sakal tasarımı ve kişisel erkek bakımı hizmetleri.",
+      "İstanbul Çekmeköy Taşdelen'de Mehmet İis öncülüğünde profesyonel saç kesimi, sakal heykeltıraşlığı ve VIP erkek bakım hizmetleri.",
     footer_copyright: "",
     nav_cta_label: "Randevu Al",
     seo_default_description:
-      "İstanbul Çekmeköy Taşdelen'de profesyonel saç kesimi, sakal tasarımı, cilt bakımı ve erkek bakım hizmetleri.",
+      "M Studio Hairdresser - Mehmet İis. İstanbul Çekmeköy Taşdelen'de profesyonel saç kesimi, sakal tasarımı, cilt bakımı ve modern erkek bakım deneyimi.",
     seo_keywords:
-      "erkek kuaförü, barber, kuaför, saç kesimi, sakal tıraşı, Çekmeköy, Taşdelen, İstanbul",
+      "m studio hairdresser, mehmet iis, erkek kuaförü, berber, saç kesimi, sakal tıraşı, çekmeköy, taşdelen, istanbul berber",
     site_url: "",
     loading_color: "#C8703A",
     booking_page_title: "Online Randevu",
     booking_page_subtitle:
-      "Zamanınız değerlidir. Sıra beklemeden, dilediğiniz gün ve saatte yerinizi rezerve edin.",
+      "Zamanınız değerlidir. Sıra beklemeden, Mehmet İis ve ekibimizden dilediğiniz gün ve saatte yerinizi rezerve edin.",
     booking_page_banner:
       "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=1200&auto=format&fit=crop",
-    home_team_eyebrow: "Uzman Kadro",
-    home_team_title: "Berberlerimiz",
-    home_gallery_eyebrow: "Instagram",
-    home_gallery_title: "Instagram\nReels & Çalışmalar",
-    home_gallery_cta_label: "Instagram'da Gör",
+    home_team_eyebrow: "Master Stylist",
+    home_team_title: "Mehmet İis & Kadromuz",
+    home_gallery_eyebrow: "Reels & TikTok",
+    home_gallery_title: "M Studio\nReels & Videolar",
+    home_gallery_cta_label: "Instagram'da Takip Et",
+    home_gallery_cta_url: "https://www.instagram.com/mstudiohairdresser/",
     home_testimonials_eyebrow: "Müşteri Yorumları",
     home_testimonials_title: "Deneyimleyenlerin\nGözünden",
     home_booking_cta_eyebrow: "Online Rezervasyon",
@@ -419,17 +465,17 @@ export async function seedDatabase() {
       "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2560&auto=format&fit=crop",
     experience_eyebrow: "Rakamlarla",
     experience_title: "Güvenin Sayılarla Kanıtı",
-    experience_years: "10+",
+    experience_years: "12+",
     experience_hygiene: "100%",
     reviews_section_intro:
-      "Bölgenizde güvenilir erkek kuaförü deneyimi. Gerçek müşteri geri bildirimleri.",
-    reviews_featured_quote: "Kaliteli hizmet, temiz salon ve profesyonel ekip.",
+      "Taşdelen Çekmeköy'ün en çok tercih edilen erkek kuaförü deneyimi. Gerçek müşteri geri bildirimleri.",
+    reviews_featured_quote: "Mehmet İis ile saç kesimi bir rutinden öte, gerçek bir sanat ve yenilenme deneyimi.",
     home_stats_json: JSON.stringify([
-      { title: "Randevulu Hizmet", desc: "Beklemeden tam saatinde hizmet." },
-      { title: "Uzman Berberler", desc: "Kişiye özel modern kesimler." },
-      { title: "Premium Bakım", desc: "Profesyonel saç ve sakal bakımı." },
-      { title: "Konforlu Salon", desc: "Rahat ve modern atmosfer." },
-      { title: "Kaliteli Ürünler", desc: "Dünya markalarıyla bakım." },
+      { title: "Randevulu Hizmet", desc: "Beklemeden tam vaktinde hizmet." },
+      { title: "Mehmet İis Ustalığı", desc: "Kişiye özel modern saç & sakal tasarımı." },
+      { title: "Reels & Trend Stiller", desc: "En güncel saç ve sakal modası." },
+      { title: "Premium VIP Konfor", desc: "Lüks, rahat ve modern atmosfer." },
+      { title: "Seçkin Markalar", desc: "Dünya standartlarında bakım ürünleri." },
     ]),
   };
 
@@ -514,10 +560,10 @@ export async function seedDatabase() {
     }
   }
 
-  // CMS içeriği kısmi doldurulmuş olabilir; her zaman ensureCMS çağır.
+  // CMS içeriği
   await ensureCMS();
 
-  console.log("Database seeded successfully!");
+  console.log("Database seeded successfully with M Studio Hairdresser data!");
   if (ADMIN_EMAIL) console.log(`Admin login email: ${ADMIN_EMAIL}`);
 }
 

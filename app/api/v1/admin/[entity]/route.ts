@@ -18,7 +18,7 @@ import { formatDbError } from "@/lib/api/db-error";
 import { getSettings } from "@/lib/services/booking";
 import { normalizePhoneStorage } from "@/lib/utils/format";
 import { revalidatePath } from "next/cache";
-import { normalizeInstagramPostUrl } from "@/lib/utils/gallery";
+import { normalizeInstagramPostUrl, normalizeTikTokPostUrl } from "@/lib/utils/gallery";
 import { MULTILINE_SETTING_KEYS, normalizeMultilineSettingValue } from "@/lib/data/multiline-settings";
 import { parseWorkingHoursJson, serializeWorkingHours } from "@/lib/data/working-hours";
 import { normalizeBarberWorkingDays, BARBER_WORKING_DAYS } from "@/lib/utils/salon-schedule";
@@ -30,10 +30,18 @@ function revalidateGalleryPages() {
 }
 
 function parseGalleryPayload(body: Record<string, unknown>) {
-  const mediaType = body.mediaType === "instagram" ? "instagram" : "image";
-  const instagramUrl = body.instagramUrl ? normalizeInstagramPostUrl(String(body.instagramUrl)) : null;
+  const rawType = String(body.mediaType || "").toLowerCase();
+  const mediaType: "image" | "instagram" | "tiktok" =
+    rawType === "instagram" ? "instagram" : rawType === "tiktok" ? "tiktok" : "image";
+  let instagramUrl: string | null = null;
+  if (body.instagramUrl) {
+    instagramUrl =
+      mediaType === "tiktok"
+        ? normalizeTikTokPostUrl(String(body.instagramUrl))
+        : normalizeInstagramPostUrl(String(body.instagramUrl));
+  }
   const coverUrl = body.coverUrl ? String(body.coverUrl).trim() : null;
-  const isVideo = Boolean(body.isVideo);
+  const isVideo = Boolean(body.isVideo) || mediaType === "tiktok";
   const url = String(body.url || coverUrl || "").trim();
 
   return { mediaType, instagramUrl, coverUrl, isVideo, url };
@@ -162,15 +170,18 @@ export async function PATCH(
         if (parsed.isVideo && !parsed.coverUrl) {
           return errorResponse("Video içerikler için kapak görseli zorunludur", 400);
         }
+      } else if (parsed.mediaType === "tiktok") {
+        if (!parsed.instagramUrl) return errorResponse("TikTok video linki gerekli", 400);
+        if (!parsed.url) return errorResponse("Kapak görseli gerekli", 400);
       } else if (raw.url !== undefined && !parsed.url) {
         return errorResponse("Görsel URL gerekli", 400);
       }
 
       const updates: Partial<typeof galleryImages.$inferInsert> = {
         mediaType: parsed.mediaType,
-        instagramUrl: parsed.mediaType === "instagram" ? parsed.instagramUrl : null,
+        instagramUrl: parsed.mediaType !== "image" ? parsed.instagramUrl : null,
         coverUrl: parsed.coverUrl,
-        isVideo: parsed.mediaType === "instagram" ? parsed.isVideo : false,
+        isVideo: parsed.mediaType === "tiktok" ? true : parsed.mediaType === "instagram" ? parsed.isVideo : false,
       };
 
       if (raw.url !== undefined || raw.coverUrl !== undefined) updates.url = parsed.url;
@@ -281,6 +292,9 @@ export async function POST(
       if (parsed.mediaType === "instagram" && parsed.isVideo && !parsed.coverUrl) {
         return errorResponse("Video içerikler için kapak görseli zorunludur", 400);
       }
+      if (parsed.mediaType === "tiktok" && !parsed.instagramUrl) {
+        return errorResponse("TikTok video linki gerekli", 400);
+      }
 
       const [created] = await db
         .insert(galleryImages)
@@ -288,9 +302,9 @@ export async function POST(
           url: parsed.url,
           title: String(body.title || "Galeri"),
           mediaType: parsed.mediaType,
-          instagramUrl: parsed.mediaType === "instagram" ? parsed.instagramUrl : null,
+          instagramUrl: parsed.mediaType !== "image" ? parsed.instagramUrl : null,
           coverUrl: parsed.coverUrl,
-          isVideo: parsed.mediaType === "instagram" ? parsed.isVideo : false,
+          isVideo: parsed.mediaType === "tiktok" ? true : parsed.mediaType === "instagram" ? parsed.isVideo : false,
           sortOrder: Number(body.sortOrder || 0),
           createdAt: new Date().toISOString(),
         })
